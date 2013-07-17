@@ -1,14 +1,16 @@
-﻿require([
+﻿/*global require*/
+require([
 	"dojo/ready",
 	"dijit/registry",
 	"esri/map",
 	"esri/dijit/BasemapGallery",
+	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
-	"dojo/parser",
 	"dijit/layout/ContentPane",
 	"dijit/layout/BorderContainer"
 ], function (ready, registry, Map, BasemapGallery) {
+	"use strict";
 	ready(function () {
 		var map;
 
@@ -20,6 +22,13 @@
 		});
 
 		map.on("load", function () {
+			var basemapGallery;
+
+			basemapGallery = new BasemapGallery({
+				map: map
+			}, "basemapGallery");
+
+			basemapGallery.startup();
 		});
 	});
 });
