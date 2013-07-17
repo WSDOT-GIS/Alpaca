@@ -15,9 +15,20 @@
 	padding: 0;
 }
 
+#legendPane {
+	width: 200px;
+}
+
 #map, .map.container {
 	width: 100%;
 	height: 100%;
 	margin: 0;
 	padding: 0;
+}
+
+span[widgetid=basemapButton] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 30;
 }
