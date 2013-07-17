@@ -40,3 +40,10 @@ span[widgetid=basemapButton] {
 .esriBasemapGalleryLabelContainer {
 	font-size: 0.7em;
 }
+
+.esriAttribution {
+	background-color: rgba(255, 255, 255, 0.5);
+	padding: 0.5em;
+	-webkit-border-radius: 5px;
+	border-radius: 5px; 
+}

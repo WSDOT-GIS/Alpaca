@@ -18,7 +18,19 @@
 		data-dojo-props="design:'headline', gutters:true, liveSplitters:true">
 		<div id="legendPane" data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="splitter:true, region:'leading'">
-			Hi, I'm leading pane
+			<div data-dojo-type="dijit/layout/TabContainer">
+				<div data-dojo-type="dijit/layout/ContentPane" title="Layers">
+					<div data-dojo-type="dijit/layout/AccordionContainer">
+						<div data-dojo-type="dijit/layout/ContentPane" title="View"></div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="Title VI"></div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="Env. Just."></div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="Population"></div>
+					</div>
+				</div>
+				<div data-dojo-type="dijit/layout/ContentPane" title="Tools">
+
+				</div>
+			</div>
 		</div>
 		<div id="mapPane" data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="splitter:true, region:'center'">
