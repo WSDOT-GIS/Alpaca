@@ -1,4 +1,8 @@
-﻿html, body {
+﻿body {
+	font-family: Futura, "Gill Sans", "Century Gothic", "Dejavu Sans", "Trebuchet MS", sans-serif;
+}
+
+html, body {
 	width: 100%;
 	height: 100%;
 	margin: 0;
@@ -31,4 +35,8 @@ span[widgetid=basemapButton] {
 	top: 0;
 	right: 0;
 	z-index: 30;
+}
+
+.esriBasemapGalleryLabelContainer {
+	font-size: 0.7em;
 }
