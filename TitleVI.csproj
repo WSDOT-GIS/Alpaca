@@ -57,6 +57,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="index.html" />
+    <Content Include="LICENSE.txt" />
+    <Content Include="Scripts\index.js" />
+    <Content Include="Style\index.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
