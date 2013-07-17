@@ -1,7 +1,6 @@
 ﻿/*global require*/
 require([
 	"dojo/ready",
-	"dijit/registry",
 	"esri/map",
 	"esri/dijit/BasemapGallery",
 	"dojo/parser",
@@ -9,7 +8,7 @@ require([
 	"dijit/TooltipDialog",
 	"dijit/layout/ContentPane",
 	"dijit/layout/BorderContainer"
-], function (ready, registry, Map, BasemapGallery) {
+], function (ready, Map, BasemapGallery) {
 	"use strict";
 	ready(function () {
 		var map;
