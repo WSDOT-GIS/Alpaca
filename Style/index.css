@@ -47,3 +47,15 @@ span[widgetid=basemapButton] {
 	-webkit-border-radius: 5px;
 	border-radius: 5px; 
 }
+
+#layerToggle {
+	display: table;
+}
+
+#layerToggle > * {
+	display: table-row;
+}
+
+#layerToggle > * > * {
+	display: table-cell;
+}
