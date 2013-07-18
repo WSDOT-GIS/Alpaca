@@ -3,6 +3,7 @@ require([
 	"dojo/ready",
 	"esri/map",
 	"esri/dijit/BasemapGallery",
+	"esri/dijit/Legend",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
@@ -11,7 +12,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, Map, BasemapGallery) {
+], function (ready, Map, BasemapGallery, Legend) {
 	"use strict";
 	ready(function () {
 		var map;
@@ -24,13 +25,18 @@ require([
 		});
 
 		map.on("load", function () {
-			var basemapGallery;
+			var basemapGallery, legend;
 
 			basemapGallery = new BasemapGallery({
 				map: map
 			}, "basemapGallery");
 
 			basemapGallery.startup();
+
+			legend = new Legend({
+				map: map,
+				autoUpdate: true
+			}, "legend");
 		});
 	});
 });
