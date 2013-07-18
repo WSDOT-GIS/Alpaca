@@ -5,10 +5,13 @@
 	<link rel="stylesheet" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.5compact/js/esri/css/esri.css" />
 	<link href="//serverapi.arcgisonline.com/jsapi/arcgis/3.5compact/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet" />
 	<link href="Style/index.css" rel="stylesheet" />
+	<script>
+		var dojoConfig = {
+			async: true,
+			parseOnLoad: true
+		};
 
-
-
-	<script>dojoConfig = { parseOnLoad: true }</script>
+	</script>
 	<script src="//serverapi.arcgisonline.com/jsapi/arcgis/3.5compact"></script>
 	<script src="Scripts/index.js"></script>
 </head>
@@ -21,9 +24,13 @@
 			<div data-dojo-type="dijit/layout/TabContainer">
 				<div data-dojo-type="dijit/layout/ContentPane" title="Layers">
 					<div data-dojo-type="dijit/layout/AccordionContainer">
-						<div data-dojo-type="dijit/layout/ContentPane" title="View"></div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="View">
+							<div id="layerToggle">
+								<input type="radio" name="layer-toggle" value="" checked="checked" /><label>Boundaries</label>
+							</div>
+						</div>
 						<div data-dojo-type="dijit/layout/ContentPane" title="Title VI"></div>
-						<div data-dojo-type="dijit/layout/ContentPane" title="Env. Just."></div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="Env. Justice"></div>
 						<div data-dojo-type="dijit/layout/ContentPane" title="Population"></div>
 					</div>
 				</div>
@@ -38,9 +45,7 @@
 				<div id="basemapButton" data-dojo-type="dijit/form/DropDownButton">
 					<span>Basemap</span>
 					<div data-dojo-type="dijit/TooltipDialog">
-						<div id="basemapGallery">
-
-						</div>
+						<div id="basemapGallery"></div>
 					</div>
 				</div>
 			</div>
