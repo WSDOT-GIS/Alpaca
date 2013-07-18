@@ -9,7 +9,8 @@ require([
 	"dijit/layout/AccordionContainer",
 	"dijit/layout/ContentPane",
 	"dijit/layout/BorderContainer",
-	"dijit/layout/TabContainer"
+	"dijit/layout/TabContainer",
+	"dijit/form/Button"
 ], function (ready, Map, BasemapGallery) {
 	"use strict";
 	ready(function () {

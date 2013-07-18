@@ -59,3 +59,7 @@ span[widgetid=basemapButton] {
 #layerToggle > * > * {
 	display: table-cell;
 }
+
+#userAddedDataSection h1 {
+	font-size: 1em;
+}
