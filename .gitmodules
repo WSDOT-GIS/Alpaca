@@ -1,0 +1,3 @@
+[submodule "map-and-app-gallery"]
+	path = map-and-app-gallery
+	url = https://github.com/Esri/map-and-app-gallery.git
