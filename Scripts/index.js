@@ -14,8 +14,9 @@ require([
 	"dijit/form/Button"
 ], function (ready, Map, BasemapGallery, Legend) {
 	"use strict";
+
 	ready(function () {
-		var map;
+		var map, mapId = "f18bec1c4af74955a02d8647e1495c20";
 
 		map = new Map("map", {
 			basemap: "gray",

@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Web;
 
-namespace TitleVI
+namespace Proxy
 {
 	public static class Extensions
 	{

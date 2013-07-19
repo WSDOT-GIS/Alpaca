@@ -1,0 +1,7 @@
+﻿{
+	layers: [
+		"Predominant Population": {
+			"url": "http://atlasmaps.esri.com/arcgis/rest/services/Census2010/Predominant_Population/MapServer"
+		}
+	]
+}
