@@ -17,20 +17,6 @@ require([
 ], function (ready, arcgisUtils, BasemapGallery, Legend, webMap, LayerChooser) {
 	"use strict";
 
-	////var mapId = "f18bec1c4af74955a02d8647e1495c20";
-
-	////config.defaults.io.proxyUrl = "proxy.ashx";
-
-	////urlUtils.addProxyRule({
-	////	proxyUrl: "proxy.ashx",
-	////	urlPrefix: location.protocol + "//www.arcgis.com/sharing/rest/content/items/" + mapId
-	////});
-
-	////urlUtils.addProxyRule({
-	////	proxyUrl: "proxy.ashx",
-	////	urlPrefix: location.protocol + "//demographics1.arcgis.com"
-	////});
-
 	ready(function () {
 		var map;
 
@@ -77,26 +63,5 @@ require([
 			layerChooser = new LayerChooser(response, "layerToggle");
 		});
 
-		////map = new Map("map", {
-		////	basemap: "gray",
-		////	center: [-120.80566406246835, 47.41322033015946],
-		////	zoom: 7,
-		////	showAttribution: true
-		////});
-
-		////map.on("load", function () {
-		////	var basemapGallery, legend;
-
-		////	basemapGallery = new BasemapGallery({
-		////		map: map
-		////	}, "basemapGallery");
-
-		////	basemapGallery.startup();
-
-		////	legend = new Legend({
-		////		map: map,
-		////		autoUpdate: true
-		////	}, "legend");
-		////});
 	});
 });

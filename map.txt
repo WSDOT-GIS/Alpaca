@@ -12,7 +12,6 @@
 		}
 	],
 	"baseMap": {
-
 		"title": "Light Gray Canvas"
 	}
 }
