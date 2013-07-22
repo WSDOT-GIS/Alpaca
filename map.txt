@@ -24,6 +24,5 @@
 			}
 		],
 		"title": "Light Gray Canvas"
-	},
-	"version": "1.9"
+	}
 }
