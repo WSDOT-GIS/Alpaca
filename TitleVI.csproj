@@ -64,11 +64,16 @@
     <Content Include="LICENSE.txt" />
     <Content Include="Scripts\index.js" />
     <Content Include="Style\index.css" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="proxy.ashx.cs">
+      <DependentUpon>proxy.ashx</DependentUpon>
+    </Compile>
     <Compile Include="ProxyConfig.cs" />
     <Compile Include="ServerUrl.cs" />
     <Compile Include="Token.cs" />
