@@ -20,7 +20,15 @@ html, body {
 }
 
 #sidebarPane {
-	width: 200px;
+	width: 400px;
+}
+
+#layersPane {
+	height: 200px;
+}
+
+#legendPane {
+	height: 200px;
 }
 
 #map, .map.container {

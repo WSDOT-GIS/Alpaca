@@ -7,6 +7,7 @@ require([
 	"esri/map",
 	"esri/dijit/BasemapGallery",
 	"esri/dijit/Legend",
+	"dojo/text!./map.txt",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
@@ -15,7 +16,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, config, urlUtils, arcgisUtils, Map, BasemapGallery, Legend) {
+], function (ready, config, urlUtils, arcgisUtils, Map, BasemapGallery, Legend, webMap) {
 	"use strict";
 
 	////var mapId = "f18bec1c4af74955a02d8647e1495c20";
@@ -35,41 +36,19 @@ require([
 	ready(function () {
 		var map;
 
-		////arcgisUtils.createMap(mapId, "map", {
-		////	mapOptions: {
-		////		basemap: "gray",
-		////		center: [-120.80566406246835, 47.41322033015946],
-		////		zoom: 7,
-		////		showAttribution: true
-		////	}
-		////}).then(function (response) {
-		////	map = response.map;
+		webMap = { itemData: JSON.parse(webMap) };
 
-		////	map.on("load", function () {
-		////		var basemapGallery, legend;
-
-		////		basemapGallery = new BasemapGallery({
-		////			map: map
-		////		}, "basemapGallery");
-
-		////		basemapGallery.startup();
-
-		////		legend = new Legend({
-		////			map: map,
-		////			autoUpdate: true
-		////		}, "legend");
-		////	});
-		////});
-
-		map = new Map("map", {
-			basemap: "gray",
-			center: [-120.80566406246835, 47.41322033015946],
-			zoom: 7,
-			showAttribution: true
-		});
-
-		map.on("load", function () {
+		arcgisUtils.createMap(webMap, "map", {
+			mapOptions: {
+				basemap: "gray",
+				center: [-120.80566406246835, 47.41322033015946],
+				zoom: 7,
+				showAttribution: true
+			}
+		}).then(function (response) {
 			var basemapGallery, legend;
+
+			map = response.map;
 
 			basemapGallery = new BasemapGallery({
 				map: map
@@ -81,6 +60,30 @@ require([
 				map: map,
 				autoUpdate: true
 			}, "legend");
+
+			legend.startup();
 		});
+
+		////map = new Map("map", {
+		////	basemap: "gray",
+		////	center: [-120.80566406246835, 47.41322033015946],
+		////	zoom: 7,
+		////	showAttribution: true
+		////});
+
+		////map.on("load", function () {
+		////	var basemapGallery, legend;
+
+		////	basemapGallery = new BasemapGallery({
+		////		map: map
+		////	}, "basemapGallery");
+
+		////	basemapGallery.startup();
+
+		////	legend = new Legend({
+		////		map: map,
+		////		autoUpdate: true
+		////	}, "legend");
+		////});
 	});
 });

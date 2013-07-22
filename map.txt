@@ -1,0 +1,29 @@
+﻿{
+	"operationalLayers": [
+		{
+			"id": "boundaries",
+			"url": "http://tigerweb.geo.census.gov/arcgis/rest/services/Tracts_Blocks/MapServer",
+			"title": "Boundaries",
+			"opacity": 1
+		}
+	],
+	"baseMap": {
+		"baseMapLayers": [
+			{
+				"id": "World_Light_Gray_Base_1486",
+				"opacity": 1,
+				"visibility": true,
+				"url": "http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer"
+			},
+			{
+				"id": "World_Light_Gray_Reference_8656",
+				"isReference": true,
+				"opacity": 1,
+				"visibility": true,
+				"url": "http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer"
+			}
+		],
+		"title": "Light Gray Canvas"
+	},
+	"version": "1.9"
+}

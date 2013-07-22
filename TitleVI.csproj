@@ -81,6 +81,7 @@
   <ItemGroup>
     <Content Include="README.md" />
     <Content Include="packages.config" />
+    <Content Include="map.txt" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="proxy.config" />
     <Content Include="proxy.ashx" />
