@@ -1,8 +1,11 @@
-﻿define([
+﻿/*global define*/
+/*jslint browser:true*/
+define([
 	"dojo/_base/declare",
 	"dojo/Evented",
 	"dojo/on"
 ], function (declare, Evented, on) {
+	"use strict";
 	var LayerChooser, LayerRadioButton;
 
 	LayerRadioButton = declare([Evented], {
@@ -85,7 +88,7 @@
 		constructor: function (mapInfo, domRef) {
 			var self = this, operationalLayers, i, l, layerRadio, opLayer, docFrag;
 
-			function toggleLayer(layerInfo) {
+			function toggleLayer() {
 				self.toggleLayer();
 			}
 

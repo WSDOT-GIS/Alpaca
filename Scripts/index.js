@@ -1,10 +1,7 @@
 ﻿/*global require*/
 require([
 	"dojo/ready",
-	"esri/config",
-	"esri/urlUtils",
 	"esri/arcgis/utils",
-	"esri/map",
 	"esri/dijit/BasemapGallery",
 	"esri/dijit/Legend",
 	"dojo/text!./map.txt",
@@ -17,7 +14,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, config, urlUtils, arcgisUtils, Map, BasemapGallery, Legend, webMap, LayerChooser) {
+], function (ready, arcgisUtils, BasemapGallery, Legend, webMap, LayerChooser) {
 	"use strict";
 
 	////var mapId = "f18bec1c4af74955a02d8647e1495c20";
@@ -37,6 +34,18 @@ require([
 	ready(function () {
 		var map;
 
+		function getBasemapLayerIds() {
+			var re, layerId, i, l, output = [];
+			re = /^layer\d+$/i;
+			for (i = 0, l = map.layerIds.length; i < l; i += 1) {
+				layerId = map.layerIds[i];
+				if (re.test(layerId)) {
+					output.push(layerId);
+				}
+			}
+			return output;
+		}
+
 		webMap = { itemData: JSON.parse(webMap) };
 
 		arcgisUtils.createMap(webMap, "map", {
@@ -49,14 +58,11 @@ require([
 		}).then(function (response) {
 			var basemapGallery, legend, layerChooser;
 
-			if (console && console.log) {
-				console.log(response);
-			}
-
 			map = response.map;
 
 			basemapGallery = new BasemapGallery({
-				map: map
+				map: map,
+				basemapIds: getBasemapLayerIds()
 			}, "basemapGallery");
 
 			basemapGallery.startup();
