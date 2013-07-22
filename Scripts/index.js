@@ -46,6 +46,15 @@ require([
 
 			map = response.map;
 
+			// Setup the progress bar to display when the map is loading data.
+			map.on("update-start", function () {
+				document.querySelector("#mapProgress").hidden = false;
+			});
+
+			map.on("update-end", function () {
+				document.querySelector("#mapProgress").hidden = true;
+			});
+
 			basemapGallery = new BasemapGallery({
 				map: map,
 				basemapIds: getBasemapLayerIds()

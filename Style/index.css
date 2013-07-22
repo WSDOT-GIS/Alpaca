@@ -38,6 +38,14 @@ html, body {
 	padding: 0;
 }
 
+#map progress {
+	position: absolute;
+	bottom: 3px;
+	right: 25%;
+	width: 50%;
+	z-index: 1;
+}
+
 span[widgetid=basemapButton] {
 	position: absolute;
 	top: 0;
