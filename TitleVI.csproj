@@ -63,6 +63,7 @@
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
     <Content Include="Scripts\index.js" />
+    <Content Include="Scripts\wsdot\title6\layerChooser.js" />
     <Content Include="Style\index.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

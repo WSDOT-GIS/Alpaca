@@ -8,6 +8,7 @@ require([
 	"esri/dijit/BasemapGallery",
 	"esri/dijit/Legend",
 	"dojo/text!./map.txt",
+	"title6/layerChooser",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
@@ -16,7 +17,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, config, urlUtils, arcgisUtils, Map, BasemapGallery, Legend, webMap) {
+], function (ready, config, urlUtils, arcgisUtils, Map, BasemapGallery, Legend, webMap, LayerChooser) {
 	"use strict";
 
 	////var mapId = "f18bec1c4af74955a02d8647e1495c20";
@@ -46,7 +47,11 @@ require([
 				showAttribution: true
 			}
 		}).then(function (response) {
-			var basemapGallery, legend;
+			var basemapGallery, legend, layerChooser;
+
+			if (console && console.log) {
+				console.log(response);
+			}
 
 			map = response.map;
 
@@ -62,6 +67,8 @@ require([
 			}, "legend");
 
 			legend.startup();
+
+			layerChooser = new LayerChooser(response, "layerToggle");
 		});
 
 		////map = new Map("map", {

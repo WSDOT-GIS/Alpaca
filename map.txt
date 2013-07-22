@@ -3,8 +3,12 @@
 		{
 			"id": "boundaries",
 			"url": "http://tigerweb.geo.census.gov/arcgis/rest/services/Tracts_Blocks/MapServer",
-			"title": "Boundaries",
-			"opacity": 1
+			"title": "Boundaries"
+		},
+		{
+			"id": "predominant_population",
+			"url": "http://atlasmaps.esri.com/arcgis/rest/services/Census2010/Predominant_Population/MapServer",
+			"title": "Predominant Population"
 		}
 	],
 	"baseMap": {
