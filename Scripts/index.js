@@ -1,7 +1,9 @@
 ﻿/*global require*/
+/*jslint browser:true */
 require([
 	"dojo/ready",
 	"esri/arcgis/utils",
+	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
 	"esri/dijit/Legend",
 	"dojo/text!./map.txt",
@@ -14,7 +16,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, arcgisUtils, BasemapGallery, Legend, webMap, LayerChooser) {
+], function (ready, arcgisUtils, domUtils, BasemapGallery, Legend, webMap, LayerChooser) {
 	"use strict";
 
 	ready(function () {
@@ -48,11 +50,11 @@ require([
 
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
-				document.querySelector("#mapProgress").hidden = false;
+				domUtils.show(document.getElementById("mapProgress"));
 			});
 
 			map.on("update-end", function () {
-				document.querySelector("#mapProgress").hidden = true;
+				domUtils.hide(document.getElementById("mapProgress"));
 			});
 
 			basemapGallery = new BasemapGallery({
