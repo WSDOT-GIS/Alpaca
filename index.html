@@ -4,7 +4,7 @@
 	<title>Test</title>
 	<link rel="stylesheet" href="//serverapi.arcgisonline.com/jsapi/arcgis/3.5compact/js/esri/css/esri.css" />
 	<link href="//serverapi.arcgisonline.com/jsapi/arcgis/3.5compact/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet" />
-	<link href="Style/index.css" rel="stylesheet" />
+	<link href="Style/index.min.css" rel="stylesheet" />
 	<script>
 		var dojoConfig = {
 			async: true,
@@ -30,8 +30,8 @@
 				<div data-dojo-type="dijit/layout/ContentPane" title="Layers">
 					<div data-dojo-type="dijit/layout/AccordionContainer">
 						<div data-dojo-type="dijit/layout/ContentPane" title="View">
-							<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:true, liveSplitters:true">
-								<div id="layersPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center',splitter:true">
+							<div data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:false, liveSplitters:true">
+								<div id="layersPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top',splitter:true">
 									<div id="layerToggle"></div>
 									<div id="userAddedDataSection">
 										<h1>User Added Data</h1>
@@ -41,7 +41,7 @@
 								</div>
 
 
-								<div id="legendPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom',splitter:true">
+								<div id="legendPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center',splitter:true">
 									<div id="legend">
 									</div>
 								</div>
