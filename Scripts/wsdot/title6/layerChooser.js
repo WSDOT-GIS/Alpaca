@@ -38,7 +38,7 @@ define([
 			// Label
 			self.label = document.createElement("label");
 			self.label.htmlFor = self.radioButton.id;
-			self.label.innerText = options.label;
+			self.label.textContent = options.label;
 
 			self.domNode.appendChild(self.label);
 
