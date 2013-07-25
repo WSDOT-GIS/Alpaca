@@ -24,7 +24,7 @@ require([
 
 		function getBasemapLayerIds() {
 			var re, layerId, i, l, output = [];
-			re = /^layer\d+$/i;
+			re = /(^layer\d+$)|(^World_Light_Gray)/i;
 			for (i = 0, l = map.layerIds.length; i < l; i += 1) {
 				layerId = map.layerIds[i];
 				if (re.test(layerId)) {
@@ -38,7 +38,7 @@ require([
 
 		arcgisUtils.createMap(webMap, "map", {
 			mapOptions: {
-				basemap: "gray",
+				//basemap: "gray",
 				center: [-120.80566406246835, 47.41322033015946],
 				zoom: 7,
 				showAttribution: true
@@ -47,6 +47,9 @@ require([
 			var basemapGallery, legend, layerChooser;
 
 			map = response.map;
+
+			// DEBUG
+			window.map = map;
 
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
@@ -72,6 +75,9 @@ require([
 			legend.startup();
 
 			layerChooser = new LayerChooser(response, "layerToggle");
+			layerChooser.on("layer-error", function (e) {
+				console.error(e);
+			});
 		});
 
 	});

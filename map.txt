@@ -1,17 +1,92 @@
 ﻿{
-	"operationalLayers": [
-		{
-			"id": "boundaries",
-			"url": "http://tigerweb.geo.census.gov/arcgis/rest/services/Tracts_Blocks/MapServer",
-			"title": "Boundaries"
+	"operationalLayers": [{
+		"url": "http://demographics1.arcgis.com/arcgis/rest/services/USA_Demographics_and_Boundaries/MapServer",
+		"id": "USA_Demographics_and_Boundaries_9660",
+		"visibility": false,
+		"visibleLayers": [0,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7,
+		8,
+		9,
+		10,
+		11,
+		12,
+		13],
+		"opacity": 1,
+		"title": "USA Median Household Income",
+		"itemId": "8f3fda01cc0f4d5d875a82e797766588"
+	},
+	{
+		"url": "http://demographics1.arcgis.com/arcgis/rest/services/USA_Demographics_and_Boundaries/MapServer",
+		"id": "USA_Demographics_and_Boundaries_3971",
+		"visibility": false,
+		"visibleLayers": [0,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7,
+		8,
+		9,
+		10,
+		11,
+		12,
+		13],
+		"opacity": 1,
+		"title": "USA Median Age",
+		"itemId": "b835f85f4c5644b393da1c18de083f16"
+	},
+	{
+		"url": "http://demographics1.arcgis.com/arcgis/rest/services/USA_Demographics_and_Boundaries/MapServer",
+		"id": "USA_Demographics_and_Boundaries_4587",
+		"visibility": false,
+		"visibleLayers": [0,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7,
+		8,
+		9,
+		10,
+		11,
+		12,
+		13],
+		"opacity": 1,
+		"title": "USA Diversity Index",
+		"itemId": "9ec6cc14086a49979f27cd5f6b9602ab"
+	},
+	{
+		"url": "http://tigerweb.geo.census.gov/arcgis/rest/services/Census2010/Tracts_Blocks/MapServer",
+		"id": "Tracts_Blocks_4047",
+		"visibility": true,
+		"opacity": 1,
+		"title": "Census Boundaries"
+	}],
+	"baseMap": {
+		"baseMapLayers": [{
+			"id": "World_Light_Gray_Base_6115",
+			"opacity": 1,
+			"visibility": true,
+			"url": "http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer"
 		},
 		{
-			"id": "predominant_population",
-			"url": "http://atlasmaps.esri.com/arcgis/rest/services/Census2010/Predominant_Population/MapServer",
-			"title": "Predominant Population"
-		}
-	],
-	"baseMap": {
+			"id": "World_Light_Gray_Reference_9055",
+			"isReference": true,
+			"opacity": 1,
+			"visibility": true,
+			"url": "http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer"
+		}],
 		"title": "Light Gray Canvas"
-	}
+	},
+	"version": "1.9"
 }

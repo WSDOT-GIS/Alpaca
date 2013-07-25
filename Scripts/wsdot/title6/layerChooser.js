@@ -17,6 +17,7 @@ define([
 		@param {String} options.layerId The ID of the layer used to identify it in the map.
 		@param {String} options.label The text that will be used for the label.
 		@param {Boolean} [options.checked] Is the radio button checked?
+		@param {Array} [options.errors] Does the layer contain errors.
 		@constructs
 		*/
 		constructor: function (options) {
@@ -48,6 +49,12 @@ define([
 					visible: self.radioButton.checked
 				});
 			});
+
+			// If the layer has errors, disable the radio button
+			if (options.errors && options.errors.length) {
+				self.radioButton.disabled = true;
+				self.domNode.classList.add("layer-chooser-layer-error");
+			}
 		}
 	});
 
@@ -86,7 +93,7 @@ define([
 			}
 		},
 		constructor: function (mapInfo, domRef) {
-			var self = this, operationalLayers, i, l, layerRadio, opLayer, docFrag;
+			var self = this, operationalLayers, i, l, layerRadio, opLayer, docFrag, firstLayerFound = false;
 
 			function toggleLayer() {
 				self.toggleLayer();
@@ -109,19 +116,29 @@ define([
 
 			for (i = 0, l = operationalLayers.length; i < l; i += 1) {
 				opLayer = operationalLayers[i];
+
 				layerRadio = new LayerRadioButton({
 					layerId: opLayer.id,
 					label: opLayer.title,
-					checked: i === 0
+					checked: !firstLayerFound, // Only check the first valid layer's radio button.
+					errors: opLayer.errors
 				});
 
 				layerRadio.on("checked", toggleLayer);
 
-				// Show the first layer, hide the others.
-				if (i === 0) {
-					opLayer.layerObject.show();
-				} else {
-					opLayer.layerObject.hide();
+				console.log("operational layer", opLayer);
+
+				if (opLayer.errors && opLayer.errors.length) {
+
+				} 
+				else {
+					// Show the first layer, hide the others.
+					if (!firstLayerFound) {
+						opLayer.layerObject.show();
+						firstLayerFound = true;
+					} else {
+						opLayer.layerObject.hide();
+					}
 				}
 
 				docFrag.appendChild(layerRadio.domNode);

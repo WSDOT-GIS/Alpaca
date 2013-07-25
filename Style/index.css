@@ -79,3 +79,8 @@ span[widgetid=basemapButton] {
 #userAddedDataSection h1 {
 	font-size: 1em;
 }
+
+.layer-chooser-layer-error {
+	text-decoration:line-through;
+	color: red;
+}
