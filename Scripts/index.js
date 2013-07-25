@@ -3,6 +3,7 @@
 require([
 	"dojo/ready",
 	"esri/arcgis/utils",
+	"esri/urlUtils",
 	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
 	"esri/dijit/Legend",
@@ -16,8 +17,13 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, arcgisUtils, domUtils, BasemapGallery, Legend, webMap, LayerChooser) {
+], function (ready, arcgisUtils, urlUtils, domUtils, BasemapGallery, Legend, webMap, LayerChooser) {
 	"use strict";
+
+	urlUtils.addProxyRule({
+		urlPrefix: "http://demographics1.arcgis.com",
+		proxyUrl: "proxy.ashx"
+	});
 
 	ready(function () {
 		var map;

@@ -5,7 +5,9 @@
   url, etc.
 */
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Web;
 
 namespace Proxy
@@ -116,15 +118,39 @@ namespace Proxy
 					{
 						// Binary response (image, lyr file, other binary file)
 						BinaryReader br = new BinaryReader(byteStream);
-						byte[] outb = br.ReadBytes((int)serverResponse.ContentLength);
+						if (serverResponse.ContentLength < 0) 
+						{
+							// If response is sent "chunked", the length is unknown, so we must loop through the bytes
+							// until the end of the stream is detected. 
+							// (Is there a better way besides waiting for an EndOfStreamException to happen?)
+							var byteList = new List<byte>();
+							byte b = br.ReadByte();
+							while (true) {
+								byteList.Add(b);
+								try
+								{
+									b = br.ReadByte();
+								}
+								catch (EndOfStreamException)
+								{
+									break;
+								}
+							}
+							var outb = byteList.ToArray();
+							response.OutputStream.Write(outb, 0, outb.Length);
+						}
+						else
+						{
+							byte[] outb = br.ReadBytes((int)serverResponse.ContentLength);
+							// Send the image to the client
+							// (Note: if large images/files sent, could modify this to send in chunks)
+							response.OutputStream.Write(outb, 0, outb.Length);
+						}
 						br.Close();
 
-						// Tell client not to cache the image since it's dynamic
-						response.CacheControl = "no-cache";
+						////// Tell client not to cache the image since it's dynamic
+						////response.CacheControl = "no-cache";
 
-						// Send the image to the client
-						// (Note: if large images/files sent, could modify this to send in chunks)
-						response.OutputStream.Write(outb, 0, outb.Length);
 					}
 
 					serverResponse.Close();
