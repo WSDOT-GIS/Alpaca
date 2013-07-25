@@ -81,9 +81,6 @@ require([
 			legend.startup();
 
 			layerChooser = new LayerChooser(response, "layerToggle");
-			layerChooser.on("layer-error", function (e) {
-				console.error(e);
-			});
 		});
 
 	});

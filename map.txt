@@ -1,5 +1,12 @@
 ﻿{
 	"operationalLayers": [{
+		"url": "http://tigerweb.geo.census.gov/arcgis/rest/services/Census2010/Tracts_Blocks/MapServer",
+		"id": "Tracts_Blocks_4047",
+		"visibility": true,
+		"opacity": 1,
+		"title": "Tracts_Blocks"
+	},
+	{
 		"url": "http://demographics1.arcgis.com/arcgis/rest/services/USA_Demographics_and_Boundaries/MapServer",
 		"id": "USA_Demographics_and_Boundaries_9660",
 		"visibility": false,
@@ -64,14 +71,8 @@
 		"opacity": 1,
 		"title": "USA Diversity Index",
 		"itemId": "9ec6cc14086a49979f27cd5f6b9602ab"
-	},
-	{
-		"url": "http://tigerweb.geo.census.gov/arcgis/rest/services/Census2010/Tracts_Blocks/MapServer",
-		"id": "Tracts_Blocks_4047",
-		"visibility": true,
-		"opacity": 1,
-		"title": "Census Boundaries"
-	}],
+	}
+	],
 	"baseMap": {
 		"baseMapLayers": [{
 			"id": "World_Light_Gray_Base_6115",

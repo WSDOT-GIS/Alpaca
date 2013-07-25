@@ -126,8 +126,6 @@ define([
 
 				layerRadio.on("checked", toggleLayer);
 
-				console.log("operational layer", opLayer);
-
 				if (opLayer.errors && opLayer.errors.length) {
 
 				} 
