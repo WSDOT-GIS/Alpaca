@@ -59,18 +59,6 @@ define([
 	});
 
 	LayerChooser = declare([Evented], {
-		/**
-		* @param mapInfo The response of the arcgisUtils/createMap operation. See https://developers.arcgis.com/en/javascript/jshelp/intro_webmap.html
-		* @param {esri/Map} mapInfo.map
-		* @param {Object} mapInfo.itemInfo
-		* @param {Object} mapInfo.itemInfo.itemData
-		* @param {Object} mapInfo.itemInfo.itemData.baseMap
-		* @param {Array} mapInfo.itemInfo.itemData.operationalLayers
-		* @param {Object} mapInfo.clickEventHandle
-		* @param {Object} mapInfo.clickEventListener
-		* @param {Array} mapInfo.errors
-		* @constructs
-		*/
 		domNode: null,
 		map: null,
 		toggleLayer: function() {
@@ -92,6 +80,18 @@ define([
 				}
 			}
 		},
+		/**
+		* @param mapInfo The response of the arcgisUtils/createMap operation. See https://developers.arcgis.com/en/javascript/jshelp/intro_webmap.html
+		* @param {esri/Map} mapInfo.map
+		* @param {Object} mapInfo.itemInfo
+		* @param {Object} mapInfo.itemInfo.itemData
+		* @param {Object} mapInfo.itemInfo.itemData.baseMap
+		* @param {Array} mapInfo.itemInfo.itemData.operationalLayers
+		* @param {Object} mapInfo.clickEventHandle
+		* @param {Object} mapInfo.clickEventListener
+		* @param {Array} mapInfo.errors
+		* @constructs
+		*/
 		constructor: function (mapInfo, domRef) {
 			var self = this, operationalLayers, i, l, layerRadio, opLayer, docFrag, firstLayerFound = false;
 
