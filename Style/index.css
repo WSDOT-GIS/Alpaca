@@ -46,7 +46,7 @@ html, body {
 	z-index: 1;
 }
 
-span[widgetid=basemapButton] {
+.toolbar {
 	position: absolute;
 	top: 0;
 	right: 0;

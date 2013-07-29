@@ -82,10 +82,12 @@
 		<div id="mapPane" data-dojo-type="dijit/layout/ContentPane"
 			data-dojo-props="splitter:true, region:'center'">
 			<div id="map">
-				<div id="basemapButton" data-dojo-type="dijit/form/DropDownButton">
-					<span>Basemap</span>
-					<div data-dojo-type="dijit/TooltipDialog">
-						<div id="basemapGallery"></div>
+				<div id="toolbar" class="toolbar">
+					<div id="basemapButton" data-dojo-type="dijit/form/DropDownButton">
+						<span>Basemap</span>
+						<div data-dojo-type="dijit/TooltipDialog">
+							<div id="basemapGallery"></div>
+						</div>
 					</div>
 				</div>
 				<progress id="mapProgress">Loading data...</progress>
