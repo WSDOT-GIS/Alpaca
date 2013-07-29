@@ -89,8 +89,6 @@ require([
 
 			map = response.map;
 
-
-
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
 				domUtils.show(document.getElementById("mapProgress"));
