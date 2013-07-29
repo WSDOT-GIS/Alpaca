@@ -18,20 +18,64 @@ require([
 ], function (ready, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser) {
 	"use strict";
 
+	/** Determines if layer is a basemap layer based on its layer ID.
+	* @param {String} layerId
+	* @returns {Boolean}
+	*/
+	function detectBasemapLayerId(layerId) {
+		var re = /(^layer\d+$)|(^World_Light_Gray)/i;
+		// Returns true if layerId is truthy (not null, undefined, 0, or emtpy string) and matches the regular expression.
+		return layerId && re.test(layerId);
+	}
+
+	/**
+	* @param response The response of the arcgisUtils/createMap operation. See https://developers.arcgis.com/en/javascript/jshelp/intro_webmap.html
+	* @param {esri/Map} response.map
+	* @param {Object} response.itemInfo
+	* @param {Object} response.itemInfo.itemData
+	* @param {Object} response.itemInfo.itemData.baseMap
+	* @param {Array} response.itemInfo.itemData.operationalLayers
+	* @param {Object} response.clickEventHandle
+	* @param {Object} response.clickEventListener
+	* @param {Array} response.errors
+	*/
+	function getLayerInfosForLegend(response) {
+		var output = [], operationalLayers, layer, i, l;
+
+		operationalLayers = response.itemInfo.itemData.operationalLayers;
+
+		for (i = 0, l = operationalLayers.length; i < l; i += 1) {
+			layer = operationalLayers[i];
+			if (!layer.featureCollection) {
+				output.push({
+					layer: layer.layerObject,
+					title: layer.title
+				});
+			}
+		}
+
+		return output;
+	}
+
 	ready(function () {
 		var map;
 
+
+		/** Gets the layer ids of all basemap layers currently in the map.
+		@returns {Array} An array of layer ID strings.
+		*/
 		function getBasemapLayerIds() {
-			var re, layerId, i, l, output = [];
-			re = /(^layer\d+$)|(^World_Light_Gray)/i;
+			var layerId, i, l, output = [];
 			for (i = 0, l = map.layerIds.length; i < l; i += 1) {
 				layerId = map.layerIds[i];
-				if (re.test(layerId)) {
+				if (detectBasemapLayerId(layerId)) {
 					output.push(layerId);
 				}
 			}
 			return output;
 		}
+
+
 
 		arcgisUtils.createMap("8ddc4f4f300a4d43b795f2abe62d3e2a", "map", {
 			mapOptions: {
@@ -44,6 +88,8 @@ require([
 			var basemapGallery, legend, layerChooser;
 
 			map = response.map;
+
+
 
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
@@ -63,7 +109,8 @@ require([
 
 			legend = new Legend({
 				map: map,
-				autoUpdate: true
+				autoUpdate: true,
+				layerInfos: getLayerInfosForLegend(response)
 			}, "legend");
 
 			legend.startup();
