@@ -3,11 +3,9 @@
 require([
 	"dojo/ready",
 	"esri/arcgis/utils",
-	"esri/urlUtils",
 	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
 	"esri/dijit/Legend",
-	"dojo/text!./map.txt",
 	"title6/layerChooser",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
@@ -17,13 +15,8 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, arcgisUtils, urlUtils, domUtils, BasemapGallery, Legend, webMap, LayerChooser) {
+], function (ready, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser) {
 	"use strict";
-
-	urlUtils.addProxyRule({
-		urlPrefix: "http://demographics1.arcgis.com",
-		proxyUrl: "proxy.ashx"
-	});
 
 	ready(function () {
 		var map;
@@ -40,9 +33,7 @@ require([
 			return output;
 		}
 
-		webMap = { itemData: JSON.parse(webMap) };
-
-		arcgisUtils.createMap(webMap, "map", {
+		arcgisUtils.createMap("8ddc4f4f300a4d43b795f2abe62d3e2a", "map", {
 			mapOptions: {
 				//basemap: "gray",
 				center: [-120.80566406246835, 47.41322033015946],
@@ -53,9 +44,6 @@ require([
 			var basemapGallery, legend, layerChooser;
 
 			map = response.map;
-
-			// DEBUG
-			window.map = map;
 
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
