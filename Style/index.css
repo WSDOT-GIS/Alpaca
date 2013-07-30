@@ -75,6 +75,7 @@ html, body {
 
 .layer-list {
 	padding-left: 0;
+	margin: 0;
 }
 
 .layer-list ul {
