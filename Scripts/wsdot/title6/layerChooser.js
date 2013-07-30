@@ -14,7 +14,7 @@ define([
 		constructor: function (layer) {
 			var self = this, i, l, layerInfos, layerInfo, li, radioButton, label, clickHandler;
 
-			clickHandler = function(e) {
+			clickHandler = function() {
 				var sublayerIds = this.value.split(",").map(Number);
 				layer.setVisibleLayers(sublayerIds);
 			};
@@ -64,7 +64,7 @@ define([
 		constructor: function (options) {
 			var self = this, opLayer = options.operationalLayer;
 
-			self.domNode = document.createElement("div");
+			self.domNode = document.createElement("li");
 
 			// Radio button
 			self.radioButton = document.createElement("input");
@@ -126,6 +126,7 @@ define([
 				}
 			}
 		},
+		list: null,
 		/**
 		* @param mapInfo The response of the arcgisUtils/createMap operation. See https://developers.arcgis.com/en/javascript/jshelp/intro_webmap.html
 		* @param {esri/Map} mapInfo.map
@@ -139,7 +140,7 @@ define([
 		* @constructs
 		*/
 		constructor: function (mapInfo, domRef) {
-			var self = this, operationalLayers, i, l, layerRadio, opLayer, docFrag, firstLayerFound = false;
+			var self = this, operationalLayers, i, l, layerRadio, opLayer, firstLayerFound = false;
 
 			function toggleLayer() {
 				self.toggleLayer();
@@ -154,11 +155,14 @@ define([
 				this.domNode = domRef;
 			}
 
+			self.list = document.createElement("ul");
+			self.list.classList.add("layer-list");
+			self.domNode.appendChild(self.list);
+
 			this.map = mapInfo.map;
 			operationalLayers = mapInfo.itemInfo.itemData.operationalLayers;
 
 			// Create the radio buttons and place each into a document fragment as it is created.
-			docFrag = document.createDocumentFragment();
 
 			for (i = 0, l = operationalLayers.length; i < l; i += 1) {
 				opLayer = operationalLayers[i];
@@ -184,10 +188,8 @@ define([
 					}
 				}
 
-				docFrag.appendChild(layerRadio.domNode);
+				self.list.appendChild(layerRadio.domNode);
 			}
-
-			this.domNode.appendChild(docFrag);
 		}
 	});
 

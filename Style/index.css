@@ -64,18 +64,6 @@ html, body {
 	border-radius: 5px; 
 }
 
-#layerToggle {
-	display: table;
-}
-
-#layerToggle > * {
-	display: table-row;
-}
-
-#layerToggle > * > * {
-	display: table-cell;
-}
-
 #userAddedDataSection h1 {
 	font-size: 1em;
 }
