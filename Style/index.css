@@ -72,3 +72,11 @@ html, body {
 	text-decoration:line-through;
 	color: red;
 }
+
+input + * + ul {
+	display: none;
+}
+
+input:checked + * + ul {
+	display: block;
+}
