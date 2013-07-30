@@ -1,5 +1,5 @@
 ﻿/*global define*/
-/*jslint browser:true*/
+/*jslint browser:true,plusplus:true*/
 define([
 	"dojo/_base/declare",
 	"dojo/Evented",
@@ -164,7 +164,7 @@ define([
 		* @constructs
 		*/
 		constructor: function (mapInfo, domRef) {
-			var self = this, operationalLayers, i, l, layerRadio, opLayer, firstLayerFound = false;
+			var self = this, operationalLayers, i, layerRadio, opLayer, firstLayerFound = false;
 
 			function toggleLayer() {
 				self.toggleLayer();
@@ -192,7 +192,8 @@ define([
 
 			// Create the radio buttons and place each into a document fragment as it is created.
 
-			for (i = 0, l = operationalLayers.length; i < l; i += 1) {
+			//for (i = 0, l = operationalLayers.length; i < l; i += 1) {
+			for (i = operationalLayers.length - 1; i >= 0; i--) {
 				opLayer = operationalLayers[i];
 
 				layerRadio = new LayerRadioButton({
