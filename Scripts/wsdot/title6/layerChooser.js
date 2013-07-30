@@ -6,30 +6,64 @@ define([
 	"dojo/on"
 ], function (declare, Evented, on) {
 	"use strict";
-	var LayerChooser, LayerRadioButton;
+	var LayerChooser, LayerRadioButton, SublayerList;
+
+	SublayerList = declare([Evented], {
+		/** @property {HTMLUListElement} */
+		domNode: null,
+		constructor: function (layer) {
+			var self = this, i, l, layerInfos, layerInfo, li, radioButton, label;
+			layerInfos = layer.layerInfos;
+			self.domNode = document.createElement("ul");
+			for (i = 0, l = layerInfos.length; i < l; i += 1) {
+				layerInfo = layerInfos[i];
+				if (layerInfo.parentLayerId === -1) {
+					li = document.createElement("li");
+					self.domNode.appendChild(li);
+					// create the radio button.
+					radioButton = document.createElement("input");
+					radioButton.id = ["layer", layer.id, layerInfo.id, "radio_button"].join("_");
+					radioButton.name = [layer.id, "sublayers"].join("_");
+					radioButton.type = "radio";
+					radioButton.checked = layerInfo.defaultVisibility;
+					radioButton.value = [layerInfo.id].concat(layerInfo.subLayerIds); // The value will be converted to a string.
+					li.appendChild(radioButton);
+					// Create label
+					label = document.createElement("label");
+					label.htmlFor = radioButton.id;
+					label.textContent = layerInfo.name;
+					li.appendChild(label);
+				}
+			}
+		}
+	});
 
 	LayerRadioButton = declare([Evented], {
 		radioButton: null,
 		label: null,
 		domNode: null,
+		sublayerList: null,
 		/**
-		@param options
-		@param {String} options.layerId The ID of the layer used to identify it in the map.
-		@param {String} options.label The text that will be used for the label.
+		@param {Object} options
+		@param {Object} options.operationalLayer
+		@param {esri/layers/Layer} options.operationalLayer.layerObject
+		@param {String} options.operationalLayer.id
+		@param {String} options.operationalLayer.title
+		@param {Array} options.operationalLayer.errors
 		@param {Boolean} [options.checked] Is the radio button checked?
-		@param {Array} [options.errors] Does the layer contain errors.
+		@param {Boolean} [options.includeSublayers] 
 		@constructs
 		*/
 		constructor: function (options) {
-			var self = this;
+			var self = this, opLayer = options.operationalLayer;
 
 			self.domNode = document.createElement("div");
 
 			// Radio button
 			self.radioButton = document.createElement("input");
 			self.radioButton.type = "radio";
-			self.radioButton.id = ["layer_chooser_radio_", options.layerId].join("");
-			self.radioButton.value = options.layerId;
+			self.radioButton.id = ["layer_chooser_radio_", opLayer.layerObject.id].join("");
+			self.radioButton.value = opLayer.id;
 			self.radioButton.name = "layer_chooser";
 			if (options.checked) {
 				self.radioButton.checked = true;
@@ -39,7 +73,7 @@ define([
 			// Label
 			self.label = document.createElement("label");
 			self.label.htmlFor = self.radioButton.id;
-			self.label.textContent = options.label;
+			self.label.textContent = opLayer.title;
 
 			self.domNode.appendChild(self.label);
 
@@ -51,9 +85,14 @@ define([
 			});
 
 			// If the layer has errors, disable the radio button
-			if (options.errors && options.errors.length) {
+			if (opLayer.errors && opLayer.errors.length) {
 				self.radioButton.disabled = true;
 				self.domNode.classList.add("layer-chooser-layer-error");
+			}
+			
+			if (options.includeSublayers) {
+				self.sublayerList = new SublayerList(opLayer.layerObject);
+				self.domNode.appendChild(self.sublayerList.domNode);
 			}
 		}
 	});
@@ -118,18 +157,17 @@ define([
 				opLayer = operationalLayers[i];
 
 				layerRadio = new LayerRadioButton({
-					layerId: opLayer.id,
-					label: opLayer.title,
+					operationalLayer: opLayer,
+					//layerId: opLayer.id,
+					//label: opLayer.title,
 					checked: !firstLayerFound, // Only check the first valid layer's radio button.
-					errors: opLayer.errors
+					//errors: opLayer.errors
+					includeSublayers: !/^Boundaries$/i.test(opLayer.title)
 				});
 
 				layerRadio.on("checked", toggleLayer);
 
-				if (opLayer.errors && opLayer.errors.length) {
-
-				} 
-				else {
+				if (!(opLayer.errors && opLayer.errors.length)) {
 					// Show the first layer, hide the others.
 					if (!firstLayerFound) {
 						opLayer.layerObject.show();
