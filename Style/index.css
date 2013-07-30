@@ -87,11 +87,11 @@ html, body {
 }
 
 /* hide all sublayer lists */
-.layer-list input + * + ul {
+.layer-list input + * + * + ul, .layer-list input + * + .dijitSlider  {
 	display: none;
 }
 
 /* show the layer lists of checked layers */
-.layer-list input:checked + * + ul {
+.layer-list input:checked + * + * + ul, .layer-list input:checked + * + .dijitSlider {
 	display: block;
 }

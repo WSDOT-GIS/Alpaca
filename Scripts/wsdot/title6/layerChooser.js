@@ -3,8 +3,9 @@
 define([
 	"dojo/_base/declare",
 	"dojo/Evented",
-	"dojo/on"
-], function (declare, Evented, on) {
+	"dojo/on",
+	"dijit/form/HorizontalSlider"
+], function (declare, Evented, on, HorizontalSlider) {
 	"use strict";
 	var LayerChooser, LayerRadioButton, SublayerList;
 
@@ -15,7 +16,9 @@ define([
 			var self = this, i, l, layerInfos, layerInfo, li, radioButton, label, clickHandler;
 
 			clickHandler = function() {
-				var sublayerIds = this.value.split(",").map(Number);
+				var sublayerIds = this.value.split(",").map(function (v) {
+					return parseInt(v, 10);
+				});
 				layer.setVisibleLayers(sublayerIds);
 				self.emit("sublayer-select", {
 					layer: layer,
@@ -54,6 +57,7 @@ define([
 		label: null,
 		domNode: null,
 		sublayerList: null,
+		opacitySlider: null,
 		/**
 		@param {Object} options
 		@param {Object} options.operationalLayer
@@ -100,6 +104,19 @@ define([
 				self.radioButton.disabled = true;
 				self.domNode.classList.add("layer-chooser-layer-error");
 			}
+
+			// Add the opacity slider
+
+			self.opacitySlider = new HorizontalSlider({
+				value: opLayer.layerObject.opacity,
+				minimum: 0,
+				maximum: 1,
+				onChange: function (value) {
+					opLayer.layerObject.setOpacity(value);
+				}
+			});
+
+			self.domNode.appendChild(self.opacitySlider.domNode);
 			
 			if (options.includeSublayers) {
 				self.sublayerList = new SublayerList(opLayer.layerObject);
