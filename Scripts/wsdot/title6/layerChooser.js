@@ -106,7 +106,7 @@ define([
 				self.domNode.appendChild(self.sublayerList.domNode);
 				self.sublayerList.on("sublayer-select", function (e) {
 					self.emit("sublayer-select", e);
-				})
+				});
 			}
 		}
 	});
