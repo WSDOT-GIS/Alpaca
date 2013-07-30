@@ -73,10 +73,24 @@ html, body {
 	color: red;
 }
 
-input + * + ul {
+.layer-list {
+	padding-left: 0;
+}
+
+.layer-list ul {
+	padding-left: 2em;
+}
+
+.layer-list li {
+	list-style-type: none;
+}
+
+/* hide all sublayer lists */
+.layer-list input + * + ul {
 	display: none;
 }
 
-input:checked + * + ul {
+/* show the layer lists of checked layers */
+.layer-list input:checked + * + ul {
 	display: block;
 }
