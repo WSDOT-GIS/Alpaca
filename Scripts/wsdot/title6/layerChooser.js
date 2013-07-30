@@ -12,7 +12,13 @@ define([
 		/** @property {HTMLUListElement} */
 		domNode: null,
 		constructor: function (layer) {
-			var self = this, i, l, layerInfos, layerInfo, li, radioButton, label;
+			var self = this, i, l, layerInfos, layerInfo, li, radioButton, label, clickHandler;
+
+			clickHandler = function(e) {
+				var sublayerIds = this.value.split(",").map(Number);
+				layer.setVisibleLayers(sublayerIds);
+			};
+
 			layerInfos = layer.layerInfos;
 			self.domNode = document.createElement("ul");
 			for (i = 0, l = layerInfos.length; i < l; i += 1) {
@@ -33,6 +39,7 @@ define([
 					label.htmlFor = radioButton.id;
 					label.textContent = layerInfo.name;
 					li.appendChild(label);
+					radioButton.addEventListener("click", clickHandler);
 				}
 			}
 		}
