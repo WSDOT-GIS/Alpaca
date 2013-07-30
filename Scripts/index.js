@@ -114,6 +114,9 @@ require([
 			legend.startup();
 
 			layerChooser = new LayerChooser(response, "layerToggle");
+			layerChooser.on("sublayer-select", function () {
+				legend.refresh();
+			});
 		});
 
 	});

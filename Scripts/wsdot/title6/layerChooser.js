@@ -17,6 +17,10 @@ define([
 			clickHandler = function() {
 				var sublayerIds = this.value.split(",").map(Number);
 				layer.setVisibleLayers(sublayerIds);
+				self.emit("sublayer-select", {
+					layer: layer,
+					sublayerIds: sublayerIds
+				});
 			};
 
 			layerInfos = layer.layerInfos;
@@ -100,6 +104,9 @@ define([
 			if (options.includeSublayers) {
 				self.sublayerList = new SublayerList(opLayer.layerObject);
 				self.domNode.appendChild(self.sublayerList.domNode);
+				self.sublayerList.on("sublayer-select", function (e) {
+					self.emit("sublayer-select", e);
+				})
 			}
 		}
 	});
@@ -146,6 +153,10 @@ define([
 				self.toggleLayer();
 			}
 
+			function emitSublayerEvent(e) {
+				self.emit("sublayer-select", e);
+			}
+
 			// Determine the root element from this dijit.
 			if (!domRef) {
 				throw new Error("The domRef parameter was not provided.");
@@ -177,6 +188,7 @@ define([
 				});
 
 				layerRadio.on("checked", toggleLayer);
+				layerRadio.on("sublayer-select", emitSublayerEvent);
 
 				if (!(opLayer.errors && opLayer.errors.length)) {
 					// Show the first layer, hide the others.
