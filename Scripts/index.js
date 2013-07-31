@@ -111,12 +111,13 @@ require([
 				layerInfos: getLayerInfosForLegend(response)
 			}, "legend");
 
-			legend.startup();
 
 			layerChooser = new LayerChooser(response, "layerToggle");
 			layerChooser.on("sublayer-select", function () {
 				legend.refresh();
 			});
+
+			legend.startup();
 		});
 
 	});
