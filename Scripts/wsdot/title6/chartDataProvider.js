@@ -1,13 +1,26 @@
 ﻿/*global define*/
-/*jslint nomen:true*/
+/*jslint nomen:true,plusplus:true*/
 define([
 	"dojo/_base/declare",
+	"dojo/_base/lang",
 	"dojo/Evented",
 	"esri/tasks/query",
-	"esri/tasks/QueryTask"
-], function (declare, Evented, Query, QueryTask) {
+	"esri/tasks/QueryTask",
+	"esri/tasks/StatisticDefinition"
+], function (declare, lang, Evented, Query, QueryTask, StatisticDefinition) {
 	"use strict";
-	var ChartDataProvider, StatsLayerInfo;
+	var ChartDataProvider, StatsLayerInfo, StatsLayerLevel, languageStatDefs, minorityStatDefs;
+
+	function onComplete(/** {esri/tasks/FeatureSet} */ featureSet) {
+
+	}
+
+	function onExecuteForIdsComplete(/** {Number[]} */ featureIds) {
+	}
+
+	function onError(/** {Error} */ error) {
+
+	}
 
 	function LayerNotFoundError() {
 		Error.apply(this, arguments);
@@ -17,7 +30,67 @@ define([
 	LayerNotFoundError.prototype.constructor = LayerNotFoundError;
 	LayerNotFoundError.prototype.name = "LayerNotFoundError";
 
-	StatsLayerInfo = declare(null, {
+	// Add a property to query task for the level type (e.g., county)
+	lang.extend(QueryTask, {
+		zoomLevel: null
+	});
+
+	languageStatDefs = [
+		{
+			"statisticType": "sum",
+			"onStatisticField": "English",
+			"outStatisticFieldName": "Total_English"
+		},
+		{
+			"statisticType": "sum",
+			"onStatisticField": "Spanish",
+			"outStatisticFieldName": "Total_Spanish"
+		},
+		{
+			"statisticType": "sum",
+			"onStatisticField": "Indo_European",
+			"outStatisticFieldName": "Total_Indo_European"
+		},
+		{
+			"statisticType": "sum",
+			"onStatisticField": "Asian_PacificIsland",
+			"outStatisticFieldName": "Total_Asian_PacificIsland"
+		},
+		{
+			"statisticType": "sum",
+			"onStatisticField": "Other",
+			"outStatisticFieldName": "Total_Other"
+		}
+	];
+
+	minorityStatDefs = [
+		{
+			"statisticType": "sum",
+			"onStatisticField": "White"
+		},
+		{
+			"statisticType": "sum",
+			"onStatisticField": "NotWhite"
+		}
+	];
+
+	// Create StatisticDefinition objects...
+	(function (statDefArrays) {
+		var i, l, sdArr, j, jl, sd, newSd;
+		for (i = 0, l = statDefArrays; i < l; i += 1) {
+			sdArr = statDefArrays[i];
+			for (j = 0, jl = sdArr.length; j < jl; j += 1) {
+				sd = sdArr[j];
+				newSd = new StatisticDefinition();
+				newSd.onStatisticField = sd.onStatisticField;
+				newSd.outStatisticFieldName = sd.outStatisticFieldName;
+				newSd.statisticType = sd.statisticType;
+				sdArr[j] = newSd;
+			}
+		}
+	}([languageStatDefs, minorityStatDefs]));
+
+	StatsLayerInfo = declare([Evented], {
 		/** Get the layer info for the currently visible sublayer. 
 		 * @returns {esri/layers/LayerInfo}
 		 */
@@ -36,13 +109,71 @@ define([
 
 			return output;
 		},
-		constructor: function (/*{esri/layers/ArcGISDynamicMapServiceLayer}*/ layer) {
+		getVisibleLayerQueryTask: function () {
+			var scale, output;
+
+			scale = this.layer._map.getScale();
+
+			if (scale >= this.countyInfo.maxScale) {
+				output = this.countyQueryTask;
+			} else if (scale >= this.tractInfo.minScale && scale <= this.tractInfo.maxScale) {
+				output = this.tractQueryTask;
+			} else {
+				output = this.blockGroupQueryTask;
+			}
+
+			return output;
+		},
+		/* Updates the *FeatureIds properties using the specified geometry. 
+		If no geometry is specified, the *FeatureIds properties will be set to null.
+		* @param {esri/geometry/Geometry} [geometry] Specifies geometries for a filter.
+		**/
+		updateSelection: function(geometry) {
+			var queryTask, query;
+			queryTask = this.getVisibleLayerQueryTask();
+			query = new Query();
+			if (geometry) {
+				query.geometry = geometry;
+				query.spatialRelationship = Query.SPATIAL_REL_CROSSES;
+			}
+			queryTask.execute(query);
+		},
+		/* Runs the query task operations.
+		**/
+		update: function () {
+			var queryTask, query;
+			queryTask = this.getVisibleLayerQueryTask();
+			query = new Query();
+			query.outStatistics = this.statisticDefinitions;
+			queryTask.execute(query);
+		},
+		/** @member {esri/layers/Layer} */
+		layer: null,
+		/** @member {esri/layers/LayerInfo} */
+		blockGroupInfo: null,
+		/** @member {esri/layers/LayerInfo} */
+		tractInfo: null,
+		/** @member {esri/layers/LayerInfo} */
+		countyInfo: null,
+		/** @member {esri/tasks/QueryTask} */
+		blockGroupQueryTask: null,
+		/** @member {esri/tasks/QueryTask} */
+		tractQueryTask: null,
+		/** @member {esri/tasks/QueryTask} */
+		countyQueryTask: null,
+		/** @member {Array} An array of object ID integers or null. */
+		blockGroupFeatureIds: null,
+		/** @member {Array} An array of object ID integers or null. */
+		tractFeatureIds: null,
+		/** @member {Array} An array of object ID integers or null. */
+		countyFeatureIds: null,
+		/** @member {esri/tasks/StatisticDefinition[]} */
+		statisticDefinitions: null,
+		constructor: function (/*{esri/layers/ArcGISDynamicMapServiceLayer}*/ layer, statisticDefinitions) {
 			var i, l, blockGroupRe, tractRe, countyRe, layerInfo;
 
 			this.layer = layer;
-			this.blockGroupInfo = null;
-			this.tractInfo = null;
-			this.countyInfo = null;
+			this.statisticDefinitions = statisticDefinitions;
 
 			blockGroupRe = /Block\s?Group/ig;
 			tractRe = /Tract/ig;
@@ -63,12 +194,38 @@ define([
 					break;
 				}
 			}
+
+			// Create the query tasks...
+			this.blockGroupQueryTask = new QueryTask([layer.url, this.blockGroupInfo.id].join("/"));
+			this.blockGroupQueryTask.zoomLevel = "blockGroup";
+			this.tractQueryTask = new QueryTask([layer.url, this.tractInfo.id].join("/"));
+			this.tractQueryTask.zoomLevel = "tract";
+			this.countyQueryTask = new QueryTask([layer.url, this.countyInfo.id].join("/"));
+			this.countyQueryTask.zoomLevel = "county";
+
+			// Assign event handlers to query tasks...
+			(function (queryTasks) {
+				var i, l, qt;
+				for (i = 0, l = queryTasks.length; i < l; i++) {
+					qt = queryTasks[i];
+					qt.on("complete", onComplete);
+					qt.on("execute-for-ids-complete", onExecuteForIdsComplete);
+					qt.on("error", onError);
+				}
+			}([this.blockGroupQueryTask, this.tractQueryTask, this.countyQueryTask]));
+
+			this.update();
 		}
 	});
 
 	ChartDataProvider = declare(Evented, {
 		languageLayerInfo: null,
 		minorityLayerInfo: null,
+		/** Trigger the chart update events.
+		*/
+		onChartUpdate: function() {
+
+		},
 		/**
 		@param {esri/Map} map
 		*/
