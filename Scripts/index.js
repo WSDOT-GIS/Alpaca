@@ -7,6 +7,7 @@ require([
 	"esri/dijit/BasemapGallery",
 	"esri/dijit/Legend",
 	"title6/layerChooser",
+	"title6/chartDataProvider",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
@@ -15,7 +16,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser) {
+], function (ready, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser, ChartDataProvider) {
 	"use strict";
 
 	/** Determines if layer is a basemap layer based on its layer ID.
@@ -85,7 +86,7 @@ require([
 				showAttribution: true
 			}
 		}).then(function (response) {
-			var basemapGallery, legend, layerChooser;
+			var basemapGallery, legend, layerChooser, chartDataProvider;
 
 			map = response.map;
 
@@ -118,6 +119,12 @@ require([
 			});
 
 			legend.startup();
+
+			chartDataProvider = new ChartDataProvider(map);
+			console.log(chartDataProvider.languageLayerInfo.getVisibleLayerInfo());
+			console.log(chartDataProvider.minorityLayerInfo.getVisibleLayerInfo());
+
+			console.log(chartDataProvider);
 		});
 
 	});
