@@ -2,11 +2,14 @@
 /*jslint browser:true */
 require([
 	"dojo/ready",
+	"dojo/_base/connect",
+	"dijit/registry",
 	"esri/arcgis/utils",
 	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
 	"esri/dijit/Legend",
 	"title6/layerChooser",
+	"esri/toolbars/draw",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
@@ -15,7 +18,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser) {
+], function (ready, connect, registry, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser, Draw) {
 	"use strict";
 
 	/** Determines if layer is a basemap layer based on its layer ID.
@@ -85,7 +88,7 @@ require([
 				showAttribution: true
 			}
 		}).then(function (response) {
-			var basemapGallery, legend, layerChooser;
+			var basemapGallery, legend, layerChooser, drawServiceAreaButton, drawToolbar;
 
 			map = response.map;
 
@@ -118,6 +121,18 @@ require([
 			});
 
 			legend.startup();
+
+			drawToolbar = new Draw(map);
+
+			connect.connect(drawToolbar, "onDrawComplete", function (e) {
+				console.debug(e);
+				drawToolbar.deactivate();
+			});
+
+			drawServiceAreaButton = registry.byId("drawServiceAreaButton");
+			drawServiceAreaButton.on("click", function () {
+				drawToolbar.activate(Draw.POLYGON);
+			});
 		});
 
 	});
