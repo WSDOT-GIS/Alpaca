@@ -85,6 +85,7 @@ define([
 				newSd.statisticType = sd.statisticType;
 				sdArr[j] = newSd;
 			}
+			statDefArrays[i] = sdArr;
 		}
 	}([languageStatDefs, minorityStatDefs]));
 
@@ -150,12 +151,12 @@ define([
 
 			scale = this.layer._map.getScale();
 
-			if (scale >= this.countyInfo.maxScale) {
-				output = this.countyInfo;
-			} else if (scale >= this.tractInfo.minScale && scale <= this.tractInfo.maxScale) {
-				output = this.tractInfo;
+			if (scale >= this.countyLayerLevel.layerInfo.maxScale) {
+				output = this.countyLayerLevel.layerInfo;
+			} else if (scale >= this.tractLayerLevel.layerInfo.minScale && scale <= this.tractLayerLevel.layerInfo.maxScale) {
+				output = this.tractLayerLevel.layerInfo;
 			} else {
-				output = this.blockGroupInfo;
+				output = this.blockGroupLayerLevel.layerInfo;
 			}
 
 			return output;
@@ -165,12 +166,12 @@ define([
 
 			scale = this.layer._map.getScale();
 
-			if (scale >= this.countyInfo.maxScale) {
-				output = this.countyQueryTask;
-			} else if (scale >= this.tractInfo.minScale && scale <= this.tractInfo.maxScale) {
-				output = this.tractQueryTask;
+			if (scale >= this.countyLayerLevel.layerInfo.maxScale) {
+				output = this.countyLayerLevel.queryTask;
+			} else if (scale >= this.tractLayerLevel.layerInfo.minScale && scale <= this.tractLayerLevel.layerInfo.maxScale) {
+				output = this.tractLayerLevel.queryTask;
 			} else {
-				output = this.blockGroupQueryTask;
+				output = this.blockGroupLayerLevel.queryTask;
 			}
 
 			return output;
@@ -270,8 +271,8 @@ define([
 				throw new LayerNotFoundError("minority");
 			}
 
-			this.languageLayerInfo = new StatsLayerInfo(languageLayer);
-			this.minorityLayerInfo = new StatsLayerInfo(minorityLayer);
+			this.languageLayerInfo = new StatsLayerInfo(languageLayer, languageStatDefs);
+			this.minorityLayerInfo = new StatsLayerInfo(minorityLayer, minorityStatDefs);
 		}
 	});
 

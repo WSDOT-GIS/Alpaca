@@ -2,12 +2,15 @@
 /*jslint browser:true */
 require([
 	"dojo/ready",
+	"dojo/_base/connect",
+	"dijit/registry",
 	"esri/arcgis/utils",
 	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
 	"esri/dijit/Legend",
 	"title6/layerChooser",
 	"title6/chartDataProvider",
+	"esri/toolbars/draw",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
@@ -16,7 +19,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser, ChartDataProvider) {
+], function (ready, connect, registry, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser, ChartDataProvider, Draw) {
 	"use strict";
 
 	/** Determines if layer is a basemap layer based on its layer ID.
@@ -86,7 +89,16 @@ require([
 				showAttribution: true
 			}
 		}).then(function (response) {
-			var basemapGallery, legend, layerChooser, chartDataProvider;
+			var basemapGallery, legend, layerChooser, chartDataProvider, drawServiceAreaButton, drawToolbar;
+
+			/**
+			@param drawResponse
+			@param {esri/geometry/Geometry} drawResponse.geometry
+			@param {esri/geometry/Geometry} drawResponse.geographicGeometry
+			*/
+			function setServiceArea(drawResponse) {
+				console.debug("drawResponse", drawResponse);
+			}
 
 			map = response.map;
 
@@ -120,11 +132,30 @@ require([
 
 			legend.startup();
 
-			chartDataProvider = new ChartDataProvider(map);
-			console.log(chartDataProvider.languageLayerInfo.getVisibleLayerInfo());
-			console.log(chartDataProvider.minorityLayerInfo.getVisibleLayerInfo());
+			try {
+				chartDataProvider = new ChartDataProvider(map);
+				console.log(chartDataProvider.languageLayerInfo.getVisibleLayerInfo());
+				console.log(chartDataProvider.minorityLayerInfo.getVisibleLayerInfo());
+				console.log(chartDataProvider);
+			} catch (e) {
+				console.error("chartDataProviderError", e);
+			}
 
-			console.log(chartDataProvider);
+			try {
+				drawToolbar = new Draw(map);
+
+				connect.connect(drawToolbar, "onDrawComplete", function (e) {
+					drawToolbar.deactivate();
+					setServiceArea(e);
+				});
+			} catch (e) {
+				console.error("draw error", e);
+			}
+
+			drawServiceAreaButton = registry.byId("drawServiceAreaButton");
+			drawServiceAreaButton.on("click", function () {
+				drawToolbar.activate(Draw.POLYGON);
+			});
 		});
 
 	});
