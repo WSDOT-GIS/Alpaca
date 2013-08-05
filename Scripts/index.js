@@ -90,6 +90,15 @@ require([
 		}).then(function (response) {
 			var basemapGallery, legend, layerChooser, drawServiceAreaButton, drawToolbar;
 
+			/**
+			@param drawResponse
+			@param {esri/geometry/Geometry} drawResponse.geometry
+			@param {esri/geometry/Geometry} drawResponse.geographicGeometry
+			*/
+			function setServiceArea(drawResponse) {
+				console.debug("drawResponse", drawResponse);
+			}
+
 			map = response.map;
 
 			// Setup the progress bar to display when the map is loading data.
@@ -125,8 +134,8 @@ require([
 			drawToolbar = new Draw(map);
 
 			connect.connect(drawToolbar, "onDrawComplete", function (e) {
-				console.debug(e);
 				drawToolbar.deactivate();
+				setServiceArea(e);
 			});
 
 			drawServiceAreaButton = registry.byId("drawServiceAreaButton");
