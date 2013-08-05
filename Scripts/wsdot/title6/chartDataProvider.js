@@ -9,22 +9,20 @@ define([
 	"esri/tasks/StatisticDefinition"
 ], function (declare, lang, Evented, Query, QueryTask, StatisticDefinition) {
 	"use strict";
-	var ChartDataProvider, StatsLayerInfo, StatsLayerLevel, languageStatDefs, minorityStatDefs;
+	var ChartDataProvider, StatsLayerInfo, StatsLayerLevel,
+		LanguageStatsLayerInfo, LanguageStatsLayerLevel,
+		MinorityStatsLayerInfo, MinorityStatsLayerLevel,
+		languageStatDefs, minorityStatDefs, blockGroupRe, tractRe, countyRe;
 
-	function onComplete(/** {esri/tasks/FeatureSet} */ featureSet) {
 
-	}
-
-	function onExecuteForIdsComplete(/** {Number[]} */ featureIds) {
-	}
-
-	function onError(/** {Error} */ error) {
-
-	}
 
 	function LayerNotFoundError() {
 		Error.apply(this, arguments);
 	}
+
+	blockGroupRe = /Block\s?Group/ig;
+	tractRe = /Tract/ig;
+	countyRe = /County/ig;
 
 	LayerNotFoundError.prototype = new Error();
 	LayerNotFoundError.prototype.constructor = LayerNotFoundError;
@@ -37,40 +35,40 @@ define([
 
 	languageStatDefs = [
 		{
-			"statisticType": "sum",
-			"onStatisticField": "English",
-			"outStatisticFieldName": "Total_English"
+			statisticType: "sum",
+			onStatisticField: "English",
+			outStatisticFieldName: "Total_English"
 		},
 		{
-			"statisticType": "sum",
-			"onStatisticField": "Spanish",
-			"outStatisticFieldName": "Total_Spanish"
+			statisticType: "sum",
+			onStatisticField: "Spanish",
+			outStatisticFieldName: "Total_Spanish"
 		},
 		{
-			"statisticType": "sum",
-			"onStatisticField": "Indo_European",
-			"outStatisticFieldName": "Total_Indo_European"
+			statisticType: "sum",
+			onStatisticField: "Indo_European",
+			outStatisticFieldName: "Total_Indo_European"
 		},
 		{
-			"statisticType": "sum",
-			"onStatisticField": "Asian_PacificIsland",
-			"outStatisticFieldName": "Total_Asian_PacificIsland"
+			statisticType: "sum",
+			onStatisticField: "Asian_PacificIsland",
+			outStatisticFieldName: "Total_Asian_PacificIsland"
 		},
 		{
-			"statisticType": "sum",
-			"onStatisticField": "Other",
-			"outStatisticFieldName": "Total_Other"
+			statisticType: "sum",
+			onStatisticField: "Other",
+			outStatisticFieldName: "Total_Other"
 		}
 	];
 
 	minorityStatDefs = [
 		{
-			"statisticType": "sum",
-			"onStatisticField": "White"
+			statisticType: "sum",
+			onStatisticField: "White"
 		},
 		{
-			"statisticType": "sum",
-			"onStatisticField": "NotWhite"
+			statisticType: "sum",
+			onStatisticField: "NotWhite"
 		}
 	];
 
@@ -89,6 +87,59 @@ define([
 			}
 		}
 	}([languageStatDefs, minorityStatDefs]));
+
+	StatsLayerLevel = declare([Evented], {
+		zoomLevel: null,
+		layerInfo: null,
+		queryTask: null,
+		oidFieldName: null,
+		nonOidfieldNames: null,
+		featureIds: null,
+		statisticDefinitions: null,
+		/* Updates the featureIds property using the specified geometry. 
+		If no geometry is specified, the featureId properties will be set to null.
+		@param {esri/geometry/Geometry} [geometry] Specifies geometries for a filter.
+		**/
+		updateSelection: function (geometry) {
+			var self = this, query;
+			query = new Query();
+			if (geometry) {
+				query.geometry = geometry;
+				query.spatialRelationship = Query.SPATIAL_REL_CROSSES;
+			}
+			this.queryTask.execute(query);
+		},
+		/**
+		@param {String} zoomLevel
+		@param {esri/layers/Layer} layer
+		@param {esri/layers/LayerInfo} layerInfo
+		@param {esri/tasks/StatisticDefinition[]} statisticDefinitions
+		*/
+		constructor: function (zoomLevel, layer, layerInfo, statisticDefinitions) {
+			function onComplete(/** {esri/tasks/FeatureSet} */ featureSet) {
+
+			}
+
+			function onExecuteForIdsComplete(/** {Number[]} */ featureIds) {
+			}
+
+			function onError(/** {Error} */ error) {
+
+			}
+
+			this.zoomLevel = zoomLevel;
+			this.layerInfo = layerInfo;
+			this.statisticDefinitions = statisticDefinitions;
+			this.queryTask = new QueryTask([layer.url, layerInfo.id].join("/"));
+		}
+	});
+
+	LanguageStatsLayerLevel = declare(StatsLayerLevel, {
+		constructor: function () {
+
+		}
+	});
+	
 
 	StatsLayerInfo = declare([Evented], {
 		/** Get the layer info for the currently visible sublayer. 
@@ -149,70 +200,33 @@ define([
 		},
 		/** @member {esri/layers/Layer} */
 		layer: null,
-		/** @member {esri/layers/LayerInfo} */
-		blockGroupInfo: null,
-		/** @member {esri/layers/LayerInfo} */
-		tractInfo: null,
-		/** @member {esri/layers/LayerInfo} */
-		countyInfo: null,
-		/** @member {esri/tasks/QueryTask} */
-		blockGroupQueryTask: null,
-		/** @member {esri/tasks/QueryTask} */
-		tractQueryTask: null,
-		/** @member {esri/tasks/QueryTask} */
-		countyQueryTask: null,
-		/** @member {Array} An array of object ID integers or null. */
-		blockGroupFeatureIds: null,
-		/** @member {Array} An array of object ID integers or null. */
-		tractFeatureIds: null,
-		/** @member {Array} An array of object ID integers or null. */
-		countyFeatureIds: null,
-		/** @member {esri/tasks/StatisticDefinition[]} */
-		statisticDefinitions: null,
+		blockLayerLevel: null,
+		tractLayerLevel: null,
+		countyLayerLevel: null,
 		constructor: function (/*{esri/layers/ArcGISDynamicMapServiceLayer}*/ layer, statisticDefinitions) {
-			var i, l, blockGroupRe, tractRe, countyRe, layerInfo;
+			var i, l, layerInfo;
 
 			this.layer = layer;
 			this.statisticDefinitions = statisticDefinitions;
 
-			blockGroupRe = /Block\s?Group/ig;
-			tractRe = /Tract/ig;
-			countyRe = /County/ig;
+
 
 
 			for (i = 0, l = layer.layerInfos.length; i < l; i += 1) {
 				layerInfo = layer.layerInfos[i];
-				if (!this.blockGroupInfo && blockGroupRe.test(layerInfo.name)) {
-					this.blockGroupInfo = layerInfo;
-				} else if (!this.tractInfo && tractRe.test(layerInfo.name)) {
-					this.tractInfo = layerInfo;
-				} else if (!this.countyInfo && countyRe.test(layerInfo.name)) {
-					this.countyInfo = layerInfo;
+				if (!this.blockLayerLevel && blockGroupRe.test(layerInfo.name)) {
+					// layer, layerInfo, statisticDefinitions
+					this.blockLayerLevel = new StatsLayerLevel("block-group", layer, layerInfo, statisticDefinitions);
+				} else if (!this.tractLayerLevel && tractRe.test(layerInfo.name)) {
+					this.tractLayerLevel = new StatsLayerLevel("tract", layer, layerInfo, statisticDefinitions);
+				} else if (!this.countyLayerLevel && countyRe.test(layerInfo.name)) {
+					this.countyLayerLevel = new StatsLayerLevel("county", layer, layerInfo, statisticDefinitions);
 				}
 				// Break out of the loop if everything has been found.
-				if (this.blockGroupInfo && this.tractInfo && this.countyInfo) {
+				if (this.blockLayerLevel && this.tractLayerLevel && this.countyLayerLevel) {
 					break;
 				}
 			}
-
-			// Create the query tasks...
-			this.blockGroupQueryTask = new QueryTask([layer.url, this.blockGroupInfo.id].join("/"));
-			this.blockGroupQueryTask.zoomLevel = "blockGroup";
-			this.tractQueryTask = new QueryTask([layer.url, this.tractInfo.id].join("/"));
-			this.tractQueryTask.zoomLevel = "tract";
-			this.countyQueryTask = new QueryTask([layer.url, this.countyInfo.id].join("/"));
-			this.countyQueryTask.zoomLevel = "county";
-
-			// Assign event handlers to query tasks...
-			(function (queryTasks) {
-				var i, l, qt;
-				for (i = 0, l = queryTasks.length; i < l; i++) {
-					qt = queryTasks[i];
-					qt.on("complete", onComplete);
-					qt.on("execute-for-ids-complete", onExecuteForIdsComplete);
-					qt.on("error", onError);
-				}
-			}([this.blockGroupQueryTask, this.tractQueryTask, this.countyQueryTask]));
 
 			this.update();
 		}
@@ -269,29 +283,29 @@ http://hqolymgis99t/arcgis/rest/services/Demographic/Language/MapServer/3/query?
 http://hqolymgis99t/arcgis/rest/services/Demographic/Language/MapServer/3/query?returnGeometry=false&outStatistics=%5B%0D%0A%7B%0D%0A%22statisticType%22%3A+%22sum%22%2C%0D%0A%22onStatisticField%22%3A+%22English%22%2C%0D%0A%22outStatisticField%22%3A+%22Total_English%22%0D%0A%7D%2C%0D%0A%7B%0D%0A%22statisticType%22%3A+%22sum%22%2C%0D%0A%22onStatisticField%22%3A+%22Spanish%22%2C%0D%0A%22outStatisticField%22%3A+%22Total_Spanish%22%0D%0A%7D%2C%0D%0A%7B%0D%0A%22statisticType%22%3A+%22sum%22%2C%0D%0A%22onStatisticField%22%3A+%22Indo_European%22%2C%0D%0A%22outStatisticField%22%3A+%22Total_Indo_European%22%0D%0A%7D%2C%0D%0A%7B%0D%0A%22statisticType%22%3A+%22sum%22%2C%0D%0A%22onStatisticField%22%3A+%22Asian_PacificIsland%22%2C%0D%0A%22outStatisticField%22%3A+%22Total_Asian_PacificIsland%22%0D%0A%7D%2C%0D%0A%7B%0D%0A%22statisticType%22%3A+%22sum%22%2C%0D%0A%22onStatisticField%22%3A+%22Other%22%2C%0D%0A%22outStatisticField%22%3A+%22Total_Other%22%0D%0A%7D%0D%0A%5D&f=pjson
 [
 	{
-		"statisticType": "sum",
-		"onStatisticField": "English",
-		"outStatisticFieldName": "Total_English"
+		statisticType: "sum",
+		onStatisticField: "English",
+		outStatisticFieldName: "Total_English"
 	},
 	{
-		"statisticType": "sum",
-		"onStatisticField": "Spanish",
-		"outStatisticFieldName": "Total_Spanish"
+		statisticType: "sum",
+		onStatisticField: "Spanish",
+		outStatisticFieldName: "Total_Spanish"
 	},
 	{
-		"statisticType": "sum",
-		"onStatisticField": "Indo_European",
-		"outStatisticFieldName": "Total_Indo_European"
+		statisticType: "sum",
+		onStatisticField: "Indo_European",
+		outStatisticFieldName: "Total_Indo_European"
 	},
 	{
-		"statisticType": "sum",
-		"onStatisticField": "Asian_PacificIsland",
-		"outStatisticFieldName": "Total_Asian_PacificIsland"
+		statisticType: "sum",
+		onStatisticField: "Asian_PacificIsland",
+		outStatisticFieldName: "Total_Asian_PacificIsland"
 	},
 	{
-		"statisticType": "sum",
-		"onStatisticField": "Other",
-		"outStatisticFieldName": "Total_Other"
+		statisticType: "sum",
+		onStatisticField: "Other",
+		outStatisticFieldName: "Total_Other"
 	}
 ]
 */
