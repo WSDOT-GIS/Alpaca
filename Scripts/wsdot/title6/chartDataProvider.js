@@ -10,8 +10,6 @@ define([
 ], function (declare, lang, Evented, Query, QueryTask, StatisticDefinition) {
 	"use strict";
 	var ChartDataProvider, StatsLayerInfo, StatsLayerLevel,
-		LanguageStatsLayerInfo, LanguageStatsLayerLevel,
-		MinorityStatsLayerInfo, MinorityStatsLayerLevel,
 		languageStatDefs, minorityStatDefs, blockGroupRe, tractRe, countyRe;
 
 
@@ -81,7 +79,7 @@ define([
 				sd = sdArr[j];
 				newSd = new StatisticDefinition();
 				newSd.onStatisticField = sd.onStatisticField;
-				newSd.outStatisticFieldName = sd.outStatisticFieldName;
+				newSd.outStatisticFieldName = sd.outStatisticFieldName || null;
 				newSd.statisticType = sd.statisticType;
 				sdArr[j] = newSd;
 			}
@@ -132,12 +130,6 @@ define([
 			this.layerInfo = layerInfo;
 			this.statisticDefinitions = statisticDefinitions;
 			this.queryTask = new QueryTask([layer.url, layerInfo.id].join("/"));
-		}
-	});
-
-	LanguageStatsLayerLevel = declare(StatsLayerLevel, {
-		constructor: function () {
-
 		}
 	});
 	
@@ -201,10 +193,13 @@ define([
 		},
 		/** @member {esri/layers/Layer} */
 		layer: null,
+		/** @member {StatsLayerLevel} */
 		blockLayerLevel: null,
+		/** @member {StatsLayerLevel} */
 		tractLayerLevel: null,
+		/** @member {StatsLayerLevel} */
 		countyLayerLevel: null,
-		constructor: function (/*{esri/layers/ArcGISDynamicMapServiceLayer}*/ layer, statisticDefinitions) {
+		constructor: function (/*{esri/layers/ArcGISDynamicMapServiceLayer}*/ layer, /**{esri/layers/StatisticDefinition[]}*/statisticDefinitions) {
 			var i, l, layerInfo;
 
 			this.layer = layer;
