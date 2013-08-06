@@ -73,7 +73,7 @@ define([
 	// Create StatisticDefinition objects...
 	(function (statDefArrays) {
 		var i, l, sdArr, j, jl, sd, newSd;
-		for (i = 0, l = statDefArrays; i < l; i += 1) {
+		for (i = 0, l = statDefArrays.length; i < l; i += 1) {
 			sdArr = statDefArrays[i];
 			for (j = 0, jl = sdArr.length; j < jl; j += 1) {
 				sd = sdArr[j];
