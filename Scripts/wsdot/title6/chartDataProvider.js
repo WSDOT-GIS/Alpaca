@@ -98,15 +98,17 @@ define([
 		/* Updates the featureIds property using the specified geometry. 
 		If no geometry is specified, the featureId properties will be set to null.
 		@param {esri/geometry/Geometry} [geometry] Specifies geometries for a filter.
+		@returns {dojo/Deferred}
 		**/
 		updateSelection: function (geometry) {
-			var self = this, query;
+			var query;
 			query = new Query();
 			if (geometry) {
 				query.geometry = geometry;
 				query.spatialRelationship = Query.SPATIAL_REL_CROSSES;
 			}
-			this.queryTask.execute(query);
+			query.outStatistics = this.statisticDefinitions;
+			return this.queryTask.execute(query);
 		},
 		/**
 		@param {String} zoomLevel
@@ -115,17 +117,6 @@ define([
 		@param {esri/tasks/StatisticDefinition[]} statisticDefinitions
 		*/
 		constructor: function (zoomLevel, layer, layerInfo, statisticDefinitions) {
-			function onComplete(/** {esri/tasks/FeatureSet} */ featureSet) {
-
-			}
-
-			function onExecuteForIdsComplete(/** {Number[]} */ featureIds) {
-			}
-
-			function onError(/** {Error} */ error) {
-
-			}
-
 			this.zoomLevel = zoomLevel;
 			this.layerInfo = layerInfo;
 			this.statisticDefinitions = statisticDefinitions;
@@ -135,35 +126,18 @@ define([
 	
 
 	StatsLayerInfo = declare([Evented], {
-		/** Get the layer info for the currently visible sublayer. 
-		 * @returns {esri/layers/LayerInfo}
-		 */
-		getVisibleLayerInfo: function () {
+
+		getVisibleLayerLevel: function () {
 			var scale, output;
 
 			scale = this.layer._map.getScale();
 
 			if (scale >= this.countyLayerLevel.layerInfo.maxScale) {
-				output = this.countyLayerLevel.layerInfo;
+				output = this.countyLayerLevel;
 			} else if (scale >= this.tractLayerLevel.layerInfo.minScale && scale <= this.tractLayerLevel.layerInfo.maxScale) {
-				output = this.tractLayerLevel.layerInfo;
+				output = this.tractLayerLevel;
 			} else {
-				output = this.blockGroupLayerLevel.layerInfo;
-			}
-
-			return output;
-		},
-		getVisibleLayerQueryTask: function () {
-			var scale, output;
-
-			scale = this.layer._map.getScale();
-
-			if (scale >= this.countyLayerLevel.layerInfo.maxScale) {
-				output = this.countyLayerLevel.queryTask;
-			} else if (scale >= this.tractLayerLevel.layerInfo.minScale && scale <= this.tractLayerLevel.layerInfo.maxScale) {
-				output = this.tractLayerLevel.queryTask;
-			} else {
-				output = this.blockGroupLayerLevel.queryTask;
+				output = this.blockGroupLayerLevel;
 			}
 
 			return output;
@@ -171,25 +145,12 @@ define([
 		/* Updates the *FeatureIds properties using the specified geometry. 
 		If no geometry is specified, the *FeatureIds properties will be set to null.
 		* @param {esri/geometry/Geometry} [geometry] Specifies geometries for a filter.
+		* @returns {dojo/Deferred}
 		**/
-		updateSelection: function(geometry) {
-			var queryTask, query;
-			queryTask = this.getVisibleLayerQueryTask();
-			query = new Query();
-			if (geometry) {
-				query.geometry = geometry;
-				query.spatialRelationship = Query.SPATIAL_REL_CROSSES;
-			}
-			queryTask.execute(query);
-		},
-		/* Runs the query task operations.
-		**/
-		update: function () {
-			var queryTask, query;
-			queryTask = this.getVisibleLayerQueryTask();
-			query = new Query();
-			query.outStatistics = this.statisticDefinitions;
-			queryTask.execute(query);
+		update: function(geometry) {
+			var layerLevel;
+			layerLevel = this.getVisibleLayerLevel();
+			return layerLevel.updateSelection(geometry);
 		},
 		/** @member {esri/layers/Layer} */
 		layer: null,
@@ -199,7 +160,7 @@ define([
 		tractLayerLevel: null,
 		/** @member {StatsLayerLevel} */
 		countyLayerLevel: null,
-		constructor: function (/*{esri/layers/ArcGISDynamicMapServiceLayer}*/ layer, /**{esri/layers/StatisticDefinition[]}*/statisticDefinitions) {
+		constructor: function (/*{esri/layers/ArcGISDynamicMapServiceLayer}*/ layer, /**{esri/layers/StatisticDefinition[]}*/ statisticDefinitions) {
 			var i, l, layerInfo;
 
 			this.layer = layer;
@@ -223,6 +184,8 @@ define([
 					break;
 				}
 			}
+
+
 
 			this.update();
 		}
