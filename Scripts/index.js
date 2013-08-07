@@ -2,7 +2,6 @@
 /*jslint browser:true */
 require([
 	"dojo/ready",
-	"dojo/_base/connect",
 	"dijit/registry",
 	"esri/arcgis/utils",
 	"esri/domUtils",
@@ -19,7 +18,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, connect, registry, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser, ChartDataProvider, Draw) {
+], function (ready, registry, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser, ChartDataProvider, Draw) {
 	"use strict";
 
 	/** Determines if layer is a basemap layer based on its layer ID.
@@ -145,9 +144,9 @@ require([
 			try {
 				drawToolbar = new Draw(map);
 
-				connect.connect(drawToolbar, "onDrawComplete", function (e) {
+				drawToolbar.on("draw-complete", function (drawResponse) {
 					drawToolbar.deactivate();
-					setServiceArea(e);
+					setServiceArea(drawResponse);
 				});
 			} catch (e) {
 				console.error("draw error", e);
