@@ -141,16 +141,12 @@ require([
 				console.error("chartDataProviderError", e);
 			}
 
-			try {
-				drawToolbar = new Draw(map);
+			drawToolbar = new Draw(map);
 
-				drawToolbar.on("draw-complete", function (drawResponse) {
-					drawToolbar.deactivate();
-					setServiceArea(drawResponse);
-				});
-			} catch (e) {
-				console.error("draw error", e);
-			}
+			drawToolbar.on("draw-complete", function (drawResponse) {
+				drawToolbar.deactivate();
+				setServiceArea(drawResponse);
+			});
 
 			drawServiceAreaButton = registry.byId("drawServiceAreaButton");
 			drawServiceAreaButton.on("click", function () {
