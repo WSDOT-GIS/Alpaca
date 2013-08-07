@@ -134,8 +134,8 @@ require([
 
 			try {
 				chartDataProvider = new ChartDataProvider(map);
-				console.log(chartDataProvider.languageLayerInfo.getVisibleLayerInfo());
-				console.log(chartDataProvider.minorityLayerInfo.getVisibleLayerInfo());
+				console.log(chartDataProvider.languageLayerInfo.getVisibleLayerLevel());
+				console.log(chartDataProvider.minorityLayerInfo.getVisibleLayerLevel());
 				console.log(chartDataProvider);
 			} catch (e) {
 				console.error("chartDataProviderError", e);

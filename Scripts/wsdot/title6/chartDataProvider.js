@@ -196,14 +196,20 @@ define([
 		minorityLayerInfo: null,
 		/** Trigger the chart update events.
 		*/
-		onChartUpdate: function() {
-
+		selectedGeometry: null,
+		_updateCharts: function () {
+			this.languageLayerInfo.update(this.selectedGeometry);
+			this.minorityLayerInfo.update(this.selectedGeometry);
+		},
+		setGeometry: function (/** {esri/geometry/Geometry} */ geometry) {
+			this.selectedGeometry = geometry;
+			this._updateCharts();
 		},
 		/**
 		@param {esri/Map} map
 		*/
 		constructor: function (map) {
-			var i, l, layerId, layer, languageRe, minorityRe, languageLayer, minorityLayer;
+			var self = this, i, l, layerId, layer, languageRe, minorityRe, languageLayer, minorityLayer;
 			languageRe = /Language/ig;
 			minorityRe = /Minority/ig;
 
@@ -231,6 +237,22 @@ define([
 
 			this.languageLayerInfo = new StatsLayerInfo(languageLayer, languageStatDefs);
 			this.minorityLayerInfo = new StatsLayerInfo(minorityLayer, minorityStatDefs);
+
+			this._updateCharts();
+
+			/**
+			@param {Event} event
+			@param {Extent} event.extent
+			@param {Point} event.delta
+			@param {Boolean} event.levelChange
+			@param {LOD} event.lod
+			*/
+			map.on("extent-change", function (event) {
+				console.debug(event);
+				if (event.levelChange) {
+					self._updateCharts();
+				}
+			});
 		}
 	});
 
