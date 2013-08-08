@@ -2,7 +2,7 @@
 /*jslint browser:true */
 require([
 	"dojo/ready",
-	"dojo/_base/connect",
+	"dojo/_base/Color",
 	"dijit/registry",
 	"esri/arcgis/utils",
 	"esri/domUtils",
@@ -10,6 +10,11 @@ require([
 	"esri/dijit/Legend",
 	"title6/layerChooser",
 	"esri/toolbars/draw",
+	"esri/layers/GraphicsLayer",
+	"esri/renderers/SimpleRenderer",
+	"esri/symbols/SimpleLineSymbol",
+	"esri/symbols/SimpleFillSymbol",
+	"esri/graphic",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
@@ -18,7 +23,10 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, connect, registry, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser, Draw) {
+], function (ready, Color, registry, arcgisUtils, domUtils, BasemapGallery,
+	Legend, LayerChooser, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
+	Graphic)
+{
 	"use strict";
 
 	/** Determines if layer is a basemap layer based on its layer ID.
@@ -88,7 +96,7 @@ require([
 				showAttribution: true
 			}
 		}).then(function (response) {
-			var basemapGallery, legend, layerChooser, drawServiceAreaButton, drawToolbar;
+			var basemapGallery, legend, layerChooser, drawToolbar, serviceAreaLayer;
 
 			/**
 			@param drawResponse
@@ -96,7 +104,30 @@ require([
 			@param {esri/geometry/Geometry} drawResponse.geographicGeometry
 			*/
 			function setServiceArea(drawResponse) {
-				console.debug("drawResponse", drawResponse);
+				var graphic;
+
+				// Create the layer if it does not already exist.
+				if (!serviceAreaLayer) {
+					(function () {
+						var renderer, symbol;
+						symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([255, 0, 0]), 3);
+						symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0,0,0,0]));
+						renderer = new SimpleRenderer(symbol);
+						serviceAreaLayer = new GraphicsLayer({
+							id: "serviceArea"
+						});
+						serviceAreaLayer.setRenderer(renderer);
+						map.addLayer(serviceAreaLayer);
+					}());
+				}
+				// Clear the existing graphics.
+				serviceAreaLayer.clear();
+
+				
+
+				graphic = new Graphic(drawResponse.geometry);
+				serviceAreaLayer.add(graphic);
+
 			}
 
 			map = response.map;
@@ -133,14 +164,19 @@ require([
 
 			drawToolbar = new Draw(map);
 
-			connect.connect(drawToolbar, "onDrawComplete", function (e) {
+			drawToolbar.on("draw-complete", function (e) {
 				drawToolbar.deactivate();
 				setServiceArea(e);
 			});
 
-			drawServiceAreaButton = registry.byId("drawServiceAreaButton");
-			drawServiceAreaButton.on("click", function () {
+			registry.byId("drawServiceAreaButton").on("click", function () {
 				drawToolbar.activate(Draw.POLYGON);
+			});
+
+			registry.byId("clearServiceAreaButton").on("click", function () {
+				if (serviceAreaLayer) {
+					serviceAreaLayer.clear();
+				}
 			});
 		});
 
