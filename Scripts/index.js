@@ -96,7 +96,7 @@ require([
 				showAttribution: true
 			}
 		}).then(function (response) {
-			var basemapGallery, legend, layerChooser, drawServiceAreaButton, drawToolbar, serviceAreaLayer;
+			var basemapGallery, legend, layerChooser, drawToolbar, serviceAreaLayer;
 
 			/**
 			@param drawResponse
@@ -169,9 +169,14 @@ require([
 				setServiceArea(e);
 			});
 
-			drawServiceAreaButton = registry.byId("drawServiceAreaButton");
-			drawServiceAreaButton.on("click", function () {
+			registry.byId("drawServiceAreaButton").on("click", function () {
 				drawToolbar.activate(Draw.POLYGON);
+			});
+
+			registry.byId("clearServiceAreaButton").on("click", function () {
+				if (serviceAreaLayer) {
+					serviceAreaLayer.clear();
+				}
 			});
 		});
 
