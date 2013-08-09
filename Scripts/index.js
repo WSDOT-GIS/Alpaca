@@ -7,7 +7,6 @@ require([
 	"esri/arcgis/utils",
 	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
-	"esri/dijit/Legend",
 	"title6/layerChooser",
 	"esri/toolbars/draw",
 	"esri/layers/GraphicsLayer",
@@ -24,7 +23,7 @@ require([
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
 ], function (ready, Color, registry, arcgisUtils, domUtils, BasemapGallery,
-	Legend, LayerChooser, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
+	LayerChooser, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic)
 {
 	"use strict";
@@ -37,35 +36,6 @@ require([
 		var re = /(^layer\d+$)|(^World_Light_Gray)/i;
 		// Returns true if layerId is truthy (not null, undefined, 0, or emtpy string) and matches the regular expression.
 		return layerId && re.test(layerId);
-	}
-
-	/**
-	* @param response The response of the arcgisUtils/createMap operation. See https://developers.arcgis.com/en/javascript/jshelp/intro_webmap.html
-	* @param {esri/Map} response.map
-	* @param {Object} response.itemInfo
-	* @param {Object} response.itemInfo.itemData
-	* @param {Object} response.itemInfo.itemData.baseMap
-	* @param {Array} response.itemInfo.itemData.operationalLayers
-	* @param {Object} response.clickEventHandle
-	* @param {Object} response.clickEventListener
-	* @param {Array} response.errors
-	*/
-	function getLayerInfosForLegend(response) {
-		var output = [], operationalLayers, layer, i, l;
-
-		operationalLayers = response.itemInfo.itemData.operationalLayers;
-
-		for (i = 0, l = operationalLayers.length; i < l; i += 1) {
-			layer = operationalLayers[i];
-			if (!layer.featureCollection) {
-				output.push({
-					layer: layer.layerObject,
-					title: layer.title
-				});
-			}
-		}
-
-		return output;
 	}
 
 	ready(function () {
@@ -96,7 +66,7 @@ require([
 				showAttribution: true
 			}
 		}).then(function (response) {
-			var basemapGallery, legend, layerChooser, drawToolbar, serviceAreaLayer;
+			var basemapGallery, layerChooser, drawToolbar, serviceAreaLayer;
 
 			/**
 			@param drawResponse
@@ -148,19 +118,7 @@ require([
 
 			basemapGallery.startup();
 
-			legend = new Legend({
-				map: map,
-				autoUpdate: true,
-				layerInfos: getLayerInfosForLegend(response)
-			}, "legend");
-
-
 			layerChooser = new LayerChooser(response, "layerToggle");
-			layerChooser.on("sublayer-select", function () {
-				legend.refresh();
-			});
-
-			legend.startup();
 
 			drawToolbar = new Draw(map);
 

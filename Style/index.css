@@ -86,12 +86,24 @@ html, body {
 	list-style-type: none;
 }
 
-/* hide all sublayer lists */
-.layer-list input + * + * + ul, .layer-list input + * + .dijitSlider  {
+/* hide all sublayer lists and legends */
+.layer-list input + * + * + ul, 
+.layer-list input + * + .dijitSlider, 
+.layer-chooser-legend  {
 	display: none;
 }
 
 /* show the layer lists of checked layers */
-.layer-list input:checked + * + * + ul, .layer-list input:checked + * + .dijitSlider {
+.layer-list input:checked + * + * + ul, 
+.layer-list input:checked + * + .dijitSlider, 
+.layer-list input:checked + * + * + .layer-chooser-legend,
+.layer-list input:checked + * + * + * + .layer-chooser-legend
+{
 	display: block;
 }
+
+.esriLegendService {
+	padding-bottom: 1em;
+	margin-left: 1em;
+}
+
