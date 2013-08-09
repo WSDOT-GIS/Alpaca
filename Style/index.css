@@ -89,7 +89,11 @@ html, body {
 /* hide all sublayer lists and legends */
 .layer-list input + * + * + ul, 
 .layer-list input + * + .dijitSlider, 
-.layer-chooser-legend  {
+.layer-chooser-legend,
+/* Hide unnecessary parts of legends.*/
+.esriLegendService > table:first-child,
+.esriLegendLayerLabel
+{
 	display: none;
 }
 
