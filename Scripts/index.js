@@ -77,25 +77,21 @@ require([
 	}
 
 	function createLanguageChart(languageData) {
-		var chartTwo = new Chart("languageChart");
-		chartTwo.setTheme(MiamiNice)
-		 .addPlot("default", {
-		 	type: Pie,
-		 	font: "normal normal 11pt Tahoma",
-		 	fontColor: "black",
-		 	labelOffset: -30,
-		 	radius: 80
-		 }).addSeries("Series A", [
-			{ y: 4, text: "Red", stroke: "black", tooltip: "Red is 50%" },
-			{ y: 2, text: "Green", stroke: "black", tooltip: "Green is 25%" },
-			{ y: 1, text: "Blue", stroke: "black", tooltip: "I am feeling Blue!" },
-			{ y: 1, text: "Other", stroke: "black", tooltip: "Mighty <strong>strong</strong><br>With two lines!" }
-		 ]);
-		var anim_a = new MoveSlice(chartTwo, "default");
-		var anim_b = new Highlight(chartTwo, "default");
-		var anim_c = new Tooltip(chartTwo, "default");
-		chartTwo.render();
-		var legendTwo = new Legend({ chart: chartTwo }, "languageChartLegend");
+		var chart, anim_a, anim_b, anim_c, legend;
+		chart = new Chart("languageChart");
+		chart.setTheme(MiamiNice).addPlot("default", {
+			type: Pie,
+			labels: false,
+			font: "normal normal 11pt Tahoma",
+			fontColor: "black",
+			labelOffset: -30,
+			radius: 80
+		}).addSeries("Language Proficiency", languageData.toPieChartSeries());
+		anim_a = new MoveSlice(chart, "default");
+		anim_b = new Highlight(chart, "default");
+		anim_c = new Tooltip(chart, "default");
+		chart.render();
+		legend = new Legend({ chart: chart }, "languageChartLegend");
 	}
 
 	ready(function () {
@@ -183,14 +179,13 @@ require([
 
 			try {
 				chartDataProvider = new ChartDataProvider(getAggregateLayer(map));
-				chartDataProvider.on("query-complete", function (chartData) {
+				chartDataProvider.on("query-complete", function (response) {
 					if (!languageChart) {
-						languageChart = createLanguageChart(chartData.language);
+						languageChart = createLanguageChart(response.chartData.language);
 					}
-					console.log(chartData);
 				});
-				chartDataProvider.on("query-error", function () {
-					console.error(arguments);
+				chartDataProvider.on("query-error", function (response) {
+					console.error(response);
 				});
 			} catch (e) {
 				console.error("chartDataProviderError", e);

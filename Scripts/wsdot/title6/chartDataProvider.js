@@ -33,13 +33,51 @@ define([
 		this.other = queryResults.SUM_Other;
 	}
 
+	LanguageData.labels = {
+		english: "English",
+		spanish: "Spanish",
+		indoEuropean: "Indo / European",
+		asianPacificIsland: "Asian / Pacific Island",
+		other: "Other"
+	};
+
+	LanguageData.prototype.getTotal = function () {
+		return this.english + this.spanish + this.indoEuropean + this.asianPacificIsland + this.other;
+	};
+
+	LanguageData.prototype.toPieChartSeries = function () {
+		var language, item, output = [], languages, i, l, total, label;
+		languages = [
+			"english",
+			"spanish",
+			"indoEuropean",
+			"asianPacificIsland",
+			"other"
+		];
+
+		total = this.getTotal();
+
+		for (i = 0, l = languages.length; i < l; i += 1) {
+			language = languages[i];
+			label = LanguageData.labels[language];
+			item = {
+				y: this[language],
+				text: label,
+				stroke: "black",
+				tooltip: [label, ": (~", Math.round((this[language] / total) * 10000) / 100, "%)"].join("")
+			};
+			output.push(item);
+		}
+		return output;
+	};
+
 	LanguageData.prototype.thresholdMet = function () {
 		var total, thresholdMet, speakerCount, language;
 		// Get the total number of people.
 		total = this.english + this.spanish + this.indoEuropean + this.asianPacificIsland + this.other;
 		for (language in this) {
 			if (this.hasOwnProperty(language)) {
-				if (language !== "english") {
+				if (language !== "English") {
 					speakerCount = this[language];
 					if (speakerCount > 1000 || speakerCount / total > 0.05) {
 						if (!thresholdMet) {
