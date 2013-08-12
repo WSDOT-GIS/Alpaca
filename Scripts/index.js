@@ -15,6 +15,16 @@ require([
 	"esri/symbols/SimpleLineSymbol",
 	"esri/symbols/SimpleFillSymbol",
 	"esri/graphic",
+
+	"dojox/charting/Chart",
+	"dojox/charting/plot2d/Pie",
+	"dojox/charting/action2d/Highlight",
+	"dojox/charting/action2d/MoveSlice",
+	"dojox/charting/action2d/Tooltip",
+	"dojox/charting/themes/MiamiNice",
+	"dojox/charting/widget/Legend",
+
+
 	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
@@ -25,7 +35,8 @@ require([
 	"dijit/form/Button"
 ], function (ready, Color, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
-	Graphic)
+	Graphic,
+	Chart, Pie, Highlight, MoveSlice, Tooltip, MiamiNice, Legend)
 {
 	"use strict";
 
@@ -65,6 +76,28 @@ require([
 		return url;
 	}
 
+	function createLanguageChart(languageData) {
+		var chartTwo = new Chart("languageChart");
+		chartTwo.setTheme(MiamiNice)
+		 .addPlot("default", {
+		 	type: Pie,
+		 	font: "normal normal 11pt Tahoma",
+		 	fontColor: "black",
+		 	labelOffset: -30,
+		 	radius: 80
+		 }).addSeries("Series A", [
+			{ y: 4, text: "Red", stroke: "black", tooltip: "Red is 50%" },
+			{ y: 2, text: "Green", stroke: "black", tooltip: "Green is 25%" },
+			{ y: 1, text: "Blue", stroke: "black", tooltip: "I am feeling Blue!" },
+			{ y: 1, text: "Other", stroke: "black", tooltip: "Mighty <strong>strong</strong><br>With two lines!" }
+		 ]);
+		var anim_a = new MoveSlice(chartTwo, "default");
+		var anim_b = new Highlight(chartTwo, "default");
+		var anim_c = new Tooltip(chartTwo, "default");
+		chartTwo.render();
+		var legendTwo = new Legend({ chart: chartTwo }, "languageChartLegend");
+	}
+
 	ready(function () {
 		var map;
 
@@ -94,7 +127,7 @@ require([
 				logo: false
 			}
 		}).then(function (response) {
-			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer;
+			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, languageChart;
 
 			/**
 			@param drawResponse
@@ -151,6 +184,9 @@ require([
 			try {
 				chartDataProvider = new ChartDataProvider(getAggregateLayer(map));
 				chartDataProvider.on("query-complete", function (chartData) {
+					if (!languageChart) {
+						languageChart = createLanguageChart(chartData.language);
+					}
 					console.log(chartData);
 				});
 				chartDataProvider.on("query-error", function () {
