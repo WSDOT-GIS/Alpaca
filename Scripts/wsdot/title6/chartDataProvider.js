@@ -12,7 +12,7 @@ define([
 
 	function RaceData(/**{Object}*/ queryResults) {
 		this.white = queryResults.SUM_White;
-		this.notWhite = queryResults.SUM_NotWhite;
+		this.minority = queryResults.SUM_NotWhite;
 		this.oneRace = queryResults.SUM_OneRace;
 		this.marginOfError = {
 			white: queryResults.MAX_MEWhite,
@@ -21,6 +21,10 @@ define([
 		};
 	}
 
+	RaceData.prototype.thresholdMet = function () {
+
+	};
+
 	function LanguageData(/**{Object}*/ queryResults) {
 		this.english = queryResults.SUM_English;
 		this.spanish = queryResults.SUM_Spanish;
@@ -28,6 +32,25 @@ define([
 		this.asianPacificIsland = queryResults.SUM_Asian_PacificIsland;
 		this.other = queryResults.SUM_Other;
 	}
+
+	LanguageData.prototype.thresholdMet = function () {
+		var total, thresholdMet, speakerCount, language;
+		// Get the total number of people.
+		total = this.english + this.spanish + this.indoEuropean + this.asianPacificIsland + this.other;
+		for (language in this) {
+			if (this.hasOwnProperty(language)) {
+				if (language !== "english") {
+					speakerCount = this[language];
+					if (speakerCount > 1000 || speakerCount / total > 0.05) {
+						if (!thresholdMet) {
+							thresholdMet = [];
+						}
+						thresholdMet.push(language);
+					}
+				}
+			}
+		}
+	};
 
 	function ChartData(/**{Object}*/ queryResults) {
 		this.race = new RaceData(queryResults);
