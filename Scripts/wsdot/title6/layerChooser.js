@@ -211,7 +211,6 @@ define([
 
 			// Create the radio buttons and place each into a document fragment as it is created.
 
-			//for (i = 0, l = operationalLayers.length; i < l; i += 1) {
 			for (i = operationalLayers.length - 1; i >= 0; i--) {
 				opLayer = operationalLayers[i];
 

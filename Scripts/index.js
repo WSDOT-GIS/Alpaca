@@ -30,13 +30,39 @@ require([
 	"use strict";
 
 	/** Determines if layer is a basemap layer based on its layer ID.
-	* @param {String} layerId
-	* @returns {Boolean}
-	*/
+	 * @param {String} layerId
+	 * @returns {Boolean}
+	 */
 	function detectBasemapLayerId(layerId) {
 		var re = /(^layer\d+$)|(^World_Light_Gray)/i;
 		// Returns true if layerId is truthy (not null, undefined, 0, or emtpy string) and matches the regular expression.
 		return layerId && re.test(layerId);
+	}
+
+	/** Gets the aggregate layer from the map, removes it, and then returns that layer's URL.
+	 * @returns {String}
+	 */
+	function getAggregateLayer(/**{Map}*/ map) {
+		var aggregateRe = /Aggregate/i, i, l, layerId, layer, url = null;
+
+		for (i = 0, l = map.layerIds.length; i < l; i += 1) {
+			if (aggregateRe.test(map.layerIds[i])) {
+				layerId = map.layerIds[i];
+				break;
+			}
+		}
+
+		if (layerId) {
+			layer = map.getLayer(layerId);
+			url = layer.url;
+			map.removeLayer(layer);
+		}
+
+		if (url && !/\/\d+/.test(url)) {
+			url += "/0";
+		}
+
+		return url;
 	}
 
 	ready(function () {
@@ -123,10 +149,13 @@ require([
 			layerChooser = new LayerChooser(response, "layerToggle");
 
 			try {
-				chartDataProvider = new ChartDataProvider(map);
-				console.log(chartDataProvider.languageLayerInfo.getVisibleLayerLevel());
-				console.log(chartDataProvider.minorityLayerInfo.getVisibleLayerLevel());
-				console.log(chartDataProvider);
+				chartDataProvider = new ChartDataProvider(getAggregateLayer(map));
+				chartDataProvider.on("query-complete", function (chartData) {
+					console.log(chartData);
+				});
+				chartDataProvider.on("query-error", function () {
+					console.error(arguments);
+				});
 			} catch (e) {
 				console.error("chartDataProviderError", e);
 			}
