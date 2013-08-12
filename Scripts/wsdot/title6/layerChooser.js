@@ -4,8 +4,9 @@ define([
 	"dojo/_base/declare",
 	"dojo/Evented",
 	"dojo/on",
-	"dijit/form/HorizontalSlider"
-], function (declare, Evented, on, HorizontalSlider) {
+	"dijit/form/HorizontalSlider",
+	"esri/dijit/Legend"
+], function (declare, Evented, on, HorizontalSlider, Legend) {
 	"use strict";
 	var LayerChooser, LayerRadioButton, SublayerList;
 
@@ -58,6 +59,7 @@ define([
 		domNode: null,
 		sublayerList: null,
 		opacitySlider: null,
+		legend: null,
 		/**
 		@param {Object} options
 		@param {Object} options.operationalLayer
@@ -70,7 +72,7 @@ define([
 		@constructs
 		*/
 		constructor: function (options) {
-			var self = this, opLayer = options.operationalLayer;
+			var self = this, opLayer = options.operationalLayer, legendDiv;
 
 			self.domNode = document.createElement("li");
 
@@ -117,6 +119,8 @@ define([
 			});
 
 			self.domNode.appendChild(self.opacitySlider.domNode);
+
+
 			
 			if (options.includeSublayers) {
 				self.sublayerList = new SublayerList(opLayer.layerObject);
@@ -125,6 +129,21 @@ define([
 					self.emit("sublayer-select", e);
 				});
 			}
+
+			// Create the legend...
+			legendDiv = document.createElement("div");
+			legendDiv.classList.add("layer-chooser-legend");
+			self.domNode.appendChild(legendDiv);
+			self.legend = new Legend({
+				autoUpdate: true,
+				map: options.map,
+				layerInfos: [
+					{
+						layer: opLayer.layerObject,
+						title: opLayer.title
+					}
+				]
+			}, legendDiv);
 		}
 	});
 
@@ -198,6 +217,7 @@ define([
 
 				layerRadio = new LayerRadioButton({
 					operationalLayer: opLayer,
+					map: self.map,
 					//layerId: opLayer.id,
 					//label: opLayer.title,
 					checked: !firstLayerFound, // Only check the first valid layer's radio button.
@@ -219,6 +239,7 @@ define([
 				}
 
 				self.list.appendChild(layerRadio.domNode);
+				layerRadio.legend.startup();
 			}
 		}
 	});

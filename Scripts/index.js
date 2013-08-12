@@ -2,14 +2,19 @@
 /*jslint browser:true */
 require([
 	"dojo/ready",
+	"dojo/_base/Color",
 	"dijit/registry",
 	"esri/arcgis/utils",
 	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
-	"esri/dijit/Legend",
 	"title6/layerChooser",
 	"title6/chartDataProvider",
 	"esri/toolbars/draw",
+	"esri/layers/GraphicsLayer",
+	"esri/renderers/SimpleRenderer",
+	"esri/symbols/SimpleLineSymbol",
+	"esri/symbols/SimpleFillSymbol",
+	"esri/graphic",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
@@ -18,7 +23,10 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, registry, arcgisUtils, domUtils, BasemapGallery, Legend, LayerChooser, ChartDataProvider, Draw) {
+], function (ready, Color, registry, arcgisUtils, domUtils, BasemapGallery,
+	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
+	Graphic)
+{
 	"use strict";
 
 	/** Determines if layer is a basemap layer based on its layer ID.
@@ -29,35 +37,6 @@ require([
 		var re = /(^layer\d+$)|(^World_Light_Gray)/i;
 		// Returns true if layerId is truthy (not null, undefined, 0, or emtpy string) and matches the regular expression.
 		return layerId && re.test(layerId);
-	}
-
-	/**
-	* @param response The response of the arcgisUtils/createMap operation. See https://developers.arcgis.com/en/javascript/jshelp/intro_webmap.html
-	* @param {esri/Map} response.map
-	* @param {Object} response.itemInfo
-	* @param {Object} response.itemInfo.itemData
-	* @param {Object} response.itemInfo.itemData.baseMap
-	* @param {Array} response.itemInfo.itemData.operationalLayers
-	* @param {Object} response.clickEventHandle
-	* @param {Object} response.clickEventListener
-	* @param {Array} response.errors
-	*/
-	function getLayerInfosForLegend(response) {
-		var output = [], operationalLayers, layer, i, l;
-
-		operationalLayers = response.itemInfo.itemData.operationalLayers;
-
-		for (i = 0, l = operationalLayers.length; i < l; i += 1) {
-			layer = operationalLayers[i];
-			if (!layer.featureCollection) {
-				output.push({
-					layer: layer.layerObject,
-					title: layer.title
-				});
-			}
-		}
-
-		return output;
 	}
 
 	ready(function () {
@@ -89,7 +68,7 @@ require([
 				logo: false
 			}
 		}).then(function (response) {
-			var basemapGallery, legend, layerChooser, chartDataProvider, drawServiceAreaButton, drawToolbar;
+			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer;
 
 			/**
 			@param drawResponse
@@ -97,7 +76,30 @@ require([
 			@param {esri/geometry/Geometry} drawResponse.geographicGeometry
 			*/
 			function setServiceArea(drawResponse) {
-				console.debug("drawResponse", drawResponse);
+				var graphic;
+
+				// Create the layer if it does not already exist.
+				if (!serviceAreaLayer) {
+					(function () {
+						var renderer, symbol;
+						symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([255, 0, 0]), 3);
+						symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0,0,0,0]));
+						renderer = new SimpleRenderer(symbol);
+						serviceAreaLayer = new GraphicsLayer({
+							id: "serviceArea"
+						});
+						serviceAreaLayer.setRenderer(renderer);
+						map.addLayer(serviceAreaLayer);
+					}());
+				}
+				// Clear the existing graphics.
+				serviceAreaLayer.clear();
+
+				
+
+				graphic = new Graphic(drawResponse.geometry);
+				serviceAreaLayer.add(graphic);
+
 			}
 
 			map = response.map;
@@ -118,19 +120,7 @@ require([
 
 			basemapGallery.startup();
 
-			legend = new Legend({
-				map: map,
-				autoUpdate: true,
-				layerInfos: getLayerInfosForLegend(response)
-			}, "legend");
-
-
 			layerChooser = new LayerChooser(response, "layerToggle");
-			layerChooser.on("sublayer-select", function () {
-				legend.refresh();
-			});
-
-			legend.startup();
 
 			try {
 				chartDataProvider = new ChartDataProvider(map);
@@ -148,9 +138,14 @@ require([
 				setServiceArea(drawResponse);
 			});
 
-			drawServiceAreaButton = registry.byId("drawServiceAreaButton");
-			drawServiceAreaButton.on("click", function () {
+			registry.byId("drawServiceAreaButton").on("click", function () {
 				drawToolbar.activate(Draw.POLYGON);
+			});
+
+			registry.byId("clearServiceAreaButton").on("click", function () {
+				if (serviceAreaLayer) {
+					serviceAreaLayer.clear();
+				}
 			});
 		});
 
