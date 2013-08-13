@@ -214,8 +214,9 @@ require([
 					}
 				});
 				chartDataProvider.on("query-error", function (response) {
+					window.alert("There was an error loading the chart data.  Please reload the page.");
 					if (console && console.error) {
-						console.error(response);
+						console.error("ChartDataProvider query-error", response);
 					}
 				});
 			} catch (e) {
