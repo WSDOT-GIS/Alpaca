@@ -171,18 +171,21 @@ define([
 		},
 		list: null,
 		/**
-		* @param mapInfo The response of the arcgisUtils/createMap operation. See https://developers.arcgis.com/en/javascript/jshelp/intro_webmap.html
-		* @param {esri/Map} mapInfo.map
-		* @param {Object} mapInfo.itemInfo
-		* @param {Object} mapInfo.itemInfo.itemData
-		* @param {Object} mapInfo.itemInfo.itemData.baseMap
-		* @param {Array} mapInfo.itemInfo.itemData.operationalLayers
-		* @param {Object} mapInfo.clickEventHandle
-		* @param {Object} mapInfo.clickEventListener
-		* @param {Array} mapInfo.errors
-		* @constructs
-		*/
-		constructor: function (mapInfo, domRef) {
+		 * @param mapInfo The response of the arcgisUtils/createMap operation. See https://developers.arcgis.com/en/javascript/jshelp/intro_webmap.html
+		 * @param {esri/Map} mapInfo.map
+		 * @param {Object} mapInfo.itemInfo
+		 * @param {Object} mapInfo.itemInfo.itemData
+		 * @param {Object} mapInfo.itemInfo.itemData.baseMap
+		 * @param {Array} mapInfo.itemInfo.itemData.operationalLayers
+		 * @param {Object} mapInfo.clickEventHandle
+		 * @param {Object} mapInfo.clickEventListener
+		 * @param {Array} mapInfo.errors
+		 * @param {String|HTMLElement} domRef
+		 * @param {Object} [options]
+		 * @param {Regexp} [omittedMapServices] Omitted map services. Any map service with a name matching the regex will not have a corresponding radio button.
+		 * @constructs
+		 */
+		constructor: function (mapInfo, domRef, options) {
 			var self = this, operationalLayers, i, layerRadio, opLayer, firstLayerFound = false;
 
 			function toggleLayer() {
@@ -202,6 +205,10 @@ define([
 				this.domNode = domRef;
 			}
 
+			if (!options) {
+				options = {};
+			}
+
 			self.list = document.createElement("ul");
 			self.list.classList.add("layer-list");
 			self.domNode.appendChild(self.list);
@@ -214,31 +221,34 @@ define([
 			for (i = operationalLayers.length - 1; i >= 0; i--) {
 				opLayer = operationalLayers[i];
 
-				layerRadio = new LayerRadioButton({
-					operationalLayer: opLayer,
-					map: self.map,
-					//layerId: opLayer.id,
-					//label: opLayer.title,
-					checked: !firstLayerFound, // Only check the first valid layer's radio button.
-					//errors: opLayer.errors
-					includeSublayers: !/^(?:Boundaries)|(?:Minority)$/i.test(opLayer.title)
-				});
+				if (!options.omittedMapServices || !options.omittedMapServices.test(opLayer.title)) {
 
-				layerRadio.on("checked", toggleLayer);
-				layerRadio.on("sublayer-select", emitSublayerEvent);
+					layerRadio = new LayerRadioButton({
+						operationalLayer: opLayer,
+						map: self.map,
+						//layerId: opLayer.id,
+						//label: opLayer.title,
+						checked: !firstLayerFound, // Only check the first valid layer's radio button.
+						//errors: opLayer.errors
+						includeSublayers: !/^(?:Boundaries)|(?:Minority)$/i.test(opLayer.title)
+					});
 
-				if (!(opLayer.errors && opLayer.errors.length)) {
-					// Show the first layer, hide the others.
-					if (!firstLayerFound) {
-						opLayer.layerObject.show();
-						firstLayerFound = true;
-					} else {
-						opLayer.layerObject.hide();
+					layerRadio.on("checked", toggleLayer);
+					layerRadio.on("sublayer-select", emitSublayerEvent);
+
+					if (!(opLayer.errors && opLayer.errors.length)) {
+						// Show the first layer, hide the others.
+						if (!firstLayerFound) {
+							opLayer.layerObject.show();
+							firstLayerFound = true;
+						} else {
+							opLayer.layerObject.hide();
+						}
 					}
-				}
 
-				self.list.appendChild(layerRadio.domNode);
-				layerRadio.legend.startup();
+					self.list.appendChild(layerRadio.domNode);
+					layerRadio.legend.startup();
+				}
 			}
 		}
 	});

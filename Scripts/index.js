@@ -201,7 +201,9 @@ require([
 
 			basemapGallery.startup();
 
-			layerChooser = new LayerChooser(response, "layerToggle");
+			layerChooser = new LayerChooser(response, "layerToggle", {
+				omittedMapServices: /Aggregate/i
+			});
 
 			try {
 				chartDataProvider = new ChartDataProvider(getAggregateLayer(map));
