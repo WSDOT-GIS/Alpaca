@@ -78,7 +78,11 @@ require([
 
 	function createLanguageChart(languageData) {
 		var chart, anim_a, anim_b, anim_c, legend;
-		chart = new Chart("languageChart");
+		chart = new Chart("languageChart", {
+			title: "Language Proficiency",
+			titlePos: "top",
+			titleGap: 5
+		});
 		chart.setTheme(MiamiNice).addPlot("default", {
 			type: Pie,
 			labels: false,
@@ -92,6 +96,28 @@ require([
 		anim_c = new Tooltip(chart, "default");
 		chart.render();
 		legend = new Legend({ chart: chart }, "languageChartLegend");
+	}
+
+	function createRaceChart(raceData) {
+		var chart, anim_a, anim_b, anim_c, legend;
+		chart = new Chart("minorityChart", {
+			title: "Minority",
+			titlePos: "top",
+			titleGap: 5
+		});
+		chart.setTheme(MiamiNice).addPlot("default", {
+			type: Pie,
+			labels: false,
+			font: "normal normal 11pt Tahoma",
+			fontColor: "black",
+			labelOffset: -30,
+			radius: 80
+		}).addSeries("Minority", raceData.toPieChartSeries());
+		anim_a = new MoveSlice(chart, "default");
+		anim_b = new Highlight(chart, "default");
+		anim_c = new Tooltip(chart, "default");
+		chart.render();
+		legend = new Legend({ chart: chart }, "minorityChartLegend");
 	}
 
 	ready(function () {
@@ -123,7 +149,7 @@ require([
 				logo: false
 			}
 		}).then(function (response) {
-			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, languageChart;
+			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, languageChart, raceChart;
 
 			/**
 			@param drawResponse
@@ -183,12 +209,19 @@ require([
 					if (!languageChart) {
 						languageChart = createLanguageChart(response.chartData.language);
 					}
+					if (!raceChart) {
+						raceChart = createRaceChart(response.chartData.race);
+					}
 				});
 				chartDataProvider.on("query-error", function (response) {
-					console.error(response);
+					if (console && console.error) {
+						console.error(response);
+					}
 				});
 			} catch (e) {
-				console.error("chartDataProviderError", e);
+				if (console && console.error) {
+					console.error("chartDataProviderError", e);
+				}
 			}
 
 			drawToolbar = new Draw(map);

@@ -21,8 +21,34 @@ define([
 		};
 	}
 
-	RaceData.prototype.thresholdMet = function () {
+	RaceData.labels = {
+		white: "White",
+		minority: "Minority"
+	};
 
+	RaceData.prototype.getTotal = function () {
+		return this.white + this.minority;
+	};
+
+	RaceData.prototype.toPieChartSeries = function () {
+		var race, item, output = [], total, label;
+
+		total = this.getTotal();
+
+		for (race in RaceData.labels) {
+			if (RaceData.labels.hasOwnProperty(race)) {
+				label = RaceData.labels[race];
+				item = {
+					y: this[race],
+					text: label,
+					stroke: "black",
+					tooltip: [label, ": (~", Math.round((this[race] / total) * 10000) / 100, "%)"].join("")
+				};
+				output.push(item);
+			}
+		}
+
+		return output;
 	};
 
 	function LanguageData(/**{Object}*/ queryResults) {
