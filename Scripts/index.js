@@ -149,7 +149,7 @@ require([
 				logo: false
 			}
 		}).then(function (response) {
-			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, languageChart, raceChart;
+			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, languageChart, raceChart, aggregateLayer;
 
 			/**
 			@param drawResponse
@@ -163,7 +163,7 @@ require([
 				if (!serviceAreaLayer) {
 					(function () {
 						var renderer, symbol;
-						symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([255, 0, 0]), 3);
+						symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([0, 0, 255]), 3);
 						symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0,0,0,0]));
 						renderer = new SimpleRenderer(symbol);
 						serviceAreaLayer = new GraphicsLayer({
@@ -185,6 +185,8 @@ require([
 
 			map = response.map;
 
+			aggregateLayer = getAggregateLayer(map);
+
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
 				domUtils.show(document.getElementById("mapProgress"));
@@ -205,26 +207,30 @@ require([
 				omittedMapServices: /Aggregate/i
 			});
 
-			try {
-				chartDataProvider = new ChartDataProvider(getAggregateLayer(map));
-				chartDataProvider.on("query-complete", function (response) {
-					if (!languageChart) {
-						languageChart = createLanguageChart(response.chartData.language);
-					}
-					if (!raceChart) {
-						raceChart = createRaceChart(response.chartData.race);
-					}
-				});
-				chartDataProvider.on("query-error", function (response) {
-					window.alert("There was an error loading the chart data.  Please reload the page.");
+			if (aggregateLayer) {
+				try {
+					chartDataProvider = new ChartDataProvider(aggregateLayer);
+					chartDataProvider.on("query-complete", function (response) {
+						if (!languageChart) {
+							languageChart = createLanguageChart(response.chartData.language);
+						}
+						if (!raceChart) {
+							raceChart = createRaceChart(response.chartData.race);
+						}
+					});
+					chartDataProvider.on("query-error", function (response) {
+						window.alert("There was an error loading the chart data.  Please reload the page.");
+						if (console && console.error) {
+							console.error("ChartDataProvider query-error", response);
+						}
+					});
+				} catch (e) {
 					if (console && console.error) {
-						console.error("ChartDataProvider query-error", response);
+						console.error("chartDataProvider error", e);
 					}
-				});
-			} catch (e) {
-				if (console && console.error) {
-					console.error("chartDataProviderError", e);
 				}
+			} else {
+				console.error("Aggregate layer not found.");
 			}
 
 			drawToolbar = new Draw(map);
