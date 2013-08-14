@@ -22,7 +22,6 @@ require([
 	"dojox/charting/action2d/Highlight",
 	"dojox/charting/action2d/MoveSlice",
 	"dojox/charting/action2d/Tooltip",
-	"dojox/charting/themes/MiamiNice",
 	"dojox/charting/widget/Legend",
 
 
@@ -37,7 +36,7 @@ require([
 ], function (ready, Color, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic,
-	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, MiamiNice, Legend)
+	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Legend)
 {
 	"use strict";
 
@@ -101,7 +100,7 @@ require([
 			titlePos: "top",
 			titleGap: 5
 		});
-		chart.setTheme(MiamiNice).addPlot("default", {
+		chart.addPlot("default", {
 			type: Pie,
 			labels: false,
 			font: "normal normal 11pt Tahoma",

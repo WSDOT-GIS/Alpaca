@@ -10,6 +10,8 @@ define([
 	"use strict";
 	var ChartDataProvider;
 
+
+
 	function RaceData(/**{Object}*/ queryResults) {
 		this.white = queryResults.SUM_White;
 		this.minority = queryResults.SUM_NotWhite;
@@ -41,6 +43,7 @@ define([
 				item = {
 					y: this[race],
 					text: label,
+					fill: race === "white" ? "RGB(255,235,204)" : "RGB(240,118,5)",
 					stroke: "black",
 					tooltip: [label, ": (~", Math.round((this[race] / total) * 10000) / 100, "%)"].join("")
 				};
@@ -115,7 +118,7 @@ define([
 	};
 
 	LanguageData.prototype.toColumnChartSeries = function () {
-		var language, output = [], item, label, percent, total, thresholdMet;
+		var language, output = [], item, label, percent, total;
 		total = this.getTotal();
 		for (language in LanguageData.labels) {
 			if (LanguageData.labels.hasOwnProperty(language)) {
