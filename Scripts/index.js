@@ -165,7 +165,7 @@ require([
 				logo: false
 			}
 		}).then(function (response) {
-			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, languageChart, raceChart, aggregateLayer;
+			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, selectionLayer, languageChart, raceChart, aggregateLayer;
 
 			/**
 			@param drawResponse
@@ -179,6 +179,7 @@ require([
 				if (!serviceAreaLayer) {
 					(function () {
 						var renderer, symbol;
+						// Create the symbol for the outline of the fill symbol.
 						symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([0, 0, 255]), 3);
 						symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0,0,0,0]));
 						renderer = new SimpleRenderer(symbol);
@@ -196,6 +197,35 @@ require([
 
 				graphic = new Graphic(drawResponse.geometry);
 				serviceAreaLayer.add(graphic);
+
+			}
+
+			/**
+			 * @param drawResponse
+			 * @param {esri/geometry/Geometry} drawResponse.geometry
+			 * @param {esri/geometry/Geometry} drawResponse.geographicGeometry
+			 */
+			function setSelection(drawResponse) {
+				var graphic;
+
+				if (!selectionLayer) {
+					(function () {
+						var renderer, symbol;
+						// Create the symbol for the outline of the fill symbol.
+						symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DOT, new Color([0, 255, 0]), 3);
+						symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0, 0, 255, 0.2]));
+						renderer = new SimpleRenderer(symbol);
+						selectionLayer = new GraphicsLayer({
+							id: "selection"
+						});
+						selectionLayer.setRenderer(renderer);
+						map.addLayer(selectionLayer);
+					}());
+				}
+				selectionLayer.clear();
+
+				graphic = new Graphic(drawResponse.geometry);
+				selectionLayer.add(graphic);
 
 			}
 
@@ -257,22 +287,45 @@ require([
 				}
 			}
 
-			drawToolbar = new Draw(map);
+			// Setup draw toolbar and associated buttons.
+			(function (drawSAButton, drawSelButton, clearSAButton, clearSelButton ) {
+				drawToolbar = new Draw(map);
 
-			drawToolbar.on("draw-complete", function (drawResponse) {
-				drawToolbar.deactivate();
-				setServiceArea(drawResponse);
-			});
+				drawToolbar.on("draw-complete", function (drawResponse) {
+					drawToolbar.deactivate();
+					if (drawToolbar.title6Mode === "service-area") {
+						setServiceArea(drawResponse);
+					} else if (drawToolbar.title6Mode === "selection") {
+						// TODO: Selection.
+						setSelection(drawResponse);
+					}
+				});
 
-			registry.byId("drawServiceAreaButton").on("click", function () {
-				drawToolbar.activate(Draw.POLYGON);
-			});
+				drawSAButton.on("click", function () {
+					drawToolbar.title6Mode = "service-area";
+					drawToolbar.activate(Draw.POLYGON);
+				});
 
-			registry.byId("clearServiceAreaButton").on("click", function () {
-				if (serviceAreaLayer) {
-					serviceAreaLayer.clear();
-				}
-			});
+				drawSelButton.on("click", function () {
+					drawToolbar.title6Mode = "selection";
+					drawToolbar.activate(Draw.POLYGON);
+				});
+
+				clearSAButton.on("click", function () {
+					if (serviceAreaLayer) {
+						serviceAreaLayer.clear();
+					}
+				});
+
+				clearSelButton.on("click", function () {
+					if (selectionLayer) {
+						selectionLayer.clear();
+					}
+				});
+			}(registry.byId("drawServiceAreaButton"), 
+			registry.byId("drawSelectionButton"),
+			registry.byId("clearServiceAreaButton"),
+			registry.byId("clearSelectionButton")));
 		});
 
 	});
