@@ -5,8 +5,9 @@ define([
 	"dojo/Evented",
 	"esri/tasks/query",
 	"esri/tasks/QueryTask",
-	"esri/tasks/StatisticDefinition"
-], function (declare, Evented, Query, QueryTask, StatisticDefinition) {
+	"esri/tasks/StatisticDefinition",
+	"dojo/number"
+], function (declare, Evented, Query, QueryTask, StatisticDefinition, number) {
 	"use strict";
 	var ChartDataProvider;
 
@@ -130,7 +131,7 @@ define([
 					text: label,
 					stroke: "black",
 					fill: this.thresholdMet(language) ? "#FF0000" : "#FFBEBE",
-					tooltip: [label, ": ", speakerCount, "(~", percent, "%)"].join("")
+					tooltip: [label, ": ", number.format(speakerCount), "(~", percent, "%)"].join("")
 				};
 				output.push(item);
 			}
