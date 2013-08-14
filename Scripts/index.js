@@ -25,6 +25,7 @@ require([
 	"dojox/charting/widget/Legend",
 
 
+	"dojox/charting/axis2d/Default",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
 	"dijit/TooltipDialog",
@@ -77,7 +78,7 @@ require([
 	}
 
 	function createLanguageChart(languageData) {
-		var chart, anim_b, anim_c, legend;
+		var chart, anim_b, anim_c;
 		chart = new Chart("languageChart", {
 			title: "Language Proficiency",
 			titlePos: "top",
@@ -86,11 +87,28 @@ require([
 		chart.addPlot("default", {
 			type: Columns
 		});
+		chart.addAxis("x", {
+			labels: [
+				{ value: 1, text: "English" },
+				{ value: 2, text: "Spanish" },
+				{ value: 3, text: "IndoEu." },
+				{ value: 4, text: "Asian,PI" },
+				{ value: 5, text: "Other" }
+			],
+			title: "Language",
+			titleOrientation: "away",
+			majorTickStep: 1,
+			minorTickStep: 0.5,
+			microTickStep: 0.25
+		});
+		chart.addAxis("y", {
+			vertical: true,
+			title: "No. of speakers"
+		});
 		chart.addSeries("Language Proficiency", languageData.toColumnChartSeries());
 		anim_b = new Highlight(chart, "default");
 		anim_c = new Tooltip(chart, "default");
 		chart.render();
-		legend = new Legend({ chart: chart }, "languageChartLegend");
 	}
 
 	function createRaceChart(raceData) {
