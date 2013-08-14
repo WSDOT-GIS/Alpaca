@@ -97,6 +97,25 @@ define([
 		return output;
 	};
 
+	LanguageData.prototype.toColumnChartSeries = function () {
+		var language, output = [], item, label, percent, total;
+		total = this.getTotal();
+		for (language in LanguageData.labels) {
+			if (LanguageData.labels.hasOwnProperty(language)) {
+				label = LanguageData.labels[language];
+				percent = Math.round((this[language] / total) * 10000) / 100;
+				item = {
+					y: this[language],
+					text: label,
+					stroke: "black",
+					tooltip: [label, ": (~", percent, "%)"].join("")
+				}
+				output.push(item);
+			}
+		}
+		return output;
+	};
+
 	LanguageData.prototype.thresholdMet = function () {
 		var total, thresholdMet, speakerCount, language;
 		// Get the total number of people.
