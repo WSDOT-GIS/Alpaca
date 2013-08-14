@@ -95,6 +95,8 @@ require([
 				{ value: 4, text: "Asian,PI" },
 				{ value: 5, text: "Other" }
 			],
+			dropLabels: false,
+			minorLabels: false,
 			//title: "Language",
 			titleOrientation: "away",
 			majorTickStep: 1,
@@ -103,6 +105,7 @@ require([
 		});
 		chart.addAxis("y", {
 			vertical: true,
+			max: languageData.getTotal() - languageData.english,
 			title: "No. of speakers"
 		});
 		chart.addSeries("Language Proficiency", languageData.toColumnChartSeries());

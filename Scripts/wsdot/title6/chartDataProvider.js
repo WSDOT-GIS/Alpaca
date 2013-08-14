@@ -118,18 +118,19 @@ define([
 	};
 
 	LanguageData.prototype.toColumnChartSeries = function () {
-		var language, output = [], item, label, percent, total;
+		var language, output = [], item, label, percent, total, speakerCount;
 		total = this.getTotal();
 		for (language in LanguageData.labels) {
 			if (LanguageData.labels.hasOwnProperty(language)) {
 				label = LanguageData.labels[language];
-				percent = Math.round((this[language] / total) * 10000) / 100;
+				speakerCount = this[language];
+				percent = Math.round((speakerCount / total) * 10000) / 100;
 				item = {
-					y: this[language],
+					y: speakerCount,
 					text: label,
 					stroke: "black",
 					fill: this.thresholdMet(language) ? "#FF0000" : "#FFBEBE",
-					tooltip: [label, ": (~", percent, "%)"].join("")
+					tooltip: [label, ": ", speakerCount, "(~", percent, "%)"].join("")
 				};
 				output.push(item);
 			}
