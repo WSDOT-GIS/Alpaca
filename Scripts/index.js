@@ -18,6 +18,7 @@ require([
 
 	"dojox/charting/Chart",
 	"dojox/charting/plot2d/Pie",
+	"dojox/charting/plot2d/Columns",
 	"dojox/charting/action2d/Highlight",
 	"dojox/charting/action2d/MoveSlice",
 	"dojox/charting/action2d/Tooltip",
@@ -36,7 +37,7 @@ require([
 ], function (ready, Color, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic,
-	Chart, Pie, Highlight, MoveSlice, Tooltip, MiamiNice, Legend)
+	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, MiamiNice, Legend)
 {
 	"use strict";
 
@@ -77,21 +78,16 @@ require([
 	}
 
 	function createLanguageChart(languageData) {
-		var chart, anim_a, anim_b, anim_c, legend;
+		var chart, anim_b, anim_c, legend;
 		chart = new Chart("languageChart", {
 			title: "Language Proficiency",
 			titlePos: "top",
 			titleGap: 5
 		});
-		chart.setTheme(MiamiNice).addPlot("default", {
-			type: Pie,
-			labels: false,
-			font: "normal normal 11pt Tahoma",
-			fontColor: "black",
-			labelOffset: -30,
-			radius: 80
-		}).addSeries("Language Proficiency", languageData.toPieChartSeries());
-		anim_a = new MoveSlice(chart, "default");
+		chart.addPlot("default", {
+			type: Columns
+		});
+		chart.addSeries("Language Proficiency", languageData.toColumnChartSeries());
 		anim_b = new Highlight(chart, "default");
 		anim_c = new Tooltip(chart, "default");
 		chart.render();

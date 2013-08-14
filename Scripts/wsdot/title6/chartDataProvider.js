@@ -97,8 +97,25 @@ define([
 		return output;
 	};
 
+	/** Determines if the threshold has been met for a particular language.
+	 * @param {String} language The name of one of the language properties: "english", "spanish", "indoEuropean", "asianPacificIsland", "other".
+	 * @returns {Boolean} If language is "english" or an invalid property name, false will be returned. Returns true if the number of speakers of the language is greater than 1000 or is greater than 5% of the total population.
+	 */
+	LanguageData.prototype.thresholdMet = function (language) {
+		var total, thresholdMet = false, speakerCount;
+		// Get the total number of people.
+		if (this.hasOwnProperty(language) && language !== "english") {
+			total = this.english + this.spanish + this.indoEuropean + this.asianPacificIsland + this.other;
+			speakerCount = this[language];
+			if (speakerCount > 1000 || speakerCount / total > 0.05) {
+				thresholdMet = true;
+			}
+		}
+		return thresholdMet;
+	};
+
 	LanguageData.prototype.toColumnChartSeries = function () {
-		var language, output = [], item, label, percent, total;
+		var language, output = [], item, label, percent, total, thresholdMet;
 		total = this.getTotal();
 		for (language in LanguageData.labels) {
 			if (LanguageData.labels.hasOwnProperty(language)) {
@@ -108,32 +125,15 @@ define([
 					y: this[language],
 					text: label,
 					stroke: "black",
+					fill: this.thresholdMet(language) ? "#FF0000" : "#FFBEBE",
 					tooltip: [label, ": (~", percent, "%)"].join("")
-				}
+				};
 				output.push(item);
 			}
 		}
 		return output;
 	};
 
-	LanguageData.prototype.thresholdMet = function () {
-		var total, thresholdMet, speakerCount, language;
-		// Get the total number of people.
-		total = this.english + this.spanish + this.indoEuropean + this.asianPacificIsland + this.other;
-		for (language in this) {
-			if (this.hasOwnProperty(language)) {
-				if (language !== "English") {
-					speakerCount = this[language];
-					if (speakerCount > 1000 || speakerCount / total > 0.05) {
-						if (!thresholdMet) {
-							thresholdMet = [];
-						}
-						thresholdMet.push(language);
-					}
-				}
-			}
-		}
-	};
 
 	function ChartData(/**{Object}*/ queryResults) {
 		this.race = new RaceData(queryResults);
