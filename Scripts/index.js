@@ -95,7 +95,7 @@ require([
 				{ value: 4, text: "Asian,PI" },
 				{ value: 5, text: "Other" }
 			],
-			title: "Language",
+			//title: "Language",
 			titleOrientation: "away",
 			majorTickStep: 1,
 			minorTickStep: 0.5,
@@ -120,7 +120,7 @@ require([
 		});
 		chart.addPlot("default", {
 			type: Pie,
-			labels: false,
+			labels: true,
 			font: "normal normal 11pt Tahoma",
 			fontColor: "black",
 			labelOffset: -30,
