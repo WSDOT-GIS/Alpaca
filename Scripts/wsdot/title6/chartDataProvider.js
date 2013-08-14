@@ -75,32 +75,6 @@ define([
 		return this.english + this.spanish + this.indoEuropean + this.asianPacificIsland + this.other;
 	};
 
-	LanguageData.prototype.toPieChartSeries = function () {
-		var language, item, output = [], languages, i, l, total, label;
-		languages = [
-			"english",
-			"spanish",
-			"indoEuropean",
-			"asianPacificIsland",
-			"other"
-		];
-
-		total = this.getTotal();
-
-		for (i = 0, l = languages.length; i < l; i += 1) {
-			language = languages[i];
-			label = LanguageData.labels[language];
-			item = {
-				y: this[language],
-				text: label,
-				stroke: "black",
-				tooltip: [label, ": (~", Math.round((this[language] / total) * 10000) / 100, "%)"].join("")
-			};
-			output.push(item);
-		}
-		return output;
-	};
-
 	/** Determines if the threshold has been met for a particular language.
 	 * @param {String} language The name of one of the language properties: "english", "spanish", "indoEuropean", "asianPacificIsland", "other".
 	 * @returns {Boolean} If language is "english" or an invalid property name, false will be returned. Returns true if the number of speakers of the language is greater than 1000 or is greater than 5% of the total population.
