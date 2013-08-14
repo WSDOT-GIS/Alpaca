@@ -331,8 +331,11 @@ require([
 					}
 				};
 
+				// Attach click events.
 				drawSAButton.on("click", clickHandler);
 				drawSelButton.on("click", clickHandler);
+
+				// Attach clear button click events.
 				clearSAButton.on("click", clearHandler);
 				clearSelButton.on("click", clearHandler);
 			}(registry.byId("drawServiceAreaButton"), registry.byId("drawSelectionButton"), registry.byId("clearServiceAreaButton"), registry.byId("clearSelectionButton")));
