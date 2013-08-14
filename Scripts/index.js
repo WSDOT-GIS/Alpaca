@@ -236,17 +236,25 @@ require([
 					});
 					chartDataProvider.on("query-error", function (response) {
 						window.alert("There was an error loading the chart data.  Please reload the page.");
-						if (console && console.error) {
-							console.error("ChartDataProvider query-error", response);
+						if (console) {
+							if (console.error) {
+								console.error("ChartDataProvider query-error", response);
+							}
 						}
 					});
 				} catch (e) {
-					if (console && console.error) {
-						console.error("chartDataProvider error", e);
+					if (console) {
+						if (console.error) {
+							console.error("chartDataProvider error", e);
+						}
 					}
 				}
 			} else {
-				console.error("Aggregate layer not found.");
+				if (console) {
+					if (console.error) {
+						console.error("Aggregate layer not found.");
+					}
+				}
 			}
 
 			drawToolbar = new Draw(map);
