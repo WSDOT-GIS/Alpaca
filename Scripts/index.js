@@ -289,43 +289,53 @@ require([
 
 			// Setup draw toolbar and associated buttons.
 			(function (drawSAButton, drawSelButton, clearSAButton, clearSelButton ) {
+				var clickHandler, clearHandler;
 				drawToolbar = new Draw(map);
 
 				drawToolbar.on("draw-complete", function (drawResponse) {
 					drawToolbar.deactivate();
+					drawToolbar.title6Mode = null;
 					if (drawToolbar.title6Mode === "service-area") {
 						setServiceArea(drawResponse);
 					} else if (drawToolbar.title6Mode === "selection") {
-						// TODO: Selection.
 						setSelection(drawResponse);
 					}
 				});
 
-				drawSAButton.on("click", function () {
-					drawToolbar.title6Mode = "service-area";
+				/** Activates the draw toolbar and sets the "title6Mode" property.
+				    The title6Mode property is used by the drawToolbars "draw-complete" event.
+				 * @this {dijit/form/Button}
+				 */
+				clickHandler = function () {
+					// Get the title6-mode string from the button that was clicked.
+					var mode = this["data-title6-mode"];
+					drawToolbar.title6Mode = mode;
 					drawToolbar.activate(Draw.POLYGON);
-				});
+				};
 
-				drawSelButton.on("click", function () {
-					drawToolbar.title6Mode = "selection";
-					drawToolbar.activate(Draw.POLYGON);
-				});
-
-				clearSAButton.on("click", function () {
-					if (serviceAreaLayer) {
-						serviceAreaLayer.clear();
+				/** Clears the graphics layer associated with the button.
+				 * @this {dijit/form/Button}
+				 */
+				clearHandler = function () {
+					var layerId, layer;
+					// Get the layer ID from the button that was clicked.
+					layerId = this["data-layer-id"];
+					// Proceed if a data-layer-id is present.
+					if (layerId) {
+						// Get the graphics layer from the map.
+						layer = map.getLayer(layerId);
+						// Clear the graphics layer if it exists.
+						if (layer) {
+							layer.clear();
+						}
 					}
-				});
+				};
 
-				clearSelButton.on("click", function () {
-					if (selectionLayer) {
-						selectionLayer.clear();
-					}
-				});
-			}(registry.byId("drawServiceAreaButton"), 
-			registry.byId("drawSelectionButton"),
-			registry.byId("clearServiceAreaButton"),
-			registry.byId("clearSelectionButton")));
+				drawSAButton.on("click", clickHandler);
+				drawSelButton.on("click", clickHandler);
+				clearSAButton.on("click", clearHandler);
+				clearSelButton.on("click", clearHandler);
+			}(registry.byId("drawServiceAreaButton"), registry.byId("drawSelectionButton"), registry.byId("clearServiceAreaButton"), registry.byId("clearSelectionButton")));
 		});
 
 	});

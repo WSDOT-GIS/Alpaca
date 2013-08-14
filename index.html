@@ -62,20 +62,25 @@
 							<button type="button" disabled="disabled" data-dojo-type="dijit/form/Button">Remove Data</button>
 						</div>
 						<div data-dojo-type="dijit/layout/ContentPane" title="Set Service Areas">
-							<button id="drawServiceAreaButton" type="button" data-dojo-type="dijit/form/Button">Draw</button>
+							<button id="drawServiceAreaButton" type="button" 
+								data-title6-mode="service-area"
+								data-dojo-type="dijit/form/Button">Draw</button>
 							<button type="button" disabled="disabled" data-dojo-type="dijit/form/Button">By Layer</button>
 							<button type="button" disabled="disabled" data-dojo-type="dijit/form/Button">Save</button>
 							<button id="clearServiceAreaButton" title="Clear the service area" type="button" 
+								data-layer-id="serviceArea"
 								data-dojo-type="dijit/form/Button">Clear</button>
 						</div>
 						<div data-dojo-type="dijit/layout/ContentPane" title="Apply Selection">
 							<button type="button" 
 								id="drawSelectionButton"
+								data-title6-mode="selection"
 								data-dojo-type="dijit/form/Button">Draw</button>
 							<button type="button" disabled="disabled" 
 								data-dojo-type="dijit/form/Button">By Layer</button>
 							<button type="button" 
 								id="clearSelectionButton"
+								data-layer-id="selection"
 								data-dojo-type="dijit/form/Button">Clear</button>
 
 						</div>
