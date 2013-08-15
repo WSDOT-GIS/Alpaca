@@ -162,7 +162,7 @@ define([
 			query.outStatistics = this._statisticDefinitions;
 			if (geometry) {
 				query.geometry = geometry;
-				query.spatialRelationship = Query.SPATIAL_REL_CROSSES;
+				//query.spatialRelationship = Query.SPATIAL_REL_CROSSES;
 			}
 			return this.queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
 				var results, output;

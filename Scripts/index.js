@@ -105,13 +105,14 @@ require([
 		});
 		chart.addAxis("y", {
 			vertical: true,
-			max: languageData.getTotal() - languageData.english,
+			//max: languageData.getTotal() - languageData.english,
 			title: "No. of speakers"
 		});
 		chart.addSeries("Language Proficiency", languageData.toColumnChartSeries());
 		anim_b = new Highlight(chart, "default");
 		anim_c = new Tooltip(chart, "default");
 		chart.render();
+		return chart;
 	}
 
 	function createRaceChart(raceData) {
@@ -134,6 +135,7 @@ require([
 		anim_c = new Tooltip(chart, "default");
 		chart.render();
 		legend = new Legend({ chart: chart }, "minorityChartLegend");
+		return chart;
 	}
 
 	ready(function () {
@@ -225,6 +227,7 @@ require([
 				selectionLayer.clear();
 
 				graphic = new Graphic(drawResponse.geometry);
+				chartDataProvider.updateCharts(drawResponse.geometry);
 				selectionLayer.add(graphic);
 
 			}
@@ -264,12 +267,16 @@ require([
 						if (!languageChart) {
 							languageChart = createLanguageChart(response.chartData.language);
 						} else {
-							// TODO: update the language chart with the response language data.
+							// Update the language chart with the response language data.
+							languageChart.updateSeries("Language Proficiency", response.chartData.language.toColumnChartSeries());
+							languageChart.render();
 						}
 						if (!raceChart) {
 							raceChart = createRaceChart(response.chartData.race);
 						} else {
-							// TODO: update the race chart with the response race data.
+							// Update the race chart with the response race data.
+							raceChart.updateSeries("Minority", response.chartData.race.toPieChartSeries());
+							raceChart.render();
 						}
 					});
 					chartDataProvider.on("query-error", function (response) {
@@ -337,6 +344,7 @@ require([
 							layer.clear();
 						}
 					}
+					chartDataProvider.updateCharts();
 				};
 
 				// Attach click events.
