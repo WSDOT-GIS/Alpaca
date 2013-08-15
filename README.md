@@ -13,6 +13,12 @@
 
 ### Filtering by geometry ###
 
+1. User selects an area, generating a geometry.
+2. **If there is a service area defined**, the selection area is intersected with the service area to ensure that the selection is not outside the service area. This generates a new selection geometry.
+	* This operation will require a call to a geometry service unless a client-side library can be found that will perform this operation.
+3. Query the aggregate block group service for the sums, this time filtering by the selection geometry.
+4. When the query returns results, update the charts.
+
 The user can select a service area by drawing it on the map.
 
 ## License ##
