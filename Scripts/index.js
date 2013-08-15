@@ -167,6 +167,9 @@ require([
 		}).then(function (response) {
 			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, selectionLayer, languageChart, raceChart, aggregateLayer;
 
+			/** Creates the service area layer and adds it to the map.
+			 * @returns {esri/layers/GraphicsLayer}
+			 */
 			function createServiceAreaLayer() {
 				var renderer, symbol, layer;
 				// Create the symbol for the outline of the fill symbol.
@@ -180,7 +183,9 @@ require([
 				map.addLayer(layer);
 				return layer;
 			}
-
+			/** Creates the selection layer and adds it to the map.
+			 * @returns {esri/layers/GraphicsLayer}
+			 */
 			function createSelectionLayer() {
 				var renderer, symbol, layer;
 				// Create the symbol for the outline of the fill symbol.
@@ -236,6 +241,7 @@ require([
 				domUtils.show(document.getElementById("mapProgress"));
 			});
 
+			// Setup the progress bar to hide when the map is loading data.
 			map.on("update-end", function () {
 				domUtils.hide(document.getElementById("mapProgress"));
 			});
