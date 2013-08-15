@@ -1,5 +1,5 @@
 ﻿/*global require*/
-/*jslint browser:true */
+/*jslint browser:true,plusplus:true */
 require([
 	"dojo/ready",
 	"dojo/_base/Color",
@@ -16,6 +16,8 @@ require([
 	"esri/symbols/SimpleFillSymbol",
 	"esri/graphic",
 	"esri/tasks/GeometryService",
+	"esri/tasks/query",
+	"esri/tasks/QueryTask",
 
 	"dojox/charting/Chart",
 	"dojox/charting/plot2d/Pie",
@@ -36,7 +38,7 @@ require([
 	"dijit/form/Button"
 ], function (ready, Color, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
-	Graphic, GeometryService,
+	Graphic, GeometryService, Query, QueryTask,
 	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake)
 {
 	"use strict";
@@ -189,6 +191,8 @@ require([
 
 		geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
 
+
+
 		arcgisUtils.createMap("b96dcdee3dfa498badcf9ea871cc1895", "map", {
 			mapOptions: {
 				//basemap: "gray",
@@ -198,7 +202,7 @@ require([
 				logo: false
 			}
 		}).then(function (response) {
-			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, selectionLayer, languageChart, raceChart, aggregateLayer;
+			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, selectionLayer, languageChart, raceChart, aggregateLayerUrl, aggregateQueryTask;
 
 			/** Creates the service area layer and adds it to the map.
 			 * @returns {esri/layers/GraphicsLayer}
@@ -260,6 +264,29 @@ require([
 				return output;
 			}
 
+			function queryAggregateLayer(/** {esri/geometry/Geometry} */ geometry) {
+				var query;
+
+				query = new Query();
+				query.geometry = geometry;
+				query.returnGeometry = true;
+				query.maxAllowableOffset = 500;
+
+				aggregateQueryTask.execute(query, function (/** {esri/tasks/FeatureSet} */ featureSet) {
+					var i, l;
+					if (featureSet) {
+						// Clear the existing features.
+						selectionLayer.clear();
+						// Add the new features.
+						for (i = 0, l = featureSet.features.length; i < l; i++) {
+							selectionLayer.add(featureSet.features[i]);
+						}
+					}
+				}, function (error) {
+					console.error("An error occured while querying for block group geometry.", error);
+				});
+			}
+
 			/**
 			 * @param drawResponse
 			 * @param {esri/geometry/Geometry} drawResponse.geometry
@@ -274,6 +301,7 @@ require([
 					var graphic = new Graphic(geometry);
 					chartDataProvider.updateCharts(geometry);
 					selectionLayer.add(graphic);
+					queryAggregateLayer(geometry);
 				}
 
 				// Determine if there is an existing service area geometry.
@@ -295,18 +323,18 @@ require([
 						updateCharts(drawResponse.geometry);
 					});
 				}
-
-
-
-
 			}
+
+
 
 			map = response.map;
 
 			serviceAreaLayer = createServiceAreaLayer();
 			selectionLayer = createSelectionLayer();
 
-			aggregateLayer = getAggregateLayer(map);
+			aggregateLayerUrl = getAggregateLayer(map);
+
+			aggregateQueryTask = new QueryTask(aggregateLayerUrl);
 
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
@@ -329,9 +357,9 @@ require([
 				omittedMapServices: /Aggregate/i
 			});
 
-			if (aggregateLayer) {
+			if (aggregateLayerUrl) {
 				try {
-					chartDataProvider = new ChartDataProvider(aggregateLayer);
+					chartDataProvider = new ChartDataProvider(aggregateLayerUrl);
 					chartDataProvider.on("query-complete", function (response) {
 						if (!languageChart) {
 							languageChart = createLanguageChart(response.chartData.language);
