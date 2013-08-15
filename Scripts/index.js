@@ -3,6 +3,7 @@
 require([
 	"dojo/ready",
 	"dojo/_base/Color",
+	"dojo/_base/connect",
 	"dijit/registry",
 	"esri/arcgis/utils",
 	"esri/domUtils",
@@ -36,7 +37,7 @@ require([
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
 	"dijit/form/Button"
-], function (ready, Color, registry, arcgisUtils, domUtils, BasemapGallery,
+], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask,
 	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake)
@@ -202,7 +203,8 @@ require([
 				logo: false
 			}
 		}).then(function (response) {
-			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, selectionLayer, languageChart, raceChart, aggregateLayerUrl, aggregateQueryTask;
+			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, selectionLayer, languageChart,
+				raceChart, aggregateLayerUrl, aggregateQueryTask, popupHandle, popupListener;
 
 			/** Creates the service area layer and adds it to the map.
 			 * @returns {esri/layers/GraphicsLayer}
@@ -325,7 +327,10 @@ require([
 				}
 			}
 
+			console.log(response);
 
+			popupHandle = response.clickEventHandle;
+			popupListener = response.clickEventListener;
 
 			map = response.map;
 
@@ -400,6 +405,7 @@ require([
 						setSelection(drawResponse);
 					}
 					drawToolbar.title6Mode = null;
+					popupHandle = connect.connect(map, "onClick", response.clickEventListener);
 				});
 
 				/** Activates the draw toolbar and sets the "title6Mode" property.
@@ -411,6 +417,7 @@ require([
 					var mode = this["data-title6-mode"];
 					drawToolbar.title6Mode = mode;
 					drawToolbar.activate(Draw.POLYGON);
+					connect.disconnect(popupHandle);
 				};
 
 				/** Clears the graphics layer associated with the button.
