@@ -272,7 +272,7 @@ require([
 				query = new Query();
 				query.geometry = geometry;
 				query.returnGeometry = true;
-				query.maxAllowableOffset = 500;
+				query.maxAllowableOffset = 50;
 
 				aggregateQueryTask.execute(query, function (/** {esri/tasks/FeatureSet} */ featureSet) {
 					var i, l;
