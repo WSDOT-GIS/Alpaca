@@ -15,6 +15,7 @@ require([
 	"esri/symbols/SimpleLineSymbol",
 	"esri/symbols/SimpleFillSymbol",
 	"esri/graphic",
+	"esri/tasks/GeometryService",
 
 	"dojox/charting/Chart",
 	"dojox/charting/plot2d/Pie",
@@ -35,10 +36,38 @@ require([
 	"dijit/form/Button"
 ], function (ready, Color, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
-	Graphic,
+	Graphic, GeometryService,
 	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake)
 {
 	"use strict";
+
+	if (!window.console) {
+		window.console = {};
+	}
+
+	if (!window.console.log) {
+		window.console.log = function () {
+
+		};
+	}
+
+	if (!window.console.error) {
+		window.console.error = function () {
+			window.console.log(arguments);
+		};
+	}
+
+	if (!window.console.warn) {
+		window.console.warn = function () {
+			window.console.log(arguments);
+		};
+	}
+
+	if (!window.console.debug) {
+		window.console.debug = function () {
+			window.console.log(arguments);
+		};
+	}
 
 	/** Determines if layer is a basemap layer based on its layer ID.
 	 * @param {String} layerId
@@ -141,7 +170,7 @@ require([
 	}
 
 	ready(function () {
-		var map;
+		var map, geometryService;
 
 
 		/** Gets the layer ids of all basemap layers currently in the map.
@@ -158,7 +187,7 @@ require([
 			return output;
 		}
 
-
+		geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
 
 		arcgisUtils.createMap("b96dcdee3dfa498badcf9ea871cc1895", "map", {
 			mapOptions: {
@@ -218,19 +247,57 @@ require([
 
 			}
 
+			/** Gets the geometry from the first graphic in the service area layer.
+			 * @returns {esri/geometry/Geometry|null} Returns a geometry if possible, null otherwise.
+			 */
+			function getServiceAreaGeometry() {
+				var output = null;
+				if (serviceAreaLayer) {
+					if (serviceAreaLayer.graphics.length) {
+						output = serviceAreaLayer.graphics[0].geometry;
+					}
+				}
+				return output;
+			}
+
 			/**
 			 * @param drawResponse
 			 * @param {esri/geometry/Geometry} drawResponse.geometry
 			 * @param {esri/geometry/Geometry} drawResponse.geographicGeometry
 			 */
 			function setSelection(drawResponse) {
-				var graphic;
+				var saGeometry;
 
 				selectionLayer.clear();
 
-				graphic = new Graphic(drawResponse.geometry);
-				chartDataProvider.updateCharts(drawResponse.geometry);
-				selectionLayer.add(graphic);
+				function updateCharts(geometry) {
+					var graphic = new Graphic(geometry);
+					chartDataProvider.updateCharts(geometry);
+					selectionLayer.add(graphic);
+				}
+
+				// Determine if there is an existing service area geometry.
+				saGeometry = getServiceAreaGeometry();
+
+				if (!saGeometry) {
+					updateCharts(drawResponse.geometry);
+				} else {
+					geometryService.intersect([drawResponse.geometry], saGeometry, function (/** {Geometry[]} */ geometries) {
+						if (geometries && geometries.length) {
+							updateCharts(geometries[0]);
+						} else {
+							updateCharts(drawResponse.geometry);
+						}
+					}, function (/** {Error} */ error) {
+						// Log an error to the console (if supported by browser);
+						console.error("Error with Geometry Service intersect operation", error);
+						// Update the charts with the un-intersected geometry.
+						updateCharts(drawResponse.geometry);
+					});
+				}
+
+
+
 
 			}
 
@@ -283,25 +350,13 @@ require([
 					});
 					chartDataProvider.on("query-error", function (response) {
 						window.alert("There was an error loading the chart data.  Please reload the page.");
-						if (console) {
-							if (console.error) {
-								console.error("ChartDataProvider query-error", response);
-							}
-						}
+						console.error("ChartDataProvider query-error", response);
 					});
 				} catch (e) {
-					if (console) {
-						if (console.error) {
-							console.error("chartDataProvider error", e);
-						}
-					}
+						console.error("chartDataProvider error", e);
 				}
 			} else {
-				if (console) {
-					if (console.error) {
-						console.error("Aggregate layer not found.");
-					}
-				}
+				console.error("Aggregate layer not found.");
 			}
 
 			// Setup draw toolbar and associated buttons.
