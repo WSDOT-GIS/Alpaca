@@ -22,8 +22,7 @@ require([
 	"dojox/charting/action2d/Highlight",
 	"dojox/charting/action2d/MoveSlice",
 	"dojox/charting/action2d/Tooltip",
-	"dojox/charting/widget/Legend",
-
+	"dojox/charting/action2d/Shake",
 
 	"dojox/charting/axis2d/Default",
 	"dojo/parser",
@@ -37,7 +36,7 @@ require([
 ], function (ready, Color, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic,
-	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Legend)
+	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake)
 {
 	"use strict";
 
@@ -78,7 +77,7 @@ require([
 	}
 
 	function createLanguageChart(languageData) {
-		var chart, anim_b, anim_c;
+		var chart, anim_a, anim_b, anim_c;
 		chart = new Chart("languageChart", {
 			title: "Language Proficiency",
 			titlePos: "top",
@@ -104,11 +103,15 @@ require([
 			microTickStep: 0.25
 		});
 		chart.addAxis("y", {
-			vertical: true,
+			vertical: true
 			//max: languageData.getTotal() - languageData.english,
-			title: "No. of speakers"
+			//title: "No. of speakers"
 		});
 		chart.addSeries("Language Proficiency", languageData.toColumnChartSeries());
+		anim_a = new Shake(chart, "default", {
+			shiftX: 10,
+			shiftY: 10
+		});
 		anim_b = new Highlight(chart, "default");
 		anim_c = new Tooltip(chart, "default");
 		chart.render();
@@ -116,7 +119,7 @@ require([
 	}
 
 	function createRaceChart(raceData) {
-		var chart, anim_a, anim_b, anim_c, legend;
+		var chart, anim_a, anim_b, anim_c;
 		chart = new Chart("minorityChart", {
 			title: "Minority",
 			titlePos: "top",
@@ -134,7 +137,6 @@ require([
 		anim_b = new Highlight(chart, "default");
 		anim_c = new Tooltip(chart, "default");
 		chart.render();
-		legend = new Legend({ chart: chart }, "minorityChartLegend");
 		return chart;
 	}
 
