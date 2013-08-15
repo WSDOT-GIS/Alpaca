@@ -167,6 +167,34 @@ require([
 		}).then(function (response) {
 			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, selectionLayer, languageChart, raceChart, aggregateLayer;
 
+			function createServiceAreaLayer() {
+				var renderer, symbol, layer;
+				// Create the symbol for the outline of the fill symbol.
+				symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([0, 0, 255]), 3);
+				symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0, 0, 0, 0]));
+				renderer = new SimpleRenderer(symbol);
+				layer = new GraphicsLayer({
+					id: "serviceArea"
+				});
+				layer.setRenderer(renderer);
+				map.addLayer(layer);
+				return layer;
+			}
+
+			function createSelectionLayer() {
+				var renderer, symbol, layer;
+				// Create the symbol for the outline of the fill symbol.
+				symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DOT, new Color([0, 255, 0]), 3);
+				symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0, 0, 255, 0.2]));
+				renderer = new SimpleRenderer(symbol);
+				layer = new GraphicsLayer({
+					id: "selection"
+				});
+				layer.setRenderer(renderer);
+				map.addLayer(layer);
+				return layer;
+			}
+
 			/**
 			@param drawResponse
 			@param {esri/geometry/Geometry} drawResponse.geometry
@@ -174,27 +202,8 @@ require([
 			*/
 			function setServiceArea(drawResponse) {
 				var graphic;
-
-				// Create the layer if it does not already exist.
-				if (!serviceAreaLayer) {
-					(function () {
-						var renderer, symbol;
-						// Create the symbol for the outline of the fill symbol.
-						symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([0, 0, 255]), 3);
-						symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0,0,0,0]));
-						renderer = new SimpleRenderer(symbol);
-						serviceAreaLayer = new GraphicsLayer({
-							id: "serviceArea"
-						});
-						serviceAreaLayer.setRenderer(renderer);
-						map.addLayer(serviceAreaLayer);
-					}());
-				}
 				// Clear the existing graphics.
 				serviceAreaLayer.clear();
-
-				
-
 				graphic = new Graphic(drawResponse.geometry);
 				serviceAreaLayer.add(graphic);
 
@@ -208,20 +217,6 @@ require([
 			function setSelection(drawResponse) {
 				var graphic;
 
-				if (!selectionLayer) {
-					(function () {
-						var renderer, symbol;
-						// Create the symbol for the outline of the fill symbol.
-						symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DOT, new Color([0, 255, 0]), 3);
-						symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0, 0, 255, 0.2]));
-						renderer = new SimpleRenderer(symbol);
-						selectionLayer = new GraphicsLayer({
-							id: "selection"
-						});
-						selectionLayer.setRenderer(renderer);
-						map.addLayer(selectionLayer);
-					}());
-				}
 				selectionLayer.clear();
 
 				graphic = new Graphic(drawResponse.geometry);
@@ -230,6 +225,9 @@ require([
 			}
 
 			map = response.map;
+
+			serviceAreaLayer = createServiceAreaLayer();
+			selectionLayer = createSelectionLayer();
 
 			aggregateLayer = getAggregateLayer(map);
 
@@ -259,9 +257,13 @@ require([
 					chartDataProvider.on("query-complete", function (response) {
 						if (!languageChart) {
 							languageChart = createLanguageChart(response.chartData.language);
+						} else {
+							// TODO: update the language chart with the response language data.
 						}
 						if (!raceChart) {
 							raceChart = createRaceChart(response.chartData.race);
+						} else {
+							// TODO: update the race chart with the response race data.
 						}
 					});
 					chartDataProvider.on("query-error", function (response) {
@@ -294,12 +296,12 @@ require([
 
 				drawToolbar.on("draw-complete", function (drawResponse) {
 					drawToolbar.deactivate();
-					drawToolbar.title6Mode = null;
 					if (drawToolbar.title6Mode === "service-area") {
 						setServiceArea(drawResponse);
 					} else if (drawToolbar.title6Mode === "selection") {
 						setSelection(drawResponse);
 					}
+					drawToolbar.title6Mode = null;
 				});
 
 				/** Activates the draw toolbar and sets the "title6Mode" property.
