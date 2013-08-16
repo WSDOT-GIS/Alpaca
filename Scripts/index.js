@@ -36,7 +36,8 @@ require([
 	"dijit/layout/ContentPane",
 	"dijit/layout/BorderContainer",
 	"dijit/layout/TabContainer",
-	"dijit/form/Button"
+	"dijit/form/Button",
+	"dijit/DropDownMenu", "dijit/MenuItem"
 ], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask,
