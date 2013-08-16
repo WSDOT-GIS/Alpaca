@@ -396,6 +396,7 @@ require([
 			(function (drawSAButton, drawSelButton, clearSAButton, clearSelButton ) {
 				var clickHandler, clearHandler;
 				drawToolbar = new Draw(map);
+				
 
 				drawToolbar.on("draw-complete", function (drawResponse) {
 					drawToolbar.deactivate();
@@ -413,9 +414,13 @@ require([
 				 * @this {dijit/form/Button}
 				 */
 				clickHandler = function () {
+					var fillSymbol;
+
 					// Get the title6-mode string from the button that was clicked.
 					var mode = this["data-title6-mode"];
 					drawToolbar.title6Mode = mode;
+					fillSymbol = mode === "service-area" ? serviceAreaLayer.renderer.symbol : selectionLayer.renderer.symbol;
+					drawToolbar.setFillSymbol(fillSymbol);
 					drawToolbar.activate(Draw.POLYGON);
 					connect.disconnect(popupHandle);
 				};
