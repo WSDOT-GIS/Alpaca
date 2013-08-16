@@ -415,10 +415,10 @@ require([
 				 * @this {dijit/form/Button}
 				 */
 				clickHandler = function () {
-					var fillSymbol;
+					var fillSymbol, mode;
 
 					// Get the title6-mode string from the button that was clicked.
-					var mode = this["data-title6-mode"];
+					mode = this["data-title6-mode"];
 					drawToolbar.title6Mode = mode;
 					fillSymbol = mode === "service-area" ? serviceAreaLayer.renderer.symbol : selectionLayer.renderer.symbol;
 					drawToolbar.setFillSymbol(fillSymbol);

@@ -62,25 +62,25 @@
 							<button type="button" disabled="disabled" data-dojo-type="dijit/form/Button">Remove Data</button>
 						</div>
 						<div data-dojo-type="dijit/layout/ContentPane" title="Set Service Areas">
-							<button id="drawServiceAreaButton" type="button" 
-								data-title6-mode="service-area"
+							<button  type="button" 
+								
 								data-dojo-type="dijit/form/Button">Draw</button>
 							<button type="button" disabled="disabled" data-dojo-type="dijit/form/Button">By Layer</button>
 							<button type="button" disabled="disabled" data-dojo-type="dijit/form/Button">Save</button>
-							<button id="clearServiceAreaButton" title="Clear the service area" type="button" 
-								data-layer-id="serviceArea"
+							<button title="Clear the service area" type="button" 
+								
 								data-dojo-type="dijit/form/Button">Clear</button>
 						</div>
 						<div data-dojo-type="dijit/layout/ContentPane" title="Apply Selection">
 							<button type="button" 
-								id="drawSelectionButton"
-								data-title6-mode="selection"
+								
+								
 								data-dojo-type="dijit/form/Button">Draw</button>
 							<button type="button" disabled="disabled" 
 								data-dojo-type="dijit/form/Button">By Layer</button>
 							<button type="button" 
-								id="clearSelectionButton"
-								data-layer-id="selection"
+								
+								
 								data-dojo-type="dijit/form/Button">Clear</button>
 
 						</div>
@@ -93,18 +93,12 @@
 			data-dojo-props="splitter:true, region:'center'">
 			<div id="map">
 				<div id="toolbar" class="toolbar">
-					<div data-dojo-type="dijit/form/DropDownButton">
-						<span>Data</span>
-						<div data-dojo-type="dijit/DropDownMenu">
-							<div data-dojo-type="dijit/MenuItem">Add</div>
-							<div data-dojo-type="dijit/MenuItem">Remove</div>
-						</div>
-					</div>
+
 					<div data-dojo-type="dijit/form/DropDownButton">
 						<span>Service Area</span>
 						<div data-dojo-type="dijit/DropDownMenu">
-							<div data-dojo-type="dijit/MenuItem">Draw</div>
-							<div data-dojo-type="dijit/MenuItem">Clear</div>
+							<div id="drawServiceAreaButton" data-title6-mode="service-area" data-dojo-type="dijit/MenuItem">Draw</div>
+							<div id="clearServiceAreaButton" data-layer-id="serviceArea" data-dojo-type="dijit/MenuItem">Clear</div>
 							<div data-dojo-type="dijit/MenuItem">Save</div>
 							<div data-dojo-type="dijit/MenuItem">By Layer</div>
 						</div>
@@ -112,12 +106,19 @@
 					<div data-dojo-type="dijit/form/DropDownButton">
 						<span>Selection</span>
 						<div data-dojo-type="dijit/DropDownMenu">
-							<div data-dojo-type="dijit/MenuItem">Draw</div>
-							<div data-dojo-type="dijit/MenuItem">Clear</div>
+							<div id="drawSelectionButton" data-title6-mode="selection" data-dojo-type="dijit/MenuItem">Draw</div>
+							<div id="clearSelectionButton" data-layer-id="selection" data-dojo-type="dijit/MenuItem">Clear</div>
 							<div data-dojo-type="dijit/MenuItem">By Layer</div>
 						</div>
 					</div>
 					<div data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconPrint', showLabel: true">Print</div>
+					<div data-dojo-type="dijit/form/DropDownButton">
+						<span>Data</span>
+						<div data-dojo-type="dijit/DropDownMenu">
+							<div data-dojo-type="dijit/MenuItem">Add</div>
+							<div data-dojo-type="dijit/MenuItem">Remove</div>
+						</div>
+					</div>
 					<div id="basemapButton" data-dojo-type="dijit/form/DropDownButton">
 						<span>Basemap</span>
 						<div data-dojo-type="dijit/TooltipDialog">
