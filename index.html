@@ -84,11 +84,6 @@
 								data-dojo-type="dijit/form/Button">Clear</button>
 
 						</div>
-						<div data-dojo-type="dijit/layout/ContentPane" title="Reporting">
-							<button type="button" disabled="disabled" 
-								data-dojo-type="dijit/form/Button" 
-								data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconPrint', showLabel: true">Print</button>
-						</div>
 					</div>
 
 				</div>
@@ -98,6 +93,19 @@
 			data-dojo-props="splitter:true, region:'center'">
 			<div id="map">
 				<div id="toolbar" class="toolbar">
+					<div data-dojo-type="dijit/form/DropDownButton">
+						<span>Data</span>
+						<div data-dojo-type="dijit/TooltipDialog"></div>
+					</div>
+					<div data-dojo-type="dijit/form/DropDownButton">
+						<span>Service Area</span>
+						<div data-dojo-type="dijit/TooltipDialog"></div>
+					</div>
+					<div data-dojo-type="dijit/form/DropDownButton">
+						<span>Selection</span>
+						<div data-dojo-type="dijit/TooltipDialog"></div>
+					</div>
+					<div data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconPrint', showLabel: true">Print</div>
 					<div id="basemapButton" data-dojo-type="dijit/form/DropDownButton">
 						<span>Basemap</span>
 						<div data-dojo-type="dijit/TooltipDialog">
