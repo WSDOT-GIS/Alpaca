@@ -89,7 +89,7 @@ define([
 	 * @returns {Number}
 	 */
 	LanguageData.prototype.getNotEnglishZoomScale = function () {
-		return Math.round(this.getTotal() / this.getMaxNotEnglish());
+		return this.getTotal() / this.getMaxNotEnglish() - 10;
 	};
 
 	/** Determines if the threshold has been met for a particular language.
