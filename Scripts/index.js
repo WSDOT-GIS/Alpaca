@@ -28,6 +28,7 @@ require([
 	"dojox/charting/action2d/Tooltip",
 	"dojox/charting/action2d/Shake",
 	"dojox/charting/action2d/MouseZoomAndPan",
+	"dojo/fx/easing",
 
 	"dojox/charting/axis2d/Default",
 	"dojo/parser",
@@ -42,7 +43,7 @@ require([
 ], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask,
-	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan)
+	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan, easing)
 {
 	"use strict";
 
@@ -118,6 +119,7 @@ require([
 			titleGap: 5
 		});
 		chart.addPlot("default", {
+			////animate: { duration: 1000, easing: easing.linear},
 			type: Columns
 		});
 		chart.addAxis("x", {
