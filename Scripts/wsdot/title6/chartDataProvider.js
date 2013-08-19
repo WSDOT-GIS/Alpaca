@@ -71,8 +71,25 @@ define([
 		other: "Other"
 	};
 
+	/** Returns the total number of people.
+	 * @returns {Number}
+	 */
 	LanguageData.prototype.getTotal = function () {
 		return this.english + this.spanish + this.indoEuropean + this.asianPacificIsland + this.other;
+	};
+
+	/** Returns the number of people in the largest non-English group.
+	 * @returns {Number}
+	 */
+	LanguageData.prototype.getMaxNotEnglish = function () {
+		return Math.max(this.spanish, this.indoEuropean, this.asianPacificIsland, this.other);
+	};
+
+	/** Returns the zoom scale integer for DojoX chart zooming to make non-English columns visible in the chart.
+	 * @returns {Number}
+	 */
+	LanguageData.prototype.getNotEnglishZoomScale = function () {
+		return Math.round(this.getTotal() / this.getMaxNotEnglish());
 	};
 
 	/** Determines if the threshold has been met for a particular language.

@@ -27,6 +27,7 @@ require([
 	"dojox/charting/action2d/MoveSlice",
 	"dojox/charting/action2d/Tooltip",
 	"dojox/charting/action2d/Shake",
+	"dojox/charting/action2d/MouseZoomAndPan",
 
 	"dojox/charting/axis2d/Default",
 	"dojo/parser",
@@ -40,7 +41,7 @@ require([
 ], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask,
-	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake)
+	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan)
 {
 	"use strict";
 
@@ -109,7 +110,7 @@ require([
 	}
 
 	function createLanguageChart(languageData) {
-		var chart, anim_a, anim_b, anim_c;
+		var chart, anim_a, anim_b, anim_c, mouseZoomAndPan;
 		chart = new Chart("languageChart", {
 			title: "Language Proficiency",
 			titlePos: "top",
@@ -140,12 +141,14 @@ require([
 			//title: "No. of speakers"
 		});
 		chart.addSeries("Language Proficiency", languageData.toColumnChartSeries());
+		mouseZoomAndPan = new MouseZoomAndPan(chart, "default", { axis: "y" });
 		anim_a = new Shake(chart, "default", {
 			shiftX: 10,
 			shiftY: 10
 		});
 		anim_b = new Highlight(chart, "default");
 		anim_c = new Tooltip(chart, "default");
+		chart.setAxisWindow("y", languageData.getNotEnglishZoomScale(), 0);
 		chart.render();
 		return chart;
 	}
@@ -327,8 +330,6 @@ require([
 				}
 			}
 
-			console.log(response);
-
 			popupHandle = response.clickEventHandle;
 			popupListener = response.clickEventListener;
 
@@ -371,6 +372,7 @@ require([
 						} else {
 							// Update the language chart with the response language data.
 							languageChart.updateSeries("Language Proficiency", response.chartData.language.toColumnChartSeries());
+							languageChart.setAxisWindow("y", response.chartData.language.getNotEnglishZoomScale(), 0);
 							languageChart.render();
 						}
 						if (!raceChart) {
@@ -414,10 +416,10 @@ require([
 				 * @this {dijit/form/Button}
 				 */
 				clickHandler = function () {
-					var fillSymbol;
+					var fillSymbol, mode;
 
 					// Get the title6-mode string from the button that was clicked.
-					var mode = this["data-title6-mode"];
+					mode = this["data-title6-mode"];
 					drawToolbar.title6Mode = mode;
 					fillSymbol = mode === "service-area" ? serviceAreaLayer.renderer.symbol : selectionLayer.renderer.symbol;
 					drawToolbar.setFillSymbol(fillSymbol);
