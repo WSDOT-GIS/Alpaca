@@ -167,11 +167,8 @@ define([
 	}
 
 	ChartDataProvider = declare(Evented, {
-		languageLayerInfo: null,
-		minorityLayerInfo: null,
 		/** Trigger the chart update events.
 		*/
-		selectedGeometry: null,
 		_statisticDefinitions: createStatisticDefinitions(),
 		updateCharts: function (/** {esri/geometry/Geometry} */ geometry) {
 			var self = this, query;
