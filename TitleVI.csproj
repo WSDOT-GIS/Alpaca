@@ -42,7 +42,9 @@
     <Content Include="LICENSE.txt" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\wsdot\title6\chartDataProvider.js" />
+    <Content Include="Scripts\wsdot\title6\languageData.js" />
     <Content Include="Scripts\wsdot\title6\layerChooser.js" />
+    <Content Include="Scripts\wsdot\title6\raceData.js" />
     <Content Include="Scripts\wsdot\title6\utils.js" />
     <Content Include="Style\index.css" />
     <Content Include="Style\index.min.css">
