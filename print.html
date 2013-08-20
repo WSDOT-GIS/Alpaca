@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+
+	<title></title>
+	<link rel="stylesheet" href="http://js.arcgis.com/3.6compact/js/esri/css/esri.css">
+	<style>
+	 #map {
+		 height: 35%;
+		 width: 100%;
+	 }
+	 #data {
+		 height: 65%;
+		 width: 100%;
+	 }
+	</style>
+</head>
+<body>
+	<div id="map"></div>
+	<div id="data">
+
+	</div>
+	<script src="http://js.arcgis.com/3.6compact/"></script>
+	<script>
+		require(["esri/map"], function(Map) {
+			var map, qsParameters;
+
+			function getQSParameters() {
+				var re = /(\w+)=([^&]+)/g, match, output = {};
+				match = re.exec(location.search);
+				while (match) {
+					output[match[1]] = JSON.parse(decodeURIComponent(match[2]));
+					match = re.exec(location.search);
+				}
+				return output;
+			}
+
+			qsParameters =  getQSParameters();
+
+			map = new Map("map", {
+				basemap: "gray",
+				center: qsParameters.center || null,
+				scale: qsParameters.scale || null
+			});
+		});
+	</script>
+</body>
+</html>

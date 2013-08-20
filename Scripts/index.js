@@ -7,6 +7,7 @@ require([
 	"dijit/registry",
 	"esri/arcgis/utils",
 	"esri/domUtils",
+	"esri/geometry/webMercatorUtils",
 	"esri/dijit/BasemapGallery",
 	"title6/layerChooser",
 	"title6/chartDataProvider",
@@ -40,7 +41,7 @@ require([
 	"dijit/layout/TabContainer",
 	"dijit/form/Button",
 	"dijit/DropDownMenu", "dijit/MenuItem"
-], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
+], function (ready, Color, connect, registry, arcgisUtils, domUtils, webMercatorUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, t6Utils, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask,
 	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan)
@@ -470,6 +471,23 @@ require([
 				clearSAButton.on("click", clearHandler);
 				clearSelButton.on("click", clearHandler);
 			}(registry.byId("drawServiceAreaButton"), registry.byId("drawSelectionButton"), registry.byId("clearServiceAreaButton"), registry.byId("clearSelectionButton")));
+
+			registry.byId("printMenuItem").on("click", function () {
+				var center, scale, form;
+				// Get the center of the map.
+				center = map.extent.getCenter();
+				// Convert to a pair of WGS 84 coordinate pairs.
+				center = webMercatorUtils.xyToLngLat(center.x, center.y);
+				scale = map.getScale();
+
+				// Get the print form.
+				form = document.forms["printForm"];
+				// set the values on the print form.
+				form.querySelector("[name=center]").value = JSON.stringify(center);
+				form.querySelector("[name=scale]").value = scale;
+
+				form.submit();
+			});
 		});
 
 	});

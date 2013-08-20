@@ -40,6 +40,7 @@
   <ItemGroup>
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
+    <Content Include="print.html" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\wsdot\title6\chartDataProvider.js" />
     <Content Include="Scripts\wsdot\title6\languageData.js" />

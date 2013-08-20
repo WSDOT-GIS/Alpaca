@@ -96,8 +96,8 @@
 									<div id="basemapGallery"></div>
 								</div>
 							</div>
-							<div data-dojo-type="dijit/MenuItem" 
-								data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconPrint', showLabel: true, disabled: true">Print</div>
+							<div id="printMenuItem" data-dojo-type="dijit/MenuItem" 
+								data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconPrint'">Print</div>
 						</div>
 					</div>
 				</div>
@@ -106,5 +106,10 @@
 
 		</div>
 	</div>
+
+	<form id="printForm" hidden="hidden" action="print.html" target="_blank">
+		<input name="center" type="hidden" />
+		<input name="scale" type="hidden" />
+	</form>
 </body>
 </html>
