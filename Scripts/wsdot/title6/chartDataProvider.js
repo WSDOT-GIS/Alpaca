@@ -6,8 +6,9 @@ define([
 	"esri/tasks/query",
 	"esri/tasks/QueryTask",
 	"esri/tasks/StatisticDefinition",
-	"dojo/number"
-], function (declare, Evented, Query, QueryTask, StatisticDefinition, number) {
+	"dojo/number",
+	"title6/utils"
+], function (declare, Evented, Query, QueryTask, StatisticDefinition, number, utils) {
 	"use strict";
 	var ChartDataProvider;
 
@@ -167,17 +168,39 @@ define([
 	}
 
 	ChartDataProvider = declare(Evented, {
-		/** Trigger the chart update events.
-		*/
+
 		_statisticDefinitions: createStatisticDefinitions(),
-		updateCharts: function (/** {esri/geometry/Geometry} */ geometry) {
-			var self = this, query;
+		/** The query tasks for each zoom level: blockGroup, tract, and county.
+		 */
+		queryTasks: {
+			blockGroup: null,
+			tract: null,
+			county: null
+		},
+		/** Returns a query task appropriate for the scale: county, tract, or block group.
+		 * @param {Number} scale
+		 * @returns {esri/tasks/QueryTask}
+		 */
+		getQueryTaskForScale: function (scale) {
+			var qt, levelName;
+			levelName = utils.getLevel(scale);
+			qt = this.queryTasks[levelName];
+			return qt;
+		},
+		/** Trigger the chart update events.
+		 * @param {esri/geometry/Geometry} [geometry]
+		 * @param {Number} [scale]
+		 * @returns {dojo/Deferred} Returns the output of the query tasks execute function.
+		 */
+		updateCharts: function (geometry, scale) {
+			var self = this, query, queryTask;
 			query = new Query();
 			query.outStatistics = this._statisticDefinitions;
 			if (geometry) {
 				query.geometry = geometry;
 			}
-			return this.queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
+			queryTask = this.getQueryTaskForScale(scale);
+			return queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
 				var results, output;
 				results = featureSet.features[0].attributes;
 				output = {
@@ -192,16 +215,36 @@ define([
 				});
 			});
 		},
-		queryTask: null,
 		/**
-		@param {String} queryTaskUrl
-		*/
-		constructor: function (queryTaskUrl) {
-			if (!queryTaskUrl) {
-				throw new TypeError("The Query Task URL was not provided.");
+		 * @param {String} mapServiceUrl
+		 * @param {Object} options
+		 * @param {Number} options.blockGroupLayerId
+		 * @param {Number} options.tractLayerId
+		 * @param {Number} options.countyLayerId
+		 */
+		constructor: function (mapServiceUrl, options) {
+			if (!mapServiceUrl) {
+				throw new TypeError("The map service URL was not provided.");
 			}
 
-			this.queryTask = new QueryTask(queryTaskUrl);
+			// Create the options if not provided.
+			if (!options) {
+				options = {
+					blockGroupLayerId: 0,
+					tractLayerId: 1,
+					countyLayerId: 2
+				};
+			}
+
+			// Append a trailing slash to the URL if it does not already have one.
+			if (!/\/$/.test(mapServiceUrl)) {
+				mapServiceUrl += "/";
+			}
+			// Create the query tasks.
+			this.queryTasks.blockGroup = new QueryTask(mapServiceUrl + String(options.blockGroupLayerId));
+			this.queryTasks.tract = new QueryTask(mapServiceUrl + String(options.tractLayerId));
+			this.queryTasks.county = new QueryTask(mapServiceUrl + String(options.countyLayerId));
+
 			this.updateCharts();
 		}
 	});

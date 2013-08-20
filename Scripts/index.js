@@ -10,6 +10,7 @@ require([
 	"esri/dijit/BasemapGallery",
 	"title6/layerChooser",
 	"title6/chartDataProvider",
+	"title6/utils",
 	"esri/toolbars/draw",
 	"esri/layers/GraphicsLayer",
 	"esri/renderers/SimpleRenderer",
@@ -28,7 +29,6 @@ require([
 	"dojox/charting/action2d/Tooltip",
 	"dojox/charting/action2d/Shake",
 	"dojox/charting/action2d/MouseZoomAndPan",
-	"dojo/fx/easing",
 
 	"dojox/charting/axis2d/Default",
 	"dojo/parser",
@@ -41,9 +41,9 @@ require([
 	"dijit/form/Button",
 	"dijit/DropDownMenu", "dijit/MenuItem"
 ], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
-	LayerChooser, ChartDataProvider, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
+	LayerChooser, ChartDataProvider, t6Utils, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask,
-	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan, easing)
+	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan)
 {
 	"use strict";
 
@@ -104,9 +104,9 @@ require([
 			map.removeLayer(layer);
 		}
 
-		if (url && !/\/\d+/.test(url)) {
-			url += "/0";
-		}
+		////if (url && !/\/\d+/.test(url)) {
+		////	url += "/0";
+		////}
 
 		return url;
 	}
@@ -210,7 +210,7 @@ require([
 			}
 		}).then(function (response) {
 			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, selectionLayer, languageChart,
-				raceChart, aggregateLayerUrl, aggregateQueryTask, popupHandle, popupListener;
+				raceChart, aggregateLayerUrl, aggregateQueryTasks, popupHandle, popupListener;
 
 			/** Creates the service area layer and adds it to the map.
 			 * @returns {esri/layers/GraphicsLayer}
@@ -273,12 +273,14 @@ require([
 			}
 
 			function queryAggregateLayer(/** {esri/geometry/Geometry} */ geometry) {
-				var query;
+				var query, aggregateQueryTask;
 
 				query = new Query();
 				query.geometry = geometry;
 				query.returnGeometry = true;
 				query.maxAllowableOffset = 50;
+
+				aggregateQueryTask = aggregateQueryTasks[t6Utils.getLevel(map.getScale())];
 
 				aggregateQueryTask.execute(query, function (/** {esri/tasks/FeatureSet} */ featureSet) {
 					var i, l;
@@ -307,7 +309,7 @@ require([
 
 				function updateCharts(geometry) {
 					var graphic = new Graphic(geometry);
-					chartDataProvider.updateCharts(geometry);
+					chartDataProvider.updateCharts(geometry, map.getScale());
 					selectionLayer.add(graphic);
 					queryAggregateLayer(geometry);
 				}
@@ -343,7 +345,17 @@ require([
 
 			aggregateLayerUrl = getAggregateLayer(map);
 
-			aggregateQueryTask = new QueryTask(aggregateLayerUrl);
+			// Append trailing slash if not present.
+			if (!/\/$/.test(aggregateLayerUrl)) {
+				aggregateLayerUrl += "/";
+			}
+
+			////aggregateQueryTask = new QueryTask(aggregateLayerUrl);
+			aggregateQueryTasks = {
+				blockGroup: new QueryTask(aggregateLayerUrl + "0"),
+				tract: new QueryTask(aggregateLayerUrl + "1"),
+				county: new QueryTask(aggregateLayerUrl + "2")
+			};
 
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
