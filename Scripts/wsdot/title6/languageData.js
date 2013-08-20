@@ -4,11 +4,11 @@ define(["dojo/number"], function (number) {
 	"use strict";
 
 	function LanguageData(/**{Object}*/ queryResults) {
-		this.english = queryResults.SUM_English;
-		this.spanish = queryResults.SUM_Spanish;
-		this.indoEuropean = queryResults.SUM_Indo_European;
-		this.asianPacificIsland = queryResults.SUM_Asian_PacificIsland;
-		this.other = queryResults.SUM_Other;
+		this.english = queryResults.english || queryResults.SUM_English || 0;
+		this.spanish = queryResults.spanish || queryResults.SUM_Spanish || 0;
+		this.indoEuropean = queryResults.indoEuropean || queryResults.SUM_Indo_European || 0;
+		this.asianPacificIsland = queryResults.asianPacificIsland || queryResults.SUM_Asian_PacificIsland || 0;
+		this.other = queryResults.other || queryResults.SUM_Other || 0;
 	}
 
 	LanguageData.labels = {

@@ -4,10 +4,10 @@ define(function () {
 	"use strict";
 
 	function RaceData(/**{Object}*/ queryResults) {
-		this.white = queryResults.SUM_White;
-		this.minority = queryResults.SUM_NotWhite;
-		this.oneRace = queryResults.SUM_OneRace;
-		this.marginOfError = {
+		this.white = queryResults.SUM_White || queryResults.white || 0;
+		this.minority = queryResults.SUM_NotWhite || queryResults.minority || 0;
+		this.oneRace = queryResults.SUM_OneRace || queryResults.oneRace || 0;
+		this.marginOfError = queryResults.marginOfError || {
 			white: queryResults.MAX_MEWhite,
 			oneRace: queryResults.MAX_MEOneRace,
 			total: queryResults.MAX_METotal

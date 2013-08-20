@@ -23,9 +23,30 @@
 	<div id="data">
 
 	</div>
+	<script>
+		(function () {
+			"use strict";
+			var url, re = /\/[^\/]+$/;
+
+			url = re.test(location.href) ? location.href.replace(re, "/") : location.href;
+
+			var dojoConfig = {
+				async: true,
+				parseOnLoad: true,
+				paths: {
+					"title6": url + "Scripts/wsdot/title6"
+				}
+			};
+
+			window.dojoConfig = dojoConfig;
+		}());
+	</script>
 	<script src="http://js.arcgis.com/3.6compact/"></script>
 	<script>
-		require(["esri/map"], function(Map) {
+		/*global require*/
+		/*jslint browser:true*/
+		require(["esri/map", "title6/languageData", "title6/raceData"], function (Map, LanguageData, RaceData) {
+			"use strict";
 			var map, qsParameters;
 
 			function getQSParameters() {
@@ -38,7 +59,18 @@
 				return output;
 			}
 
-			qsParameters =  getQSParameters();
+			qsParameters = getQSParameters();
+
+			if (qsParameters.chartdata) {
+				if (qsParameters.chartdata.language) {
+					qsParameters.chartdata.language = new LanguageData(qsParameters.chartdata.language);
+				}
+				if (qsParameters.chartdata.race) {
+					qsParameters.chartdata.race = new RaceData(qsParameters.chartdata.race);
+				}
+			}
+
+			console.log(qsParameters);
 
 			map = new Map("map", {
 				basemap: "gray",

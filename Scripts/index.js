@@ -399,6 +399,8 @@ require([
 							raceChart.updateSeries("Minority", response.chartData.race.toPieChartSeries());
 							raceChart.render();
 						}
+
+						document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(response.chartData);
 					});
 					chartDataProvider.on("query-error", function (response) {
 						window.alert("There was an error loading the chart data.  Please reload the page.");
