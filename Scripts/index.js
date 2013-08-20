@@ -339,6 +339,7 @@ require([
 			popupListener = response.clickEventListener;
 
 			map = response.map;
+			window.map = map;
 
 			serviceAreaLayer = createServiceAreaLayer();
 			selectionLayer = createSelectionLayer();
