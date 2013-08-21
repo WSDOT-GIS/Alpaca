@@ -12,6 +12,16 @@ require([
 	"use strict";
 	var map, qsParameters, dataDiv;
 
+	/** Reads information from the data tags of an HTML element.
+	 * @param {HTMLElement} An HTML element with the following "data-" tags: extent, graphics, renderer, chart.
+	 * @member {esri/geometry/Extent} extent
+	 * @member {esri/Graphic[]} graphics
+	 * @member {esri/renderer/SimpleRenderer} renderer
+	 * @member {Object} chart
+	 * @member {LanguageData} chart.language
+	 * @member {RaceData} chart.race
+	 * @constructor
+	 */
 	function Parameters(dataset) {
 		var propName;
 

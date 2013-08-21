@@ -3,14 +3,23 @@
 define(["dojo/number"], function (number) {
 	"use strict";
 
+	/** @constructor */
 	function LanguageData(/**{Object}*/ queryResults) {
+		/** @type {Number} */
 		this.english = queryResults.english || queryResults.SUM_English || 0;
+		/** @type {Number} */
 		this.spanish = queryResults.spanish || queryResults.SUM_Spanish || 0;
+		/** @type {Number} */
 		this.indoEuropean = queryResults.indoEuropean || queryResults.SUM_Indo_European || 0;
+		/** @type {Number} */
 		this.asianPacificIsland = queryResults.asianPacificIsland || queryResults.SUM_Asian_PacificIsland || 0;
+		/** @type {Number} */
 		this.other = queryResults.other || queryResults.SUM_Other || 0;
 	}
 
+	/** Provides labels for each of the LanguageData properties.
+	 * @static {Object.<string, number>}
+	 */
 	LanguageData.labels = {
 		english: "English",
 		spanish: "Spanish",
@@ -57,6 +66,9 @@ define(["dojo/number"], function (number) {
 		return thresholdMet;
 	};
 
+	/** Creates objects used to populate a column chart.
+	 * @returns {Array}
+	 */
 	LanguageData.prototype.toColumnChartSeries = function () {
 		var language, output = [], item, label, percent, total, speakerCount;
 		total = this.getTotal();
@@ -78,6 +90,9 @@ define(["dojo/number"], function (number) {
 		return output;
 	};
 
+	/** Generates an HTML Table of the language data.
+	 * @returns {HTMLTableElement}
+	 */
 	LanguageData.prototype.toHtmlTable = function () {
 		var self = this, table, tbody, innerHtml, total, propertyName;
 

@@ -10,14 +10,25 @@ define([
 	"title6/languageData",
 	"title6/utils"
 ], function (declare, Evented, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, utils) {
+	/** Provides classes for updating charts.
+	 * @exports wsdot/title6/chartDataProvider
+	 */
 	"use strict";
 	var ChartDataProvider;
 
+	/**
+	 * @constructor
+	 */
 	function ChartData(/**{Object}*/ queryResults) {
+		/** Provices race data */
 		this.race = new RaceData(queryResults);
+		/** Provides language data */
 		this.language = new LanguageData(queryResults);
 	}
 
+	/** Creates an array of statistic definition objects
+	 * @returns {esri/tasks/StatisticDefinition}
+	 */
 	function createStatisticDefinitions() {
 		var i, l, statDef, output;
 
@@ -51,8 +62,7 @@ define([
 	ChartDataProvider = declare(Evented, {
 
 		_statisticDefinitions: createStatisticDefinitions(),
-		/** The query tasks for each zoom level: blockGroup, tract, and county.
-		 */
+		/** The query tasks for each zoom level: blockGroup, tract, and county. */
 		queryTasks: {
 			blockGroup: null,
 			tract: null,
@@ -102,6 +112,7 @@ define([
 		 * @param {Number} options.blockGroupLayerId
 		 * @param {Number} options.tractLayerId
 		 * @param {Number} options.countyLayerId
+		 * @constructs
 		 */
 		constructor: function (mapServiceUrl, options) {
 			if (!mapServiceUrl) {
