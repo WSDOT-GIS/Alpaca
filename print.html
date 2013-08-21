@@ -49,6 +49,9 @@
 			"use strict";
 			var map, qsParameters;
 
+			/** Converts the query string parameters into an object.
+			 * @returns {Object}
+			 */
 			function getQSParameters() {
 				var re = /(\w+)=([^&]+)/g, match, output = {};
 				match = re.exec(location.search);
@@ -61,6 +64,7 @@
 
 			qsParameters = getQSParameters();
 
+			// Convert language and race data into specialized objects.
 			if (qsParameters.chartdata) {
 				if (qsParameters.chartdata.language) {
 					qsParameters.chartdata.language = new LanguageData(qsParameters.chartdata.language);
@@ -70,13 +74,13 @@
 				}
 			}
 
-			console.log(qsParameters);
-
 			map = new Map("map", {
 				basemap: "gray",
 				center: qsParameters.center || null,
 				scale: qsParameters.scale || null
 			});
+
+			document.getElementById("data").appendChild(qsParameters.chartdata.language.toHtmlTable());
 		});
 	</script>
 </body>

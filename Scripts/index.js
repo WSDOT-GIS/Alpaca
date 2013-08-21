@@ -483,7 +483,7 @@ require([
 				scale = map.getScale();
 
 				// Get the print form.
-				form = document.forms["printForm"];
+				form = document.forms.printForm;
 				// set the values on the print form.
 				form.querySelector("[name=center]").value = JSON.stringify(center);
 				form.querySelector("[name=scale]").value = scale;
