@@ -1,5 +1,5 @@
 ﻿/*global require*/
-/*jslint browser:true,plusplus:true */
+/*jslint white:true,browser:true,plusplus:true */
 require([
 	"dojo/ready",
 	"dojo/_base/Color",
@@ -7,6 +7,7 @@ require([
 	"dijit/registry",
 	"esri/arcgis/utils",
 	"esri/domUtils",
+	"esri/geometry/webMercatorUtils",
 	"esri/dijit/BasemapGallery",
 	"title6/layerChooser",
 	"title6/chartDataProvider",
@@ -40,7 +41,7 @@ require([
 	"dijit/layout/TabContainer",
 	"dijit/form/Button",
 	"dijit/DropDownMenu", "dijit/MenuItem"
-], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
+], function (ready, Color, connect, registry, arcgisUtils, domUtils, webMercatorUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, t6Utils, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask,
 	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan)
@@ -339,6 +340,7 @@ require([
 			popupListener = response.clickEventListener;
 
 			map = response.map;
+			window.map = map;
 
 			serviceAreaLayer = createServiceAreaLayer();
 			selectionLayer = createSelectionLayer();
@@ -397,6 +399,8 @@ require([
 							raceChart.updateSeries("Minority", response.chartData.race.toPieChartSeries());
 							raceChart.render();
 						}
+
+						document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(response.chartData);
 					});
 					chartDataProvider.on("query-error", function (response) {
 						window.alert("There was an error loading the chart data.  Please reload the page.");
@@ -469,6 +473,29 @@ require([
 				clearSAButton.on("click", clearHandler);
 				clearSelButton.on("click", clearHandler);
 			}(registry.byId("drawServiceAreaButton"), registry.byId("drawSelectionButton"), registry.byId("clearServiceAreaButton"), registry.byId("clearSelectionButton")));
+
+			registry.byId("printMenuItem").on("click", function () {
+				var form;
+
+				function getSelectionGraphics() {
+					var gfx, i, l, output = [];
+					gfx = selectionLayer.graphics;
+
+					for (i = 0, l = gfx.length; i < l; i += 1) {
+						output.push(gfx[i].toJson());
+					}
+
+					return output;
+				}
+
+				// Get the print form.
+				form = document.forms.printForm;
+				// set the values on the print form.
+				form.querySelector("[name=extent]").value = JSON.stringify(map.extent.toJson());
+				form.querySelector("[name=graphics]").value = JSON.stringify(getSelectionGraphics());
+				form.querySelector("[name=renderer]").value = JSON.stringify(selectionLayer.renderer.toJson());
+				form.submit();
+			});
 		});
 
 	});

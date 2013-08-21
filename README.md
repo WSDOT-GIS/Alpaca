@@ -21,5 +21,13 @@
 
 The user can select a service area by drawing it on the map.
 
+## Printing ##
+
+Parameters
+
+* Map extent
+* Selection geometries (optional)
+* Service area geometry (optional)
+
 ## License ##
 See the `LICENSE` file for details.

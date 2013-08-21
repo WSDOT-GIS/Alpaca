@@ -22,7 +22,25 @@ define(function () {
 				output = SCALE_NAME_BLOCK_GROUP;
 			}
 			return output;
+		},
+		getVisibleLayers: function (map) {
+			var output = [];
+			for (p in map._layers) {
+				if (map._layers.hasOwnProperty(p)) {
+					var layer = map._layers[p];
+					if (layer.visible) {
+						output.push(layer);
+					}
+				}
+			}
+			return output;
 		}
+	};
+
+	utils.ranges = {
+		county: [499999,0],
+		tract: [500000,3999999],
+		blockGroup: [0,4000000]
 	};
 
 	utils.SCALE_NAME_BLOCK_GROUP = SCALE_NAME_BLOCK_GROUP;
