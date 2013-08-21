@@ -1,5 +1,5 @@
 ﻿/*global define*/
-/*jslint nomen:true,plusplus:true*/
+/*jslint nomen:true,plusplus:true,white:true,browser:true*/
 define(function () {
 	"use strict";
 
@@ -52,7 +52,7 @@ define(function () {
 
 		table = document.createElement("table");
 
-		innerHtml = ["<thead><tr><th>Race</th><th>Count</th><th>%</th></tr></thead><tbody>"];
+		innerHtml = ["<caption>Minority</caption><thead><tr><th>Race</th><th>Count</th><th>%</th></tr></thead><tbody>"];
 
 		/** Adds a row of data to the innerHTML array.
 		*/
