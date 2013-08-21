@@ -475,18 +475,11 @@ require([
 			}(registry.byId("drawServiceAreaButton"), registry.byId("drawSelectionButton"), registry.byId("clearServiceAreaButton"), registry.byId("clearSelectionButton")));
 
 			registry.byId("printMenuItem").on("click", function () {
-				var center, scale, form;
-				// Get the center of the map.
-				center = map.extent.getCenter();
-				// Convert to a pair of WGS 84 coordinate pairs.
-				center = webMercatorUtils.xyToLngLat(center.x, center.y);
-				scale = map.getScale();
-
+				var form;
 				// Get the print form.
 				form = document.forms.printForm;
 				// set the values on the print form.
-				form.querySelector("[name=center]").value = JSON.stringify(center);
-				form.querySelector("[name=scale]").value = scale;
+				form.querySelector("[name=extent]").value = JSON.stringify(map.extent.toJson());
 
 				form.submit();
 			});

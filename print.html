@@ -62,7 +62,12 @@
 	<script>
 		/*global require*/
 		/*jslint browser:true*/
-		require(["esri/map", "title6/languageData", "title6/raceData"], function (Map, LanguageData, RaceData) {
+		require([
+			"esri/map",
+			"esri/geometry/Extent",
+			"title6/languageData",
+			"title6/raceData"
+		], function (Map, Extent, LanguageData, RaceData) {
 			"use strict";
 			var map, qsParameters;
 
@@ -93,8 +98,7 @@
 
 			map = new Map("map", {
 				basemap: "gray",
-				center: qsParameters.center || null,
-				scale: qsParameters.scale || null
+				extent: new Extent(qsParameters.extent),
 			});
 
 			document.getElementById("data").appendChild(qsParameters.chartdata.language.toHtmlTable());
