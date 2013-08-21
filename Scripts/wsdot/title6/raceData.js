@@ -67,7 +67,9 @@ define(function () {
 
 		for (propertyName in self) {
 			if (self.hasOwnProperty(propertyName)) {
-				addRow(propertyName);
+				if (RaceData.labels.hasOwnProperty(propertyName)) {
+					addRow(propertyName);
+				}
 			}
 		}
 
