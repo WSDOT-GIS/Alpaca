@@ -46,23 +46,39 @@ define(function () {
 	};
 
 	RaceData.prototype.toHtmlTable = function () {
-		var self = this, table, innerHtml, total, propertyName;
+		var self = this, table, tbody, innerHtml, total, propertyName;
 
 		total = this.getTotal();
 
 		table = document.createElement("table");
-
-		innerHtml = ["<caption>Minority</caption><thead><tr><th>Race</th><th>Count</th><th>%</th></tr></thead><tbody>"];
+		table.createCaption().textContent = "Minority";
+		table.createTHead().innerHTML = "<tr><th>Race</th><th>Count</th><th>%</th></tr>";
+		tbody = table.createTBody();
 
 		/** Adds a row of data to the innerHTML array.
 		*/
 		function addRow(/**{String} */ propertyName) {
-			var label = RaceData.labels[propertyName], value = self[propertyName], percent = Math.round((value / total) * 10000) / 100;
-			innerHtml.push("<tr>",
-				"<td>", label, "</td>",
-				"<td>", value, "</td>",
-				"<td>", percent, " %</td>",
-			"</tr>");
+			var tr, td, label, value, percent;
+
+			label = RaceData.labels[propertyName];
+			value = self[propertyName];
+			percent = Math.round((value / total) * 10000) / 100;
+
+			tr = document.createElement("tr");
+
+			td = document.createElement("td");
+			td.textContent = label;
+			tr.appendChild(td);
+
+			td = document.createElement("td");
+			td.textContent = value;
+			tr.appendChild(td);
+
+			td = document.createElement("td");
+			td.textContent = [percent, "%"].join("");
+			tr.appendChild(td);
+
+			table.appendChild(tr);
 		}
 
 		for (propertyName in self) {
@@ -73,10 +89,38 @@ define(function () {
 			}
 		}
 
-
-		innerHtml.push("</tbody>");
-		table.innerHTML = innerHtml.join("");
 		return table;
+		////var self = this, table, innerHtml, total, propertyName;
+
+		////total = this.getTotal();
+
+		////table = document.createElement("table");
+
+		////innerHtml = ["<caption>Minority</caption><thead><tr><th>Race</th><th>Count</th><th>%</th></tr></thead><tbody>"];
+
+		/////** Adds a row of data to the innerHTML array.
+		////*/
+		////function addRow(/**{String} */ propertyName) {
+		////	var label = RaceData.labels[propertyName], value = self[propertyName], percent = Math.round((value / total) * 10000) / 100;
+		////	innerHtml.push("<tr>",
+		////		"<td>", label, "</td>",
+		////		"<td>", value, "</td>",
+		////		"<td>", percent, " %</td>",
+		////	"</tr>");
+		////}
+
+		////for (propertyName in self) {
+		////	if (self.hasOwnProperty(propertyName)) {
+		////		if (RaceData.labels.hasOwnProperty(propertyName)) {
+		////			addRow(propertyName);
+		////		}
+		////	}
+		////}
+
+
+		////innerHtml.push("</tbody>");
+		////table.innerHTML = innerHtml.join("");
+		////return table;
 	};
 
 
