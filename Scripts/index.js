@@ -1,5 +1,5 @@
 ﻿/*global require*/
-/*jslint browser:true,plusplus:true */
+/*jslint white:true,browser:true,plusplus:true */
 require([
 	"dojo/ready",
 	"dojo/_base/Color",
@@ -476,11 +476,24 @@ require([
 
 			registry.byId("printMenuItem").on("click", function () {
 				var form;
+
+				function getSelectionGraphics() {
+					var gfx, i, l, output = [];
+					gfx = selectionLayer.graphics;
+
+					for (i = 0, l = gfx.length; i < l; i += 1) {
+						output.push(gfx[i].toJson());
+					}
+
+					return output;
+				}
+
 				// Get the print form.
 				form = document.forms.printForm;
 				// set the values on the print form.
 				form.querySelector("[name=extent]").value = JSON.stringify(map.extent.toJson());
-
+				form.querySelector("[name=graphics]").value = JSON.stringify(getSelectionGraphics());
+				form.querySelector("[name=renderer]").value = JSON.stringify(selectionLayer.renderer.toJson());
 				form.submit();
 			});
 		});

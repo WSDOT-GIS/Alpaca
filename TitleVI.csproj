@@ -40,8 +40,9 @@
   <ItemGroup>
     <Content Include="index.html" />
     <Content Include="LICENSE.txt" />
-    <Content Include="print.html" />
+    <Content Include="Print.aspx" />
     <Content Include="Scripts\index.js" />
+    <Content Include="Scripts\Print.js" />
     <Content Include="Scripts\wsdot\title6\chartDataProvider.js" />
     <Content Include="Scripts\wsdot\title6\languageData.js" />
     <Content Include="Scripts\wsdot\title6\layerChooser.js" />
@@ -51,8 +52,16 @@
     <Content Include="Style\index.min.css">
       <DependentUpon>index.css</DependentUpon>
     </Content>
+    <Content Include="Style\Print.css" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Print.aspx.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Print.aspx.designer.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +69,13 @@
     <Content Include="map.txt" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
