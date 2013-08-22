@@ -77,8 +77,8 @@ require([
 	}
 
 	/** Determines if layer is a basemap layer based on its layer ID.
-	 * @param {String} layerId
-	 * @returns {Boolean}
+	 * @param {string} layerId
+	 * @returns {boolean}
 	 */
 	function detectBasemapLayerId(layerId) {
 		var re = /(^layer\d+$)|(^World_Light_Gray)/i;
@@ -87,7 +87,7 @@ require([
 	}
 
 	/** Gets the aggregate layer from the map, removes it, and then returns that layer's URL.
-	 * @returns {String}
+	 * @returns {string}
 	 */
 	function getAggregateLayer(/**{Map}*/ map) {
 		var aggregateRe = /Aggregate/i, i, l, layerId, layer, url = null;

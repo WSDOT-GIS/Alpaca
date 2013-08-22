@@ -57,7 +57,7 @@ define(function () {
 
 		/** Adds a row of data to the innerHTML array.
 		*/
-		function addRow(/**{String} */ propertyName) {
+		function addRow(/**{string} */ propertyName) {
 			var tr, td, label, value, percent;
 
 			label = RaceData.labels[propertyName];

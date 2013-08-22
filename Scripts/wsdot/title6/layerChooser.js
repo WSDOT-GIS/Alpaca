@@ -64,11 +64,11 @@ define([
 		@param {Object} options
 		@param {Object} options.operationalLayer
 		@param {esri/layers/Layer} options.operationalLayer.layerObject
-		@param {String} options.operationalLayer.id
-		@param {String} options.operationalLayer.title
+		@param {string} options.operationalLayer.id
+		@param {string} options.operationalLayer.title
 		@param {Array} options.operationalLayer.errors
-		@param {Boolean} [options.checked] Is the radio button checked?
-		@param {Boolean} [options.includeSublayers] 
+		@param {boolean} [options.checked] Is the radio button checked?
+		@param {boolean} [options.includeSublayers] 
 		@constructs
 		*/
 		constructor: function (options) {

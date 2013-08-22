@@ -5,15 +5,15 @@ define(["dojo/number"], function (number) {
 
 	/** @constructor */
 	function LanguageData(/**{Object}*/ queryResults) {
-		/** @type {Number} */
+		/** @type {number} */
 		this.english = queryResults.english || queryResults.SUM_English || 0;
-		/** @type {Number} */
+		/** @type {number} */
 		this.spanish = queryResults.spanish || queryResults.SUM_Spanish || 0;
-		/** @type {Number} */
+		/** @type {number} */
 		this.indoEuropean = queryResults.indoEuropean || queryResults.SUM_Indo_European || 0;
-		/** @type {Number} */
+		/** @type {number} */
 		this.asianPacificIsland = queryResults.asianPacificIsland || queryResults.SUM_Asian_PacificIsland || 0;
-		/** @type {Number} */
+		/** @type {number} */
 		this.other = queryResults.other || queryResults.SUM_Other || 0;
 	}
 
@@ -29,29 +29,29 @@ define(["dojo/number"], function (number) {
 	};
 
 	/** Returns the total number of people.
-	 * @returns {Number}
+	 * @returns {number}
 	 */
 	LanguageData.prototype.getTotal = function () {
 		return this.english + this.spanish + this.indoEuropean + this.asianPacificIsland + this.other;
 	};
 
 	/** Returns the number of people in the largest non-English group.
-	 * @returns {Number}
+	 * @returns {number}
 	 */
 	LanguageData.prototype.getMaxNotEnglish = function () {
 		return Math.max(this.spanish, this.indoEuropean, this.asianPacificIsland, this.other);
 	};
 
 	/** Returns the zoom scale integer for DojoX chart zooming to make non-English columns visible in the chart.
-	 * @returns {Number}
+	 * @returns {number}
 	 */
 	LanguageData.prototype.getNotEnglishZoomScale = function () {
 		return this.getTotal() / this.getMaxNotEnglish() - 10;
 	};
 
 	/** Determines if the threshold has been met for a particular language.
-	 * @param {String} language The name of one of the language properties: "english", "spanish", "indoEuropean", "asianPacificIsland", "other".
-	 * @returns {Boolean} If language is "english" or an invalid property name, false will be returned. Returns true if the number of speakers of the language is greater than 1000 or is greater than 5% of the total population.
+	 * @param {string} language The name of one of the language properties: "english", "spanish", "indoEuropean", "asianPacificIsland", "other".
+	 * @returns {boolean} If language is "english" or an invalid property name, false will be returned. Returns true if the number of speakers of the language is greater than 1000 or is greater than 5% of the total population.
 	 */
 	LanguageData.prototype.thresholdMet = function (language) {
 		var total, thresholdMet = false, speakerCount;
@@ -105,7 +105,7 @@ define(["dojo/number"], function (number) {
 
 		/** Adds a row of data to the innerHTML array.
 		*/
-		function addRow(/**{String} */ propertyName) {
+		function addRow(/**{string} */ propertyName) {
 			var tr, td, label, value, percent;
 
 			label = LanguageData.labels[propertyName];

@@ -69,7 +69,7 @@ define([
 			county: null
 		},
 		/** Returns a query task appropriate for the scale: county, tract, or block group.
-		 * @param {Number} scale
+		 * @param {number} scale
 		 * @returns {esri/tasks/QueryTask}
 		 */
 		getQueryTaskForScale: function (scale) {
@@ -80,7 +80,7 @@ define([
 		},
 		/** Trigger the chart update events.
 		 * @param {esri/geometry/Geometry} [geometry]
-		 * @param {Number} [scale]
+		 * @param {number} [scale]
 		 * @returns {dojo/Deferred} Returns the output of the query tasks execute function.
 		 */
 		updateCharts: function (geometry, scale) {
@@ -107,11 +107,11 @@ define([
 			});
 		},
 		/**
-		 * @param {String} mapServiceUrl
+		 * @param {string} mapServiceUrl
 		 * @param {Object} options
-		 * @param {Number} options.blockGroupLayerId
-		 * @param {Number} options.tractLayerId
-		 * @param {Number} options.countyLayerId
+		 * @param {number} options.blockGroupLayerId
+		 * @param {number} options.tractLayerId
+		 * @param {number} options.countyLayerId
 		 * @constructs
 		 */
 		constructor: function (mapServiceUrl, options) {
