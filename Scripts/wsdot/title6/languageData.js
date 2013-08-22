@@ -94,14 +94,15 @@ define(["dojo/number"], function (number) {
 	 * @returns {HTMLTableElement}
 	 */
 	LanguageData.prototype.toHtmlTable = function () {
-		var self = this, table, tbody, innerHtml, total, propertyName;
+		var self = this, table, tbody, total, propertyName;
 
 		total = this.getTotal();
 
 		table = document.createElement("table");
 		table.createCaption().textContent = "Language Proficiency";
 		table.createTHead().innerHTML = "<tr><th>Language</th><th>Count</th><th>%</th></tr>";
-		tbody = table.createTBody();
+		tbody = document.createElement("tbody");
+		table.appendChild(tbody);
 
 		/** Adds a row of data to the innerHTML array.
 		*/
@@ -129,7 +130,7 @@ define(["dojo/number"], function (number) {
 			td.textContent = [percent, "%"].join("");
 			tr.appendChild(td);
 
-			table.appendChild(tr);
+			tbody.appendChild(tr);
 		}
 
 		for (propertyName in self) {
