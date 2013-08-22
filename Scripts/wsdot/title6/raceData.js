@@ -1,6 +1,6 @@
 ﻿/*global define*/
 /*jslint nomen:true,plusplus:true,white:true,browser:true*/
-define(function () {
+define(["dojo/number"], function (number) {
 	"use strict";
 
 	/**
@@ -91,7 +91,7 @@ define(function () {
 			tr.appendChild(td);
 
 			td = document.createElement("td");
-			td.textContent = value;
+			td.textContent = number.format(value);
 			tr.appendChild(td);
 
 			td = document.createElement("td");

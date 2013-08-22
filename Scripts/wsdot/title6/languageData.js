@@ -123,7 +123,7 @@ define(["dojo/number"], function (number) {
 			tr.appendChild(td);
 
 			td = document.createElement("td");
-			td.textContent = value;
+			td.textContent = number.format(value);
 			tr.appendChild(td);
 
 			td = document.createElement("td");
