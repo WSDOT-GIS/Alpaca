@@ -82,7 +82,7 @@ define(["dojo/number"], function (number) {
 
 			label = RaceData.labels[propertyName];
 			value = self[propertyName];
-			percent = Math.round((value / total) * 10000) / 100;
+			percent = (value / total) * 100;
 
 			tr = document.createElement("tr");
 
@@ -95,7 +95,7 @@ define(["dojo/number"], function (number) {
 			tr.appendChild(td);
 
 			td = document.createElement("td");
-			td.textContent = [percent, "%"].join("");
+			td.textContent = [number.format(percent, { places: 2 }), "%"].join("");
 			tr.appendChild(td);
 
 			tbody.appendChild(tr);
