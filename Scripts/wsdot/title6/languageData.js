@@ -4,7 +4,7 @@ define(["dojo/number"], function (number) {
 	"use strict";
 
 	/** @constructor */
-	function LanguageData(/**{Object}*/ queryResults) {
+	function LanguageData(/**{Object.<string,number>}*/ queryResults) {
 		/** @type {number} */
 		this.english = queryResults.english || queryResults.SUM_English || 0;
 		/** @type {number} */

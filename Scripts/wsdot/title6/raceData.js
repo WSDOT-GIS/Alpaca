@@ -6,7 +6,7 @@ define(function () {
 	/**
 	 * @constructor
 	 */
-	function RaceData(/**{Object}*/ queryResults) {
+	function RaceData(/**{Object.<string,number>}*/ queryResults) {
 		/** @member {!number} */
 		this.white = queryResults.SUM_White || queryResults.white || 0;
 		/** @member {!number} */
