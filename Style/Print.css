@@ -22,6 +22,7 @@ table {
 
 .threshold-met {
     font-style: italic;
+    font-weight: bold;
 }
 
 td:first-child + td, td:first-child + td + td {
