@@ -2,11 +2,12 @@
 /*jslint browser:true,plusplus:true*/
 define([
 	"dojo/_base/declare",
+	"dojo/dom-class",
 	"dojo/Evented",
 	"dojo/on",
 	"dijit/form/HorizontalSlider",
 	"esri/dijit/Legend"
-], function (declare, Evented, on, HorizontalSlider, Legend) {
+], function (declare, domClass, Evented, on, HorizontalSlider, Legend) {
 	"use strict";
 	var LayerChooser, LayerRadioButton, SublayerList;
 
@@ -104,7 +105,8 @@ define([
 			// If the layer has errors, disable the radio button
 			if (opLayer.errors && opLayer.errors.length) {
 				self.radioButton.disabled = true;
-				self.domNode.classList.add("layer-chooser-layer-error");
+				//self.domNode.classList.add("layer-chooser-layer-error");
+				domClass.add(self.domNode, "layer-chooser-layer-error");
 			}
 
 			// Add the opacity slider
@@ -132,7 +134,8 @@ define([
 
 			// Create the legend...
 			legendDiv = document.createElement("div");
-			legendDiv.classList.add("layer-chooser-legend");
+			////legendDiv.classList.add("layer-chooser-legend");
+			domClass.add(legendDiv, "layer-chooser-legend");
 			self.domNode.appendChild(legendDiv);
 			self.legend = new Legend({
 				autoUpdate: true,
@@ -210,7 +213,8 @@ define([
 			}
 
 			self.list = document.createElement("ul");
-			self.list.classList.add("layer-list");
+			////self.list.classList.add("layer-list");
+			domClass.add(self.list, "layer-list");
 			self.domNode.appendChild(self.list);
 
 			this.map = mapInfo.map;
