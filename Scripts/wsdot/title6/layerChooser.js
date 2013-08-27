@@ -74,7 +74,7 @@ define([
 		@constructs
 		*/
 		constructor: function (options) {
-			var self = this, opLayer = options.operationalLayer, legendDiv;
+			var self = this, opLayer = options.operationalLayer, legendDiv, controlsDiv;
 
 			self.domNode = document.createElement("li");
 
@@ -110,6 +110,13 @@ define([
 				domClass.add(self.domNode, "layer-chooser-layer-error");
 			}
 
+			// Create the controls div.
+			// The controls that are only shown when the layer is checked will be placed inside of this div.
+			// The hiding of this div is performed by the stylesheet.
+			controlsDiv = document.createElement("div");
+			domClass.add(controlsDiv, "layer-chooser-layer-controls");
+			self.domNode.appendChild(controlsDiv);
+
 			// Add the opacity slider
 
 			self.opacitySlider = new HorizontalSlider({
@@ -121,13 +128,13 @@ define([
 				}
 			});
 
-			self.domNode.appendChild(self.opacitySlider.domNode);
+			controlsDiv.appendChild(self.opacitySlider.domNode);
 
 
 			
 			if (options.includeSublayers) {
 				self.sublayerList = new SublayerList(opLayer.layerObject);
-				self.domNode.appendChild(self.sublayerList.domNode);
+				controlsDiv.appendChild(self.sublayerList.domNode);
 				self.sublayerList.on("sublayer-select", function (e) {
 					self.emit("sublayer-select", e);
 				});
@@ -137,7 +144,7 @@ define([
 			legendDiv = document.createElement("div");
 			////legendDiv.classList.add("layer-chooser-legend");
 			domClass.add(legendDiv, "layer-chooser-legend");
-			self.domNode.appendChild(legendDiv);
+			controlsDiv.appendChild(legendDiv);
 			self.legend = new Legend({
 				autoUpdate: true,
 				map: options.map,
