@@ -99,17 +99,6 @@ html, body {
 	display: none;
 }
 
-/* show the layer lists of checked layers */
-/*
-.layer-list input:checked + * + * + ul, 
-.layer-list input:checked + * + .dijitSlider, 
-.layer-list input:checked + * + * + .layer-chooser-legend,
-.layer-list input:checked + * + * + * + .layer-chooser-legend
-{
-	visibility: visible;
-}
-	*/
-
 .esriLegendService {
 	padding-bottom: 1em;
 	margin-left: 1em;
