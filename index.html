@@ -17,7 +17,13 @@
 				parseOnLoad: true,
 				paths: {
 					"title6": url + "Scripts/wsdot/title6"
-				}
+				},
+				packages: [
+					{
+						name: "CSV-Reader",
+						location: url + "Scripts/wsdot/CSV-Reader"
+					}
+				]
 			};
 
 			window.dojoConfig = dojoConfig;
