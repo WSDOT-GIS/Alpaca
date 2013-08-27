@@ -1,0 +1,3 @@
+[submodule "Scripts/wsdot/CSV-Reader"]
+	path = Scripts/wsdot/CSV-Reader
+	url = https://github.com/WSDOT-GIS/CSV-Reader.git

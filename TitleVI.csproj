@@ -43,6 +43,9 @@
     <Content Include="Print.aspx" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\Print.js" />
+    <Content Include="Scripts\wsdot\CSV-Reader\csvArcGis.js" />
+    <Content Include="Scripts\wsdot\CSV-Reader\csvHtml.js" />
+    <Content Include="Scripts\wsdot\CSV-Reader\main.js" />
     <Content Include="Scripts\wsdot\title6\chartDataProvider.js" />
     <Content Include="Scripts\wsdot\title6\languageData.js" />
     <Content Include="Scripts\wsdot\title6\layerChooser.js" />
