@@ -554,12 +554,15 @@ require([
 
 				menuItem.on("click", function () {
 					if (window.FileReader) {
+						if (input.value) {
+							input.value = null;
+						}
 						dialog.show();
 					} else {
 						window.alert("This operation is not supported by your browser");
 					}
 				});
-			}(registry.byId("addCsvMenuItem"), registry.byId("addCsvDialog"), document.getElementById("addCsvFileInput")));
+			}(registry.byId("addDataButton"), registry.byId("addCsvDialog"), document.getElementById("addCsvFileInput")));
 		});
 
 	});

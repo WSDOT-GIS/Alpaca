@@ -26,7 +26,7 @@ define(["esri/symbols/SimpleMarkerSymbol",
 	}
 
 	function createRandomPointRenderer() {
-		var symbol, renderer, symbolStyles = ["circle", "square", "cross", "x", "diamond"];
+		var symbol, renderer, symbolStyles = ["circle", "square", "cross", /*"x",*/ "diamond"]; // X is too hard to click on.
 		symbol = new SimpleMarkerSymbol();
 		// Set the symbol to a randomly generated color.
 		symbol.setColor(String(getRandomInt(0, 0xffffff)));
