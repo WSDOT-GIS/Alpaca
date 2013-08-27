@@ -7,7 +7,6 @@ require([
 	"dijit/registry",
 	"esri/arcgis/utils",
 	"esri/domUtils",
-	"esri/geometry/webMercatorUtils",
 	"esri/dijit/BasemapGallery",
 	"title6/layerChooser",
 	"title6/chartDataProvider",
@@ -21,6 +20,7 @@ require([
 	"esri/tasks/GeometryService",
 	"esri/tasks/query",
 	"esri/tasks/QueryTask",
+	"esri/InfoTemplate",
 
 	"dojox/charting/Chart",
 	"dojox/charting/plot2d/Pie",
@@ -31,8 +31,10 @@ require([
 	"dojox/charting/action2d/Shake",
 	"dojox/charting/action2d/MouseZoomAndPan",
 
-	"CSV-Reader",
+	"CSV-Reader/csvArcGis",
+	"layerUtils",
 
+	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
@@ -43,10 +45,10 @@ require([
 	"dijit/layout/TabContainer",
 	"dijit/form/Button",
 	"dijit/DropDownMenu", "dijit/MenuItem"
-], function (ready, Color, connect, registry, arcgisUtils, domUtils, webMercatorUtils, BasemapGallery,
+], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, ChartDataProvider, t6Utils, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
-	Graphic, GeometryService, Query, QueryTask,
-	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan, CsvReader)
+	Graphic, GeometryService, Query, QueryTask, InfoTemplate,
+	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan, csvArcGis, LayerUtils)
 {
 	"use strict";
 
@@ -474,6 +476,8 @@ require([
 				// Attach clear button click events.
 				clearSAButton.on("click", clearHandler);
 				clearSelButton.on("click", clearHandler);
+
+
 			}(registry.byId("drawServiceAreaButton"), registry.byId("drawSelectionButton"), registry.byId("clearServiceAreaButton"), registry.byId("clearSelectionButton")));
 
 			registry.byId("printMenuItem").on("click", function () {
@@ -498,6 +502,60 @@ require([
 				form.querySelector("[name=renderer]").value = JSON.stringify(selectionLayer.renderer.toJson());
 				form.submit();
 			});
+
+			// Setup the Add CSV menu item.
+			(function (menuItem, dialog, input) {
+
+				function handleFileLoad(evt) {
+					var text, graphicsLayer, renderer, infoTemplate;
+
+					text = evt.target.result;
+
+					try {
+						graphicsLayer = csvArcGis.csvToGraphicsLayer(text, ',', null, null, null, null, null, {
+							id: evt.target.file.name
+						});
+
+						renderer = LayerUtils.createRandomPointRenderer();
+						infoTemplate = new InfoTemplate("Imported Feature", "${*}");
+
+						graphicsLayer.setRenderer(renderer);
+						graphicsLayer.setInfoTemplate(infoTemplate);
+
+						map.addLayer(graphicsLayer);
+					} catch (e) {
+						if (e instanceof TypeError) {
+							window.alert(e.message);
+						} else {
+							throw e;
+						}
+					}
+
+					dialog.hide();
+				}
+
+				function handleFileSelect(evt) {
+					var file, files, reader, i, l;
+					files = evt.target.files; // FileList object
+
+					// Loop through all of the files. Create a reader for each and read the text.
+					for (i = 0, l = files.length; i < l; i += 1) {
+						file = files[i];
+						reader = new window.FileReader();
+						// Add the file as a property of the reader so its filename can be used as a layer id.
+						reader.file = file;
+						reader.onload = handleFileLoad;
+
+						reader.readAsText(file);
+					}
+				}
+
+				input.addEventListener("change", handleFileSelect, false);
+
+				menuItem.on("click", function () {
+					dialog.show();
+				});
+			}(registry.byId("addCsvMenuItem"), registry.byId("addCsvDialog"), document.getElementById("addCsvFileInput")));
 		});
 
 	});

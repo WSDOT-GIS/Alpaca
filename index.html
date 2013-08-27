@@ -22,6 +22,10 @@
 					{
 						name: "CSV-Reader",
 						location: url + "Scripts/wsdot/CSV-Reader"
+					},
+					{
+						name: "layerUtils",
+						location: url + "Scripts/wsdot/layerUtils"
 					}
 				]
 			};
@@ -92,7 +96,12 @@
 							<div data-dojo-type="dijit/PopupMenuItem">
 								<span>Data</span>
 								<div data-dojo-type="dijit/DropDownMenu">
-									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">Add</div>
+									<div data-dojo-type="dijit/PopupMenuItem">
+										<span>Add</span>
+										<div data-dojo-type="dijit/DropDownMenu">
+											<div id="addCsvMenuItem" data-dojo-type="dijit/MenuItem">CSV</div>
+										</div>
+									</div>
 									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">Remove</div>
 								</div>
 							</div>
@@ -119,5 +128,9 @@
 		<input name="graphics" type="hidden" />
 		<input name="renderer" type="hidden" />
 	</form>
+
+	<div id="addCsvDialog" data-dojo-type="dijit/Dialog" data-dojo-props='title:"Add CSV to Map"'>
+		<input id="addCsvFileInput" type="file" />
+	</div>
 </body>
 </html>
