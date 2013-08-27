@@ -553,7 +553,11 @@ require([
 				input.addEventListener("change", handleFileSelect, false);
 
 				menuItem.on("click", function () {
-					dialog.show();
+					if (window.FileReader) {
+						dialog.show();
+					} else {
+						window.alert("This operation is not supported by your browser");
+					}
 				});
 			}(registry.byId("addCsvMenuItem"), registry.byId("addCsvDialog"), document.getElementById("addCsvFileInput")));
 		});
