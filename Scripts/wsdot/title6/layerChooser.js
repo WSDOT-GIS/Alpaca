@@ -48,7 +48,8 @@ define([
 					label.htmlFor = radioButton.id;
 					label.textContent = layerInfo.name;
 					li.appendChild(label);
-					radioButton.addEventListener("click", clickHandler);
+					////radioButton.addEventListener("click", clickHandler);
+					on(radioButton, "click", clickHandler);
 				}
 			}
 		}
