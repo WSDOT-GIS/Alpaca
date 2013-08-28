@@ -215,7 +215,8 @@ require([
 				logo: false
 			}
 		}).then(function (response) {
-			var basemapGallery, layerChooser, chartDataProvider, drawToolbar, serviceAreaLayer, selectionLayer, languageChart,
+			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
+				serviceAreaLayer, selectionLayer, languageChart,
 				raceChart, aggregateLayerUrl, aggregateQueryTasks, popupHandle, popupListener;
 
 			/** Creates the service area layer and adds it to the map.
@@ -373,6 +374,8 @@ require([
 			map.on("update-end", function () {
 				domUtils.hide(document.getElementById("mapProgress"));
 			});
+
+			graphicsLayerList = new GraphicsLayerList(map, "graphicsLayerList");
 
 			basemapGallery = new BasemapGallery({
 				map: map,
