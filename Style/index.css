@@ -104,3 +104,15 @@ html, body {
 	margin-left: 1em;
 }
 
+.graphics-layer-list {
+	display: table;
+}
+
+.graphics-layer-list > li {
+	display: table-row;
+}
+
+.graphics-layer-list > li > * {
+	display: table-cell;
+}
+
