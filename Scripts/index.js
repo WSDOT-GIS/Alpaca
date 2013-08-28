@@ -375,7 +375,9 @@ require([
 				domUtils.hide(document.getElementById("mapProgress"));
 			});
 
-			graphicsLayerList = new GraphicsLayerList(map, "graphicsLayerList");
+			graphicsLayerList = new GraphicsLayerList(map, "graphicsLayerList", {
+				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)/i
+			});
 
 			basemapGallery = new BasemapGallery({
 				map: map,

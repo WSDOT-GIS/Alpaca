@@ -81,6 +81,28 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 		constructor: function (map, domNode, options) {
 			var self = this, i, l, id, layer, listItem, frag, removeLayerFromMap;
 
+			/** Determines if a layer should be omitted from the layer list.
+			 * @returns {boolean}
+			*/
+			function shouldOmit(/** {string} */ layer) {
+				var id, output;
+				if (!options || !options.omittedLayers) {
+					output = false;
+				} else {
+					if (!layer) {
+						throw new TypeError("Layer must be either a string or a layer object.");
+					} else if (typeof layer === "string") {
+						id = layer;
+					} else if (layer.id) {
+						id = layer.id;
+					} else {
+						throw new TypeError("Layer must be either a string or a layer object.");
+					}
+					output = options.omittedLayers.test(id);
+				}
+				return output;
+			}
+
 			/** Removes the layer from the map that corresponds to the button that was clicked.
 			 * @this {HTMLButtonElement}
 			 */
@@ -111,10 +133,12 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 
 			for (i = 0, l = map.graphicsLayerIds.length; i < l; i += 1) {
 				id = map.graphicsLayerIds[i];
-				layer = map.getLayer(id);
-				listItem = new ListItem(layer);
-				on(listItem.removeButton, "click", removeLayerFromMap);
-				frag.appendChild(listItem.domNode);
+				if (!shouldOmit(id)) {
+					layer = map.getLayer(id);
+					listItem = new ListItem(layer);
+					on(listItem.removeButton, "click", removeLayerFromMap);
+					frag.appendChild(listItem.domNode);
+				}
 			}
 
 			this.domNode.appendChild(frag);
@@ -139,7 +163,7 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 			 */
 			map.on("layer-add-result", function (evt) {
 				var listItem;
-				if (evt.layer) {
+				if (evt.layer && !shouldOmit(evt.layer.id)) {
 					listItem = new ListItem(evt.layer);
 					on(listItem.removeButton, "click", removeLayerFromMap);
 					// Add the list item to the list.
