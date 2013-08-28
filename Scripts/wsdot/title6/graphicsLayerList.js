@@ -20,7 +20,7 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 
 	ListItem = declare(null, {
 		domNode: null,
-		layerId: null,
+		layer: null,
 		checkbox: null,
 		label: null,
 		removeButton: null,
@@ -29,12 +29,17 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 			var id;
 			id = generateUniqueId();
 
-			this.layerId = typeof layer === "string" ? layer : layer.id || null;
+			if (!layer) {
+				throw new TypeError("The layer parameter must be an esri/layers/Layer.");
+			}
+
+			this.layer = layer;
 
 			this.domNode = document.createElement("li");
-			this.domNode.setAttribute("data-layer-id", this.layerId);
+			this.domNode.setAttribute("data-layer-id", layer.id);
 
 			this.checkbox = document.createElement("input");
+			this.checkbox.setAttribute("data-layer-id", layer.id);
 			this.checkbox.type = "checkbox";
 			this.checkbox.id = id;
 			this.checkbox.checked = layer.visible;
@@ -46,7 +51,7 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 			this.domNode.appendChild(this.label);
 
 			this.removeButton = document.createElement("button");
-			this.removeButton.setAttribute("data-layer-id", this.layerId);
+			this.removeButton.setAttribute("data-layer-id", layer.id);
 			this.removeButton.type = "button";
 			this.removeButton.textContent = "remove";
 
@@ -73,13 +78,13 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 		},
 		/**
 		 * @param {esri/Map} map
-		 * @param {(HTMLUListElement|string)} [domNode]
+		 * @param {(HTMLUListElement|HTMLOListElement|string)} [domNode]
 		 * @param {Object} options
 		 * @param {Regexp} [options.omittedLayers] Determines which layers will be omitted from the layer list.
 		 * @constructs
 		 */
 		constructor: function (map, domNode, options) {
-			var self = this, i, l, id, layer, listItem, frag, removeLayerFromMap;
+			var self = this, i, l, id, layer, listItem, frag, removeLayerFromMap, setLayerVisibility;
 
 			/** Determines if a layer should be omitted from the layer list.
 			 * @returns {boolean}
@@ -103,10 +108,12 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 				return output;
 			}
 
+
+
 			/** Removes the layer from the map that corresponds to the button that was clicked.
 			 * @this {HTMLButtonElement}
 			 */
-			removeLayerFromMap = function (e) {
+			removeLayerFromMap = function () {
 				var layer;
 
 				layer = this.getAttribute("data-layer-id");
@@ -117,6 +124,37 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 					}
 				}
 			};
+
+			/**
+			 * @this {HTMLInputElement} A checkbox input element.
+			 */
+			setLayerVisibility = function () {
+				var layer;
+
+				layer = this.getAttribute("data-layer-id");
+				if (layer) {
+					layer = map.getLayer(layer);
+					if (layer) {
+						if (this.checked) {
+							layer.show();
+						} else {
+							layer.hide();
+						}
+					}
+				}
+			};
+
+			/** Creates a list item and assignes its removeButton and checkbox events.
+			 * @returns {ListItem}
+			*/
+			function createListItem(/**{esri/layers/Layer}*/ layer) {
+				var listItem;
+				listItem = new ListItem(layer);
+				on(listItem.removeButton, "click", removeLayerFromMap);
+				on(listItem.checkbox, "change", setLayerVisibility);
+
+				return listItem;
+			}
 
 			if (!map) {
 				throw new TypeError("The map parameter cannot be null.");
@@ -135,8 +173,7 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 				id = map.graphicsLayerIds[i];
 				if (!shouldOmit(id)) {
 					layer = map.getLayer(id);
-					listItem = new ListItem(layer);
-					on(listItem.removeButton, "click", removeLayerFromMap);
+					listItem = createListItem(layer);
 					frag.appendChild(listItem.domNode);
 				}
 			}
@@ -164,8 +201,7 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 			map.on("layer-add-result", function (evt) {
 				var listItem;
 				if (evt.layer && !shouldOmit(evt.layer.id)) {
-					listItem = new ListItem(evt.layer);
-					on(listItem.removeButton, "click", removeLayerFromMap);
+					listItem = createListItem(evt.layer);
 					// Add the list item to the list.
 					self.domNode.appendChild(listItem.domNode);
 				}
