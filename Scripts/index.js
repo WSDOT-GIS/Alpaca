@@ -9,6 +9,7 @@ require([
 	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
 	"title6/layerChooser",
+	"title6/graphicsLayerList",
 	"title6/chartDataProvider",
 	"title6/utils",
 	"esri/toolbars/draw",
@@ -46,7 +47,7 @@ require([
 	"dijit/form/Button",
 	"dijit/DropDownMenu", "dijit/MenuItem"
 ], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
-	LayerChooser, ChartDataProvider, t6Utils, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
+	LayerChooser, GraphicsLayerList, ChartDataProvider, t6Utils, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask, InfoTemplate,
 	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan, csvArcGis, LayerUtils)
 {
