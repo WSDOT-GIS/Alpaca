@@ -36,10 +36,10 @@ define(["dojo/number"], function (number) {
 		return this.white + this.minority;
 	};
 
-	/** Creates objects used to populate a pie chart.
+	/** Creates objects used to populate a column chart.
 	 * @returns {Object[]}
 	 */
-	RaceData.prototype.toPieChartSeries = function () {
+	RaceData.prototype.toColumnChartSeries = function () {
 		var race, item, output = [], total, label;
 
 		total = this.getTotal();
