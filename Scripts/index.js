@@ -315,9 +315,19 @@ require([
 				selectionLayer.clear();
 
 				function updateCharts(geometry) {
-					var graphic = new Graphic(geometry);
+					var graphic;
+
+					// If a selection polygon is outside of the service area, its 
+					// intersection will be a geometry with an empty "rings" property.
+					// In this case we will set the geometry to null.
+					if (geometry && geometry.rings && geometry.rings.length) {
+						graphic = new Graphic(geometry);
+						selectionLayer.add(graphic);
+					} else {
+						geometry = null;
+					}
+
 					chartDataProvider.updateCharts(geometry, map.getScale());
-					selectionLayer.add(graphic);
 					queryAggregateLayer(geometry);
 				}
 
