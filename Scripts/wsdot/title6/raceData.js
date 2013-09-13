@@ -36,6 +36,20 @@ define(["dojo/number"], function (number) {
 		return this.white + this.minority;
 	};
 
+	/** Returns the number of people that is 30% of the total number.
+	 * @returns {number}
+	 */
+	RaceData.prototype.get30Percent = function () {
+		return this.getTotal() * 0.30;
+	};
+
+	/** Determines if the minority count is greater than 30% of the total.
+	 * @returns {Boolean}
+	 */
+	RaceData.prototype.isMinorityAbove30Percent = function () {
+		return this.minority >= this.get30Percent();
+	};
+
 	/** Creates objects used to populate a column chart.
 	 * @returns {Object[]}
 	 */
