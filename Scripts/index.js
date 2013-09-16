@@ -33,6 +33,9 @@ require([
 	"CSV-Reader/csvArcGis",
 	"layerUtils",
 
+	"esri/graphicsUtils",
+	"esri/config",
+
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
 	"dojo/parser",
@@ -47,9 +50,11 @@ require([
 ], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, GraphicsLayerList, ChartDataProvider, t6Utils, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask, InfoTemplate,
-	Chart, Columns, Highlight, Tooltip, Shake, MouseZoomAndPan, csvArcGis, LayerUtils)
+	Chart, Columns, Highlight, Tooltip, Shake, MouseZoomAndPan, csvArcGis, LayerUtils, graphicsUtils, esriConfig)
 {
 	"use strict";
+
+	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 
 	if (!window.console) {
 		window.console = {};
@@ -263,18 +268,58 @@ require([
 				return layer;
 			}
 
+			function queryAggregateLayerForServiceArea(/** {esri/geometry/Geometry} */ geometry) {
+				var query, aggregateQueryTask;
+
+				query = new Query();
+				query.geometry = geometry;
+				query.returnGeometry = true;
+				////query.maxAllowableOffset = 50;
+
+				aggregateQueryTask = aggregateQueryTasks[t6Utils.getLevel(map.getScale())];
+
+				aggregateQueryTask.execute(query, function (/** {esri/tasks/FeatureSet} */ featureSet) {
+					var /** {Geometry[]} */geometries;
+					if (featureSet && featureSet.features && featureSet.features.length >= 1) {
+						// Clear the existing features.
+						serviceAreaLayer.clear();
+
+						if (featureSet.features.length === 1) {
+							serviceAreaLayer.add(featureSet.features[0]);
+						} else {
+							geometries = graphicsUtils.getGeometries(featureSet.features);
+
+							geometryService.union(geometries, function (/**{Geometry}*/ geometry) {
+								var graphic;
+								if (geometry) {
+									graphic = new Graphic(geometry);
+									serviceAreaLayer.add(graphic);
+								}
+							}, function (error) {
+								if (console) {
+									if (console.error) {
+										console.error(error);
+									}
+								}
+							});
+						}
+
+
+					}
+				}, function (error) {
+					console.error("An error occured while querying for block group geometry.", error);
+				});
+			}
+
 			/**
 			@param drawResponse
 			@param {esri/geometry/Geometry} drawResponse.geometry
 			@param {esri/geometry/Geometry} drawResponse.geographicGeometry
 			*/
 			function setServiceArea(drawResponse) {
-				var graphic;
 				// Clear the existing graphics.
 				serviceAreaLayer.clear();
-				graphic = new Graphic(drawResponse.geometry);
-				serviceAreaLayer.add(graphic);
-
+				queryAggregateLayerForServiceArea(drawResponse.geometry);
 			}
 
 			/** Gets the geometry from the first graphic in the service area layer.
@@ -290,13 +335,13 @@ require([
 				return output;
 			}
 
-			function queryAggregateLayer(/** {esri/geometry/Geometry} */ geometry) {
+			function queryAggregateLayerForSelection(/** {esri/geometry/Geometry} */ geometry) {
 				var query, aggregateQueryTask;
 
 				query = new Query();
 				query.geometry = geometry;
 				query.returnGeometry = true;
-				query.maxAllowableOffset = 50;
+				//query.maxAllowableOffset = 50;
 
 				aggregateQueryTask = aggregateQueryTasks[t6Utils.getLevel(map.getScale())];
 
@@ -339,7 +384,7 @@ require([
 					}
 
 					chartDataProvider.updateCharts(geometry, map.getScale());
-					queryAggregateLayer(geometry);
+					queryAggregateLayerForSelection(geometry);
 				}
 
 				// Determine if there is an existing service area geometry.
