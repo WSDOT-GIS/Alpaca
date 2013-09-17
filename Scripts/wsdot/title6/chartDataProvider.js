@@ -37,9 +37,9 @@ define([
 			{ "statisticType": "sum", "onStatisticField": "NotWhite" },
 			{ "statisticType": "sum", "onStatisticField": "OneRace" },
 
-			{ "statisticType": "max", "onStatisticField": "MEWhite" },
-			{ "statisticType": "max", "onStatisticField": "MEOneRace" },
-			{ "statisticType": "max", "onStatisticField": "METotal" },
+			////{ "statisticType": "max", "onStatisticField": "MEWhite" },
+			////{ "statisticType": "max", "onStatisticField": "MEOneRace" },
+			////{ "statisticType": "max", "onStatisticField": "METotal" },
 
 
 			{ "statisticType": "sum", "onStatisticField": "English" },
@@ -107,11 +107,11 @@ define([
 			});
 		},
 		/**
-		 * @param {string} mapServiceUrl
-		 * @param {Object} options
-		 * @param {number} options.blockGroupLayerId
-		 * @param {number} options.tractLayerId
-		 * @param {number} options.countyLayerId
+		 * @param {string} mapServiceUrl The map service that provides aggregate census data.
+		 * @param {Object} [options]
+		 * @param {number} options.blockGroupLayerId The ID of layer that provides block group level data. Defaults to 0 if options is omitted.
+		 * @param {number} options.tractLayerId The ID of layer that provides tract level data. Defaults to 1 if options is omitted.
+		 * @param {number} options.countyLayerId The ID of layer that provides county level data. Defaults to 2 if options is omitted.
 		 * @constructs
 		 */
 		constructor: function (mapServiceUrl, options) {
