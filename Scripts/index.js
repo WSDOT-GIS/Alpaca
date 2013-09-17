@@ -366,7 +366,13 @@ require([
 					// If a selection polygon is outside of the service area, its 
 					// intersection will be a geometry with an empty "rings" property.
 					// In this case we will set the geometry to null.
-					if (geometry && geometry.rings && geometry.rings.length) {
+					if (geometry &&
+						((geometry.rings && geometry.rings.length)
+						||
+						(geometry.points && geometry.points.length)
+						||
+						(geometry.paths && geometry.paths.length)
+						)) {
 						graphic = new Graphic(geometry);
 						selectionLayer.add(graphic);
 					} else {
@@ -480,7 +486,7 @@ require([
 			}
 
 			// Setup draw toolbar and associated buttons.
-			(function (drawSAButton, drawSelButton, clearSAButton, clearSelButton ) {
+			(function (drawSAButton, drawSelButton, drawPointsSelButton, drawLineSelButton, clearSAButton, clearSelButton ) {
 				var clickHandler, clearHandler;
 				drawToolbar = new Draw(map);
 				
@@ -508,7 +514,7 @@ require([
 					drawToolbar.title6Mode = mode;
 					fillSymbol = mode === "service-area" ? serviceAreaLayer.renderer.symbol : selectionLayer.renderer.symbol;
 					drawToolbar.setFillSymbol(fillSymbol);
-					drawToolbar.activate(Draw.POLYGON);
+					drawToolbar.activate(Draw[this["data-geometry-type"]]);
 					connect.disconnect(popupHandle);
 				};
 
@@ -534,13 +540,20 @@ require([
 				// Attach click events.
 				drawSAButton.on("click", clickHandler);
 				drawSelButton.on("click", clickHandler);
+				drawPointsSelButton.on("click", clickHandler);
+				drawLineSelButton.on("click", clickHandler);
 
 				// Attach clear button click events.
 				clearSAButton.on("click", clearHandler);
 				clearSelButton.on("click", clearHandler);
 
 
-			}(registry.byId("drawServiceAreaButton"), registry.byId("drawSelectionButton"), registry.byId("clearServiceAreaButton"), registry.byId("clearSelectionButton")));
+			}(registry.byId("drawServiceAreaButton"),
+			registry.byId("drawPolylineSelectionButton"),
+			registry.byId("drawPointsSelectionButton"),
+			registry.byId("drawLineSelectionButton"),
+			registry.byId("clearServiceAreaButton"),
+			registry.byId("clearSelectionButton")));
 
 			registry.byId("printMenuItem").on("click", function () {
 				var form;
