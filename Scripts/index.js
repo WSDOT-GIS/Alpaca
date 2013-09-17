@@ -24,8 +24,10 @@ require([
 	"esri/InfoTemplate",
 
 	"dojox/charting/Chart",
+	"dojox/charting/plot2d/Pie",
 	"dojox/charting/plot2d/Columns",
 	"dojox/charting/action2d/Highlight",
+	"dojox/charting/action2d/MoveSlice",
 	"dojox/charting/action2d/Tooltip",
 	"dojox/charting/action2d/Shake",
 	"dojox/charting/action2d/MouseZoomAndPan",
@@ -50,7 +52,7 @@ require([
 ], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, GraphicsLayerList, ChartDataProvider, t6Utils, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask, InfoTemplate,
-	Chart, Columns, Highlight, Tooltip, Shake, MouseZoomAndPan, csvArcGis, LayerUtils, graphicsUtils, esriConfig)
+	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan, csvArcGis, LayerUtils, graphicsUtils, esriConfig)
 {
 	"use strict";
 
@@ -167,35 +169,23 @@ require([
 	}
 
 	function createRaceChart(raceData) {
-		var chart, anim_a, anim_b, anim_c, mouseZoomAndPan;
+		var chart, anim_a, anim_b, anim_c;
 		chart = new Chart("minorityChart", {
 			title: "Minority",
 			titlePos: "top",
 			titleGap: 5
 		});
 		chart.addPlot("default", {
-			////animate: { duration: 1000, easing: easing.linear},
-			type: Columns
-		});
-		chart.addAxis("x", {
-			labels: [
-				{ value: 1, text: "White" },
-				{ value: 2, text: "Non-white" }
-			]
-		});
-		chart.addAxis("y", {
-			vertical: true,
-			includeZero: true
-		});
-		chart.addSeries("Minority", raceData.toColumnChartSeries());
-		mouseZoomAndPan = new MouseZoomAndPan(chart, "default", { axis: "y" });
-		anim_a = new Shake(chart, "default", {
-			shiftX: 10,
-			shiftY: 10
-		});
+			type: Pie,
+			labels: true,
+			font: "normal normal 11pt Tahoma",
+			fontColor: "black",
+			labelOffset: -30,
+			radius: 80
+		}).addSeries("Minority", raceData.toColumnChartSeries());
+		anim_a = new MoveSlice(chart, "default");
 		anim_b = new Highlight(chart, "default");
 		anim_c = new Tooltip(chart, "default");
-		chart.setWindow(1, 1, 0, 0);
 		chart.render();
 		return chart;
 	}
