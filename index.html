@@ -86,7 +86,15 @@
 							<div data-dojo-type="dijit/PopupMenuItem">
 								<span>Selection</span>
 								<div data-dojo-type="dijit/DropDownMenu">
-									<div id="drawSelectionButton" data-title6-mode="selection" data-dojo-type="dijit/MenuItem">Draw</div>
+									<div data-dojo-type="dijit/PopupMenuItem">
+										<span>Draw</span>
+										<div data-dojo-type="dijit/DropDownMenu">
+											<div id="drawPointsSelectionButton" data-title6-mode="selection" data-geometry-type="MULTI_POINT" data-dojo-type="dijit/MenuItem">Points</div>
+											<div id="drawLineSelectionButton" data-title6-mode="selection" data-geometry-type="POLYLINE" data-dojo-type="dijit/MenuItem">Lines</div>
+											<div id="drawPolylineSelectionButton" data-title6-mode="selection" data-geometry-type="POLYGON" data-dojo-type="dijit/MenuItem">Polygon</div>
+										</div>
+									</div>
+									
 									<div id="clearSelectionButton" data-layer-id="selection" 
 										data-dojo-type="dijit/MenuItem" 
 										data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
