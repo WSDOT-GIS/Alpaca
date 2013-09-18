@@ -15,6 +15,7 @@ require([
 	"esri/toolbars/draw",
 	"esri/layers/GraphicsLayer",
 	"esri/renderers/SimpleRenderer",
+	"esri/symbols/SimpleMarkerSymbol",
 	"esri/symbols/SimpleLineSymbol",
 	"esri/symbols/SimpleFillSymbol",
 	"esri/graphic",
@@ -50,7 +51,8 @@ require([
 	"dijit/form/Button",
 	"dijit/DropDownMenu", "dijit/MenuItem"
 ], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
-	LayerChooser, GraphicsLayerList, ChartDataProvider, t6Utils, Draw, GraphicsLayer, SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
+	LayerChooser, GraphicsLayerList, ChartDataProvider, t6Utils, Draw, GraphicsLayer,
+	SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask, InfoTemplate,
 	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan, csvArcGis, LayerUtils, graphicsUtils, esriConfig)
 {
@@ -229,16 +231,30 @@ require([
 			/** Collection of layers of user added graphics.
 			 */
 			function UserGraphicsLayers(/** {esri/Map} */ map) {
+				var pointRenderer, lineRenderer, polygonRenderer, pointSymbol, lineSymbol, polygonSymbol;
 				// Create graphics layers
 
 				this.points = new GraphicsLayer({ id: "userPoints" });
 				this.lines = new GraphicsLayer({ id: "userPoints" });
 				this.polygons = new GraphicsLayer({ id: "userPoints" });
 
+				// Add renderers.
+				pointSymbol = new SimpleMarkerSymbol();
+				lineSymbol = new SimpleLineSymbol();
+				polygonSymbol = new SimpleFillSymbol();
+
+				pointRenderer = new SimpleRenderer(pointSymbol);
+				lineRenderer = new SimpleRenderer(lineSymbol);
+				polygonRenderer = new SimpleRenderer(polygonSymbol);
+
+				this.points.setRenderer(pointRenderer);
+				this.lines.setRenderer(lineRenderer);
+				this.polygons.setRenderer(polygonRenderer);
+
+
 				// Add layers to the map
 				map.addLayers([this.points, this.lines, this.polygons]);
 
-				// TODO add renderers.
 			}
 
 			/** Clears graphics from all of the layers.
