@@ -223,7 +223,46 @@ require([
 		}).then(function (response) {
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
 				serviceAreaLayer, selectionLayer, languageChart,
-				raceChart, aggregateLayerUrl, aggregateQueryTasks, popupHandle, popupListener;
+				raceChart, aggregateLayerUrl, aggregateQueryTasks, popupHandle, popupListener, userGraphicsLayers;
+
+
+			/** Collection of layers of user added graphics.
+			 */
+			function UserGraphicsLayers(/** {esri/Map} */ map) {
+				// Create graphics layers
+
+				this.points = new GraphicsLayer({ id: "userPoints" });
+				this.lines = new GraphicsLayer({ id: "userPoints" });
+				this.polygons = new GraphicsLayer({ id: "userPoints" });
+
+				// Add layers to the map
+				map.addLayers([this.points, this.lines, this.polygons]);
+
+				// TODO add renderers.
+			}
+
+			/** Clears graphics from all of the layers.
+			 */
+			UserGraphicsLayers.prototype.clear = function () {
+				this.points.clear();
+				this.lines.clear();
+				this.polygons.clear();
+			};
+
+			/** Adds a graphic to one of the graphics layers, determined by they geometry type of the graphic.
+			 * @returns {esri/Graphic}
+			 */
+			UserGraphicsLayers.prototype.add = function (/** {esri/Graphic} */ graphic) {
+				var output, layer;
+				if (graphic && graphic.geometry) {
+					// Determine which layer will have a graphic added to it.
+					layer = /(?:multi)?point/i.test(graphic.geometry.type) ? this.points
+						: graphic.geometry.type === "polyline" ? this.lines.add(graphic)
+						: this.polygons;
+					output = layer.add(graphic);
+				}
+				return output;
+			};
 
 			/** Creates the service area layer and adds it to the map.
 			 * @returns {esri/layers/GraphicsLayer}
