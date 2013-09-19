@@ -322,12 +322,6 @@ require([
 				layer.setRenderer(renderer);
 				map.addLayer(layer);
 
-				layer.on("graphics-clear", function () {
-					if (userGraphicsLayers) {
-						userGraphicsLayers.clear();
-					}
-				});
-
 				return layer;
 			}
 
@@ -591,7 +585,7 @@ require([
 					drawToolbar.title6Mode = mode;
 					fillSymbol = mode === "service-area" ? serviceAreaLayer.renderer.symbol : selectionLayer.renderer.symbol;
 					drawToolbar.setFillSymbol(fillSymbol);
-					drawToolbar.activate(Draw[this["data-geometry-type"]]);
+					drawToolbar.activate(Draw[this["data-geometry-type"] || "POLYGON"]);
 					connect.disconnect(popupHandle);
 				};
 
@@ -609,6 +603,10 @@ require([
 						// Clear the graphics layer if it exists.
 						if (layer) {
 							layer.clear();
+						}
+
+						if (layerId === "selection" && userGraphicsLayers) {
+							userGraphicsLayers.clear();
 						}
 					}
 					chartDataProvider.updateCharts();
