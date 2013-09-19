@@ -235,13 +235,15 @@ require([
 				// Create graphics layers
 
 				this.points = new GraphicsLayer({ id: "userPoints" });
-				this.lines = new GraphicsLayer({ id: "userPoints" });
-				this.polygons = new GraphicsLayer({ id: "userPoints" });
+				this.lines = new GraphicsLayer({ id: "userLines" });
+				this.polygons = new GraphicsLayer({ id: "userPolygons" });
 
 				// Add renderers.
 				pointSymbol = new SimpleMarkerSymbol();
 				lineSymbol = new SimpleLineSymbol();
+				lineSymbol.setColor("#000000");
 				polygonSymbol = new SimpleFillSymbol();
+				polygonSymbol.setOutline(lineSymbol);
 
 				pointRenderer = new SimpleRenderer(pointSymbol);
 				lineRenderer = new SimpleRenderer(lineSymbol);
@@ -270,11 +272,20 @@ require([
 			 */
 			UserGraphicsLayers.prototype.add = function (/** {esri/Graphic} */ graphic) {
 				var output, layer;
+
+				// Is this a geometry and not a graphic? Create a graphic.
+				if (graphic.type) {
+					graphic = new Graphic(graphic);
+				}
+
+				// Clear the existing graphics.
+				this.clear();
 				if (graphic && graphic.geometry) {
 					// Determine which layer will have a graphic added to it.
 					layer = /(?:multi)?point/i.test(graphic.geometry.type) ? this.points
-						: graphic.geometry.type === "polyline" ? this.lines.add(graphic)
+						: graphic.geometry.type === "polyline" ? this.lines
 						: this.polygons;
+					// Add the graphic.
 					output = layer.add(graphic);
 				}
 				return output;
@@ -310,6 +321,13 @@ require([
 				});
 				layer.setRenderer(renderer);
 				map.addLayer(layer);
+
+				layer.on("graphics-clear", function () {
+					if (userGraphicsLayers) {
+						userGraphicsLayers.clear();
+					}
+				});
+
 				return layer;
 			}
 
@@ -457,6 +475,8 @@ require([
 						updateCharts(drawResponse.geometry);
 					});
 				}
+
+				userGraphicsLayers.add(drawResponse.geometry);
 			}
 
 			popupHandle = response.clickEventHandle;
@@ -493,7 +513,7 @@ require([
 			});
 
 			graphicsLayerList = new GraphicsLayerList(map, "graphicsLayerList", {
-				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)/i
+				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))/i
 			});
 
 			basemapGallery = new BasemapGallery({
@@ -544,6 +564,8 @@ require([
 			(function (drawSAButton, drawSelButton, drawPointsSelButton, drawLineSelButton, clearSAButton, clearSelButton ) {
 				var clickHandler, clearHandler;
 				drawToolbar = new Draw(map);
+
+				userGraphicsLayers = new UserGraphicsLayers(map);
 				
 
 				drawToolbar.on("draw-complete", function (drawResponse) {
