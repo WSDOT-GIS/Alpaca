@@ -30,4 +30,6 @@ Parameters
 * Service area geometry (optional)
 
 ## License ##
-See the `LICENSE` file for details.
+Licensed under [The MIT License]. See the `LICENSE.txt` file for details.
+
+[The MIT License]:http://choosealicense.com/licenses/mit/
