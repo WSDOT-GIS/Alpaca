@@ -37,6 +37,7 @@ require([
 
 	"esri/graphicsUtils",
 	"esri/config",
+	"esri/geometry/jsonUtils",
 	"title6/UserGraphicsLayers",
 
 	"dijit/Dialog",
@@ -54,7 +55,8 @@ require([
 	LayerChooser, GraphicsLayerList, ChartDataProvider, t6Utils, Draw, GraphicsLayer,
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask, InfoTemplate,
-	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan, csvArcGis, LayerUtils, graphicsUtils, esriConfig, UserGraphicsLayers)
+	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan, csvArcGis, LayerUtils,
+	graphicsUtils, esriConfig, jsonUtils, UserGraphicsLayers)
 {
 	"use strict";
 
@@ -362,7 +364,14 @@ require([
 			 * @param {esri/geometry/Geometry} drawResponse.geographicGeometry
 			 */
 			function setSelection(drawResponse) {
-				var saGeometry;
+				var saGeometry, selectionGeometry;
+
+				if (drawResponse.geometry) {
+					selectionGeometry = drawResponse.geometry;
+				} else if (typeof drawResponse === "string") {
+					selectionGeometry = JSON.parse(drawResponse);
+					selectionGeometry = jsonUtils.fromJson(selectionGeometry);
+				}
 
 				selectionLayer.clear();
 
@@ -393,23 +402,23 @@ require([
 				saGeometry = getServiceAreaGeometry();
 
 				if (!saGeometry) {
-					updateCharts(drawResponse.geometry);
+					updateCharts(selectionGeometry);
 				} else {
-					geometryService.intersect([drawResponse.geometry], saGeometry, function (/** {Geometry[]} */ geometries) {
+					geometryService.intersect([selectionGeometry], saGeometry, function (/** {Geometry[]} */ geometries) {
 						if (geometries && geometries.length) {
 							updateCharts(geometries[0]);
 						} else {
-							updateCharts(drawResponse.geometry);
+							updateCharts(selectionGeometry);
 						}
 					}, function (/** {Error} */ error) {
 						// Log an error to the console (if supported by browser);
 						console.error("Error with Geometry Service intersect operation", error);
 						// Update the charts with the un-intersected geometry.
-						updateCharts(drawResponse.geometry);
+						updateCharts(selectionGeometry);
 					});
 				}
 
-				userGraphicsLayers.add(drawResponse.geometry);
+				userGraphicsLayers.add(selectionGeometry);
 			}
 
 			popupHandle = response.clickEventHandle;
@@ -499,6 +508,25 @@ require([
 				drawToolbar = new Draw(map);
 
 				userGraphicsLayers = new UserGraphicsLayers(map);
+
+				if (!window.addEventListener || !window.localStorage || !window.JSON) {
+					window.alert("This browser does not support saving of graphics. Saving of geometry requires support for window.addEventListener, window.localStorage, and window.JSON.");
+				} else {
+					window.addEventListener("beforeunload", function (/*e*/) {
+						var selectionGeometry;
+						selectionGeometry = userGraphicsLayers.getGeometryForStorage();
+						if (selectionGeometry) {
+							window.localStorage.setItem("title6_selectionGeometry", selectionGeometry);
+						} else if (window.localStorage.title6_selectionGeometry) {
+							window.localStorage.removeItem("title6_selectionGeometry");
+						}
+						
+					});
+
+					if (window.localStorage.title6_selectionGeometry) {
+						setSelection(window.localStorage.title6_selectionGeometry);
+					}
+				}
 				
 
 				drawToolbar.on("draw-complete", function (drawResponse) {

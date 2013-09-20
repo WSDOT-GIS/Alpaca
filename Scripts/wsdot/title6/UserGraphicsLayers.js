@@ -51,9 +51,14 @@ define(["esri/graphic",
 	/** Adds a graphic to one of the graphics layers, determined by they geometry type of the graphic.
 	 * @param {(esri/Graphic|esri/geometry/Geometry|string} graphic Either a graphic, geometry, or JSON string representation of a geometry.
 	 * @returns {esri/Graphic}
+	 * @throws {TypeError} Throws if graphic parameter is null or falsey.
 	 */
 	UserGraphicsLayers.prototype.add = function (/** {(esri/Graphic|esri/geometry/Geometry|string} */ graphic) {
 		var output, layer;
+
+		if (!graphic) {
+			throw new TypeError("Input parameter must be a Graphic, Geometry, or a JSON string representation of a geometry.");
+		}
 
 		// Parse a JSON string into geometry.
 		if (typeof graphic === "string") {
@@ -100,7 +105,7 @@ define(["esri/graphic",
 		}
 
 		return geometry ? JSON.stringify(geometry) : null;
-	}
+	};
 
 	return UserGraphicsLayers;
 });
