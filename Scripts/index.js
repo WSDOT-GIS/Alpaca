@@ -318,6 +318,7 @@ require([
 				// Clear the existing graphics.
 				serviceAreaLayer.clear();
 				if (typeof drawResponse === "string") { // If it's a string, then its a geometry representation from localStorage.
+					selectionLayer.clear();
 					serviceAreaLayer.add(new Graphic(jsonUtils.fromJson(JSON.parse(drawResponse))));
 				} else {
 					queryAggregateLayerForServiceArea(drawResponse.geometry);
