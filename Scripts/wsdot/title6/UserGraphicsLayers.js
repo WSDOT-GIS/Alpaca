@@ -5,8 +5,9 @@ define(["esri/graphic",
 	"esri/renderers/SimpleRenderer",
 	"esri/symbols/SimpleMarkerSymbol",
 	"esri/symbols/SimpleLineSymbol",
-	"esri/symbols/SimpleFillSymbol"
-], function (Graphic, GraphicsLayer, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol) {
+	"esri/symbols/SimpleFillSymbol",
+	"esri/geometry/jsonUtils"
+], function (Graphic, GraphicsLayer, SimpleRenderer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, jsonUtils) {
 	"use strict";
 	/** Collection of layers of user added graphics.
 	 */
@@ -48,10 +49,17 @@ define(["esri/graphic",
 	};
 
 	/** Adds a graphic to one of the graphics layers, determined by they geometry type of the graphic.
+	 * @param {(esri/Graphic|esri/geometry/Geometry|string} graphic Either a graphic, geometry, or JSON string representation of a geometry.
 	 * @returns {esri/Graphic}
 	 */
-	UserGraphicsLayers.prototype.add = function (/** {esri/Graphic} */ graphic) {
+	UserGraphicsLayers.prototype.add = function (/** {(esri/Graphic|esri/geometry/Geometry|string} */ graphic) {
 		var output, layer;
+
+		// Parse a JSON string into geometry.
+		if (typeof graphic === "string") {
+			graphic = JSON.parse(graphic);
+			graphic = jsonUtils.fromJson(graphic);
+		}
 
 		// Is this a geometry and not a graphic? Create a graphic.
 		if (graphic.type) {
@@ -70,6 +78,29 @@ define(["esri/graphic",
 		}
 		return output;
 	};
+
+	/** Gets the geometry currently in the graphics layers. 
+	 * Since there should only be one graphic stored at a time, there
+	 * will only be a single geometry returned.
+	 * @returns {string} Returns a JSON string representation of a geometry if there is a graphic, null if there are no graphics.
+	 */
+	UserGraphicsLayers.prototype.getGeometryForStorage = function () {
+		var graphic, geometry;
+
+		if (this.points.graphics.length) {
+			graphic = this.points.graphics[0];
+		} else if (this.lines.graphics.length) {
+			graphic = this.lines.graphics[0];
+		} else if (this.polygons.graphics.length) {
+			graphic = this.polygons.graphics[0];
+		}
+
+		if (graphic && graphic.geometry) {
+			geometry = graphic.geometry.toJson();
+		}
+
+		return geometry ? JSON.stringify(geometry) : null;
+	}
 
 	return UserGraphicsLayers;
 });
