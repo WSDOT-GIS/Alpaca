@@ -317,7 +317,11 @@ require([
 			function setServiceArea(drawResponse) {
 				// Clear the existing graphics.
 				serviceAreaLayer.clear();
-				queryAggregateLayerForServiceArea(drawResponse.geometry);
+				if (typeof drawResponse === "string") { // If it's a string, then its a geometry representation from localStorage.
+					serviceAreaLayer.add(new Graphic(jsonUtils.fromJson(JSON.parse(drawResponse))));
+				} else {
+					queryAggregateLayerForServiceArea(drawResponse.geometry);
+				}
 			}
 
 			/** Gets the geometry from the first graphic in the service area layer.
@@ -509,22 +513,44 @@ require([
 
 				userGraphicsLayers = new UserGraphicsLayers(map);
 
-				if (!window.addEventListener || !window.localStorage || !window.JSON) {
+				// Setup loading and saving to / from localStorage.
+				if (!window.addEventListener || !localStorage || !JSON) {
 					window.alert("This browser does not support saving of graphics. Saving of geometry requires support for window.addEventListener, window.localStorage, and window.JSON.");
 				} else {
 					window.addEventListener("beforeunload", function (/*e*/) {
-						var selectionGeometry;
+						var selectionGeometry, serviceAreaGeometry;
+
+						// Save the selection.
 						selectionGeometry = userGraphicsLayers.getGeometryForStorage();
 						if (selectionGeometry) {
-							window.localStorage.setItem("title6_selectionGeometry", selectionGeometry);
-						} else if (window.localStorage.title6_selectionGeometry) {
-							window.localStorage.removeItem("title6_selectionGeometry");
+							localStorage.setItem("title6_selectionGeometry", selectionGeometry);
+						} else if (localStorage.title6_selectionGeometry) {
+							localStorage.removeItem("title6_selectionGeometry");
 						}
+
+						// Save the service area.
+						if (serviceAreaLayer.graphics && serviceAreaLayer.graphics.length) {
+							serviceAreaGeometry = serviceAreaLayer.graphics[0].geometry;
+						}
+						if (serviceAreaGeometry) {
+							// Strip unneeded properties.
+							if (serviceAreaGeometry.toJson) {
+								serviceAreaGeometry = serviceAreaGeometry.toJson();
+							}
+							serviceAreaGeometry = JSON.stringify(serviceAreaGeometry);
+							localStorage.setItem("title6_serviceAreaGeometry", serviceAreaGeometry);
+						} else {
+							localStorage.removeItem("title6_serviceAreaGeometry");
+						}
+						
 						
 					});
 
-					if (window.localStorage.title6_selectionGeometry) {
-						setSelection(window.localStorage.title6_selectionGeometry);
+					if (localStorage.title6_serviceAreaGeometry) {
+						setServiceArea(localStorage.title6_serviceAreaGeometry);
+					}
+					if (localStorage.title6_selectionGeometry) {
+						setSelection(localStorage.title6_selectionGeometry);
 					}
 				}
 				
