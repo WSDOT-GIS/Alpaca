@@ -521,7 +521,6 @@ require([
 					window.addEventListener("beforeunload", function (/*e*/) {
 						var selectionGeometry, serviceAreaGeometry, mapCenter;
 
-						//localStorage.setItem("title6_mapExtent", JSON.stringify(map.extent.toJson()));
 						mapCenter = map.geographicExtent.getCenter();
 						localStorage.setItem("title6_mapCenter", JSON.stringify([mapCenter.x, mapCenter.y]));
 						localStorage.setItem("title6_mapZoom", String(map.getZoom()));
