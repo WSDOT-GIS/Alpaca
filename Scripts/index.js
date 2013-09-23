@@ -219,8 +219,8 @@ require([
 		arcgisUtils.createMap("b96dcdee3dfa498badcf9ea871cc1895", "map", {
 			mapOptions: {
 				//basemap: "gray",
-				center: [-120.80566406246835, 47.41322033015946],
-				zoom: 7,
+				center: JSON && localStorage && localStorage.title6_mapCenter ? JSON.parse(localStorage.title6_mapCenter) : [-120.80566406246835, 47.41322033015946],
+				zoom: localStorage && localStorage.title6_mapZoom ? Number(localStorage.title6_mapZoom) : 7,
 				showAttribution: true,
 				logo: false
 			}
@@ -519,7 +519,13 @@ require([
 					window.alert("This browser does not support saving of graphics. Saving of geometry requires support for window.addEventListener, window.localStorage, and window.JSON.");
 				} else {
 					window.addEventListener("beforeunload", function (/*e*/) {
-						var selectionGeometry, serviceAreaGeometry;
+						var selectionGeometry, serviceAreaGeometry, mapCenter;
+
+						//localStorage.setItem("title6_mapExtent", JSON.stringify(map.extent.toJson()));
+						mapCenter = map.geographicExtent.getCenter();
+						localStorage.setItem("title6_mapCenter", JSON.stringify([mapCenter.x, mapCenter.y]));
+						localStorage.setItem("title6_mapZoom", String(map.getZoom()));
+						
 
 						// Save the selection.
 						selectionGeometry = userGraphicsLayers.getGeometryForStorage();
