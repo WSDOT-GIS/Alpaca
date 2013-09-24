@@ -6,12 +6,12 @@ define([
 	"esri/tasks/query",
 	"esri/tasks/QueryTask",
 	"esri/tasks/StatisticDefinition",
-	"title6/raceData",
-	"title6/languageData",
-	"title6/utils"
+	"alpaca/raceData",
+	"alpaca/languageData",
+	"alpaca/utils"
 ], function (declare, Evented, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, utils) {
 	/** Provides classes for updating charts.
-	 * @exports wsdot/title6/chartDataProvider
+	 * @exports wsdot/alpaca/chartDataProvider
 	 */
 	"use strict";
 	var ChartDataProvider;

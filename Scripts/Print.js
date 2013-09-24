@@ -6,8 +6,8 @@ require([
 	"esri/graphic",
 	"esri/layers/GraphicsLayer",
 	"esri/renderers/SimpleRenderer",
-	"title6/languageData",
-	"title6/raceData"
+	"alpaca/languageData",
+	"alpaca/raceData"
 ], function (Map, Extent, Graphic, GraphicsLayer, SimpleRenderer, LanguageData, RaceData) {
 	"use strict";
 	var map, qsParameters, dataDiv;

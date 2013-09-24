@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Print.aspx.cs" Inherits="TitleVI.Print" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Print.aspx.cs" Inherits="Wsdot.Alpaca.Print" %>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -29,7 +29,7 @@
 				async: true,
 				parseOnLoad: true,
 				paths: {
-					"title6": url + "Scripts/wsdot/title6"
+					"alpaca": url + "Scripts/wsdot/alpaca"
 				}
 			};
 

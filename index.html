@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-	<title>Test</title>
+	<title>ALPACA - Application for Local Planning and Community Accessibility</title>
 	<link rel="stylesheet" href="//js.arcgis.com/3.7/js/esri/css/esri.css" />
 	<link href="//js.arcgis.com/3.7/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet" />
 	<link href="Style/index.min.css" rel="stylesheet" />
@@ -16,7 +16,7 @@
 				async: true,
 				parseOnLoad: true,
 				paths: {
-					"title6": url + "Scripts/wsdot/title6"
+					"alpaca": url + "Scripts/wsdot/alpaca"
 				},
 				packages: [
 					{
@@ -76,7 +76,7 @@
 							<div data-dojo-type="dijit/PopupMenuItem">
 								<span>Service Area</span>
 								<div data-dojo-type="dijit/DropDownMenu">
-									<div id="drawServiceAreaButton" data-title6-mode="service-area" data-dojo-type="dijit/MenuItem">Draw</div>
+									<div id="drawServiceAreaButton" data-alpaca-mode="service-area" data-dojo-type="dijit/MenuItem">Draw</div>
 									<div id="clearServiceAreaButton" data-layer-id="serviceArea" data-dojo-type="dijit/MenuItem"
 										data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
 									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
@@ -88,9 +88,9 @@
 									<div data-dojo-type="dijit/PopupMenuItem">
 										<span>Draw</span>
 										<div data-dojo-type="dijit/DropDownMenu">
-											<div id="drawPointsSelectionButton" data-title6-mode="selection" data-geometry-type="MULTI_POINT" data-dojo-type="dijit/MenuItem">Points</div>
-											<div id="drawLineSelectionButton" data-title6-mode="selection" data-geometry-type="POLYLINE" data-dojo-type="dijit/MenuItem">Lines</div>
-											<div id="drawPolylineSelectionButton" data-title6-mode="selection" data-geometry-type="POLYGON" data-dojo-type="dijit/MenuItem">Polygon</div>
+											<div id="drawPointsSelectionButton" data-alpaca-mode="selection" data-geometry-type="MULTI_POINT" data-dojo-type="dijit/MenuItem">Points</div>
+											<div id="drawLineSelectionButton" data-alpaca-mode="selection" data-geometry-type="POLYLINE" data-dojo-type="dijit/MenuItem">Lines</div>
+											<div id="drawPolylineSelectionButton" data-alpaca-mode="selection" data-geometry-type="POLYGON" data-dojo-type="dijit/MenuItem">Polygon</div>
 										</div>
 									</div>
 									

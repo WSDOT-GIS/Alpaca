@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitleVI", "TitleVI.csproj", "{E1473CF7-4E4B-48F8-B4D1-A60FDA07B82A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alpaca", "Alpaca.csproj", "{E1473CF7-4E4B-48F8-B4D1-A60FDA07B82A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

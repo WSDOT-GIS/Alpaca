@@ -8,10 +8,10 @@ require([
 	"esri/arcgis/utils",
 	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
-	"title6/layerChooser",
-	"title6/graphicsLayerList",
-	"title6/chartDataProvider",
-	"title6/utils",
+	"alpaca/layerChooser",
+	"alpaca/graphicsLayerList",
+	"alpaca/chartDataProvider",
+	"alpaca/utils",
 	"esri/toolbars/draw",
 	"esri/layers/GraphicsLayer",
 	"esri/renderers/SimpleRenderer",
@@ -38,7 +38,7 @@ require([
 	"esri/graphicsUtils",
 	"esri/config",
 	"esri/geometry/jsonUtils",
-	"title6/UserGraphicsLayers",
+	"alpaca/UserGraphicsLayers",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -579,8 +579,8 @@ require([
 				clickHandler = function () {
 					var fillSymbol, mode;
 
-					// Get the title6-mode string from the button that was clicked.
-					mode = this["data-title6-mode"];
+					// Get the alpaca-mode string from the button that was clicked.
+					mode = this["data-alpaca-mode"];
 					drawToolbar.title6Mode = mode;
 					fillSymbol = mode === "service-area" ? serviceAreaLayer.renderer.symbol : selectionLayer.renderer.symbol;
 					drawToolbar.setFillSymbol(fillSymbol);

@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TitleVI</RootNamespace>
-    <AssemblyName>TitleVI</AssemblyName>
+    <RootNamespace>Wsdot.Alpaca</RootNamespace>
+    <AssemblyName>Alpaca</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -43,17 +43,17 @@
     <Content Include="Print.aspx" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\Print.js" />
+    <Content Include="Scripts\wsdot\alpaca\chartDataProvider.js" />
+    <Content Include="Scripts\wsdot\alpaca\graphicsLayerList.js" />
+    <Content Include="Scripts\wsdot\alpaca\languageData.js" />
+    <Content Include="Scripts\wsdot\alpaca\layerChooser.js" />
+    <Content Include="Scripts\wsdot\alpaca\raceData.js" />
+    <Content Include="Scripts\wsdot\alpaca\UserGraphicsLayers.js" />
+    <Content Include="Scripts\wsdot\alpaca\utils.js" />
     <Content Include="Scripts\wsdot\CSV-Reader\csvArcGis.js" />
     <Content Include="Scripts\wsdot\CSV-Reader\csvHtml.js" />
     <Content Include="Scripts\wsdot\CSV-Reader\main.js" />
     <Content Include="Scripts\wsdot\layerUtils\main.js" />
-    <Content Include="Scripts\wsdot\title6\chartDataProvider.js" />
-    <Content Include="Scripts\wsdot\title6\graphicsLayerList.js" />
-    <Content Include="Scripts\wsdot\title6\languageData.js" />
-    <Content Include="Scripts\wsdot\title6\layerChooser.js" />
-    <Content Include="Scripts\wsdot\title6\raceData.js" />
-    <Content Include="Scripts\wsdot\title6\UserGraphicsLayers.js" />
-    <Content Include="Scripts\wsdot\title6\utils.js" />
     <Content Include="Style\index.css" />
     <Content Include="Style\index.min.css">
       <DependentUpon>index.css</DependentUpon>
