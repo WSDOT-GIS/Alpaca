@@ -6,9 +6,9 @@ define([
 	"esri/tasks/query",
 	"esri/tasks/QueryTask",
 	"esri/tasks/StatisticDefinition",
-	"alpaca/raceData",
-	"alpaca/languageData",
-	"alpaca/utils"
+	"./raceData",
+	"./languageData",
+	"./utils"
 ], function (declare, Evented, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, utils) {
 	/** Provides classes for updating charts.
 	 * @exports wsdot/alpaca/chartDataProvider
