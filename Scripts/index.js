@@ -144,8 +144,8 @@ require([
 		arcgisUtils.createMap("b96dcdee3dfa498badcf9ea871cc1895", "map", {
 			mapOptions: {
 				//basemap: "gray",
-				center: JSON && localStorage && localStorage.title6_mapCenter ? JSON.parse(localStorage.title6_mapCenter) : [-120.80566406246835, 47.41322033015946],
-				zoom: localStorage && localStorage.title6_mapZoom ? Number(localStorage.title6_mapZoom) : 7,
+				center: window.JSON && window.localStorage && window.localStorage.title6_mapCenter ? JSON.parse(window.localStorage.title6_mapCenter) : [-120.80566406246835, 47.41322033015946],
+				zoom: window.localStorage && window.localStorage.title6_mapZoom ? Number(window.localStorage.title6_mapZoom) : 7,
 				showAttribution: true,
 				logo: false
 			}
@@ -624,7 +624,10 @@ require([
 					}
 				}
 
-				input.addEventListener("change", handleFileSelect, false);
+				if (input.addEventListener) {
+
+					input.addEventListener("change", handleFileSelect, false);
+				}
 
 				menuItem.on("click", function () {
 					if (window.FileReader) {
