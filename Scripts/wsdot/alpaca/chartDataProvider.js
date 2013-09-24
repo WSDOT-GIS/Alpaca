@@ -2,14 +2,17 @@
 /*jslint nomen:true,plusplus:true*/
 define([
 	"dojo/_base/declare",
+	"dojo/Deferred",
 	"dojo/Evented",
+	"esri/config",
+	"esri/graphic",
 	"esri/tasks/query",
 	"esri/tasks/QueryTask",
 	"esri/tasks/StatisticDefinition",
 	"./raceData",
 	"./languageData",
 	"./utils"
-], function (declare, Evented, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, utils) {
+], function (declare, Deferred, Evented, esriConfig, Graphic, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, utils) {
 	/** Provides classes for updating charts.
 	 * @exports wsdot/alpaca/chartDataProvider
 	 */
@@ -59,6 +62,9 @@ define([
 		return output;
 	}
 
+	/** An object used to provide chart data.
+	 * @fires chartDataProvider#service-area-totals-determined
+	 */
 	ChartDataProvider = declare(Evented, {
 
 		_statisticDefinitions: createStatisticDefinitions(),
@@ -105,6 +111,99 @@ define([
 					error: error
 				});
 			});
+		},
+		/** Determines a service area based on a given geometry and scale.
+		 * @param {esri/Geometry} geometry The geometry used to determine the service area.
+		 * @param {Number} scale The scale of the map. Used to determine which query task is used (County, Tract, or Block Group)
+		 * @returns {dojo/Deferred} The "resolve" function contains a single esri/Graphic parameter.
+		 */
+		selectServiceArea: function(geometry, scale) {
+			var self = this, query, queryTask, deferred = new Deferred();
+
+			if (!geometry) {
+				throw new TypeError("No geometry was provided.");
+			}
+
+			// Get the query task for the current scale.
+			queryTask = self.getQueryTaskForScale(scale);
+
+			// Setup the query.
+			query = new Query();
+			query.geometry = geometry;
+			query.outFields = [
+				"OneRace",
+				"White",
+				"NotWhite",
+				"English",
+				"Spanish",
+				"Indo_European",
+				"Asian_PacificIsland",
+				"Other"
+			];
+
+			// Query to determine intersecting geometry.
+			queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
+				var totals, geometries = [], i, l, graphic, attrName, geometryService;
+				// Initiate count totals.
+				totals = {};
+
+				for (i = 0, l = featureSet.features.length; i < l; i += 1) {
+					graphic = featureSet.features[i];
+					// Add the geometry to the geometries array.
+					if (graphic.geometry) {
+						geometries.push(graphic.geometry);
+					}
+					// Add the values from the attributes to the totals
+					for (attrName in graphic.attributes) {
+						if (graphic.attributes.hasOwnProperty(attrName)) {
+							if (!totals[attrName]) {
+								totals[attrName] = graphic.attributes[attrName];
+							} else {
+								totals[attrName] += graphic.attributes[attrName];
+							}
+						}
+					}
+				}
+
+				/**
+				 * service-area-totals-event
+				 * @event chartDataProvider#service-area-totals-determined
+				 * @type {object}
+				 * @property {number} OneRace
+				 * @property {number} White
+				 * @property {number} NotWhite
+				 * @property {number} English
+				 * @property {number} Spanish
+				 * @property {number} Indo_European
+				 * @property {number} Asian_PacificIsland
+				 * @property {number} Other
+				 */
+				self.emit("service-area-totals-determined", totals);
+
+				// Update progress on the deferred object.
+				deferred.progress({
+					message: "totals determined",
+					totals: totals
+				});
+
+				// Get the default geometry service.
+				geometryService = esriConfig.defaults.geometryService;
+				if (!geometryService) {
+					throw new TypeError("esri/config.defaults.geometryService not defined.");
+				}
+				geometryService.union(geometries, function (geometry) {
+					graphic = new Graphic(geometry, null, totals);
+					deferred.resolve(graphic);
+				}, function (error) {
+					error.totals = totals;
+					deferred.reject(error);
+				});
+			}, function (error) {
+				self.emit("service-area-query-error", error);
+				deferred.reject(error);
+			});
+
+			return deferred.promise;
 		},
 		/**
 		 * @param {string} mapServiceUrl The map service that provides aggregate census data.
