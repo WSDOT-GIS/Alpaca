@@ -23,14 +23,7 @@ require([
 	"esri/tasks/QueryTask",
 	"esri/InfoTemplate",
 
-	"dojox/charting/Chart",
-	"dojox/charting/plot2d/Pie",
-	"dojox/charting/plot2d/Columns",
-	"dojox/charting/action2d/Highlight",
-	"dojox/charting/action2d/MoveSlice",
-	"dojox/charting/action2d/Tooltip",
-	"dojox/charting/action2d/Shake",
-	"dojox/charting/action2d/MouseZoomAndPan",
+	"alpaca/chartUtils",
 
 	"CSV-Reader/csvArcGis",
 	"layerUtils",
@@ -55,7 +48,7 @@ require([
 	LayerChooser, GraphicsLayerList, ChartDataProvider, t6Utils, Draw, GraphicsLayer,
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	Graphic, GeometryService, Query, QueryTask, InfoTemplate,
-	Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan, csvArcGis, LayerUtils,
+	chartUtils, csvArcGis, LayerUtils,
 	graphicsUtils, esriConfig, jsonUtils, UserGraphicsLayers)
 {
 	"use strict";
@@ -124,74 +117,6 @@ require([
 		////}
 
 		return url;
-	}
-
-	function createLanguageChart(languageData) {
-		var chart, anim_a, anim_b, anim_c, mouseZoomAndPan;
-		chart = new Chart("languageChart", {
-			title: "Language Proficiency",
-			titlePos: "top",
-			titleGap: 5
-		});
-		chart.addPlot("default", {
-			////animate: { duration: 1000, easing: easing.linear},
-			type: Columns
-		});
-		chart.addAxis("x", {
-			labels: [
-				{ value: 1, text: "English" },
-				{ value: 2, text: "Spanish" },
-				{ value: 3, text: "IndoEu." },
-				{ value: 4, text: "Asian,PI" },
-				{ value: 5, text: "Other" }
-			],
-			dropLabels: false,
-			minorLabels: false,
-			//title: "Language",
-			titleOrientation: "away",
-			majorTickStep: 1,
-			minorTickStep: 0.5,
-			microTickStep: 0.25
-		});
-		chart.addAxis("y", {
-			vertical: true,
-			//max: languageData.getTotal() - languageData.english,
-			//title: "No. of speakers"
-			includeZero: true
-		});
-		chart.addSeries("Language Proficiency", languageData.toColumnChartSeries());
-		mouseZoomAndPan = new MouseZoomAndPan(chart, "default", { axis: "y" });
-		anim_a = new Shake(chart, "default", {
-			shiftX: 10,
-			shiftY: 10
-		});
-		anim_b = new Highlight(chart, "default");
-		anim_c = new Tooltip(chart, "default");
-		chart.setAxisWindow("y", languageData.getNotEnglishZoomScale(), 0);
-		chart.render();
-		return chart;
-	}
-
-	function createRaceChart(raceData) {
-		var chart, anim_a, anim_b, anim_c;
-		chart = new Chart("minorityChart", {
-			title: "Minority",
-			titlePos: "top",
-			titleGap: 5
-		});
-		chart.addPlot("default", {
-			type: Pie,
-			labels: true,
-			font: "normal normal 11pt Tahoma",
-			fontColor: "black",
-			labelOffset: -30,
-			radius: 80
-		}).addSeries("Minority", raceData.toColumnChartSeries());
-		anim_a = new MoveSlice(chart, "default");
-		anim_b = new Highlight(chart, "default");
-		anim_c = new Tooltip(chart, "default");
-		chart.render();
-		return chart;
 	}
 
 	ready(function () {
@@ -479,7 +404,7 @@ require([
 					chartDataProvider = new ChartDataProvider(aggregateLayerUrl);
 					chartDataProvider.on("query-complete", function (response) {
 						if (!languageChart) {
-							languageChart = createLanguageChart(response.chartData.language);
+							languageChart = chartUtils.createLanguageChart(response.chartData.language);
 						} else {
 							// Update the language chart with the response language data.
 							languageChart.updateSeries("Language Proficiency", response.chartData.language.toColumnChartSeries());
@@ -487,7 +412,7 @@ require([
 							languageChart.render();
 						}
 						if (!raceChart) {
-							raceChart = createRaceChart(response.chartData.race);
+							raceChart = chartUtils.createRaceChart(response.chartData.race);
 						} else {
 							// Update the race chart with the response race data.
 							raceChart.updateSeries("Minority", response.chartData.race.toColumnChartSeries());

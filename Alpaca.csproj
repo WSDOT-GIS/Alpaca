@@ -44,6 +44,7 @@
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\Print.js" />
     <Content Include="Scripts\wsdot\alpaca\chartDataProvider.js" />
+    <Content Include="Scripts\wsdot\alpaca\chartUtils.js" />
     <Content Include="Scripts\wsdot\alpaca\graphicsLayerList.js" />
     <Content Include="Scripts\wsdot\alpaca\languageData.js" />
     <Content Include="Scripts\wsdot\alpaca\layerChooser.js" />

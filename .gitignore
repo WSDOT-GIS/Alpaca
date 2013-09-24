@@ -28,6 +28,4 @@ _ReSharper*/
 *.vssscc
 $tf*/
 *.pubxml
-Web.Config
-Web.*.Config
 packages
