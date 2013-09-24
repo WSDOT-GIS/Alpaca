@@ -1,5 +1,5 @@
-﻿Title VI Map Application
-========================
+﻿ALPACA (Application for Local Planning and Community Accessibility)
+===================================================================
 
 ## Chart Data Provider ##
 
