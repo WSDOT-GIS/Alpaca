@@ -517,21 +517,20 @@ require([
 				 * @this {dijit/form/Button}
 				 */
 				clearHandler = function () {
-					var layerId, layer;
+					var layerId;
 					// Get the layer ID from the button that was clicked.
 					layerId = this["data-layer-id"];
 					// Proceed if a data-layer-id is present.
 					if (layerId) {
-						// Get the graphics layer from the map.
-						layer = map.getLayer(layerId);
-						// Clear the graphics layer if it exists.
-						if (layer) {
-							layer.clear();
+						if (layerId === "serviceArea" || layerId === "selection") {
+							// The selection and user graphics need to be cleared even when the service area is cleared.
+							selectionLayer.clear();
+							userGraphicsLayers.clear();
+							if (layerId === "serviceArea") {
+								serviceAreaLayer.clear();
+							}
 						}
 
-						if (layerId === "selection" && userGraphicsLayers) {
-							userGraphicsLayers.clear();
-						}
 					}
 					chartDataProvider.updateCharts();
 				};
