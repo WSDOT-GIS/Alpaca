@@ -115,9 +115,10 @@ define([
 		/** Determines a service area based on a given geometry and scale.
 		 * @param {esri/Geometry} geometry The geometry used to determine the service area.
 		 * @param {Number} scale The scale of the map. Used to determine which query task is used (County, Tract, or Block Group)
-		 * @returns {dojo/Deferred} The "resolve" function contains a single esri/Graphic parameter.
+		 * @param {Boolean} union Set to true to union the returned geometry. (Output will be a single graphic in this case.) Set to false to skip the union operation.
+		 * @returns {dojo/Deferred} The "resolve" function contains a single esri/Graphic parameter if union is true.
 		 */
-		selectServiceArea: function(geometry, scale) {
+		getSelectionGraphics: function(geometry, scale, union) {
 			var self = this, query, queryTask, deferred = new Deferred();
 
 			if (!geometry) {
@@ -143,7 +144,7 @@ define([
 
 			// Query to determine intersecting geometry.
 			queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
-				var totals, geometries = [], i, l, graphic, attrName, geometryService;
+				var totals, geometries = [], i, l, graphic, attrName, geometryService, output;
 				// Initiate count totals.
 				totals = {};
 
@@ -165,39 +166,54 @@ define([
 					}
 				}
 
-				/**
-				 * service-area-totals-event
-				 * @event chartDataProvider#service-area-totals-determined
-				 * @type {object}
-				 * @property {number} OneRace
-				 * @property {number} White
-				 * @property {number} NotWhite
-				 * @property {number} English
-				 * @property {number} Spanish
-				 * @property {number} Indo_European
-				 * @property {number} Asian_PacificIsland
-				 * @property {number} Other
-				 */
-				self.emit("service-area-totals-determined", totals);
+				if (union) {
 
-				// Update progress on the deferred object.
-				deferred.progress({
-					message: "totals determined",
-					totals: totals
-				});
+					/**
+					 * service-area-totals-event
+					 * @event chartDataProvider#service-area-totals-determined
+					 * @type {object}
+					 * @property {number} OneRace
+					 * @property {number} White
+					 * @property {number} NotWhite
+					 * @property {number} English
+					 * @property {number} Spanish
+					 * @property {number} Indo_European
+					 * @property {number} Asian_PacificIsland
+					 * @property {number} Other
+					 */
+					self.emit("service-area-totals-determined", totals);
 
-				// Get the default geometry service.
-				geometryService = esriConfig.defaults.geometryService;
-				if (!geometryService) {
-					throw new TypeError("esri/config.defaults.geometryService not defined.");
+					// Update progress on the deferred object.
+					deferred.progress({
+						message: "totals determined",
+						totals: totals
+					});
+
+					// Get the default geometry service.
+					geometryService = esriConfig.defaults.geometryService;
+					if (!geometryService) {
+						throw new TypeError("esri/config.defaults.geometryService not defined.");
+					}
+					geometryService.union(geometries, function (geometry) {
+						graphic = new Graphic(geometry, null, totals);
+						output = {
+							chartData: new ChartData(totals),
+							features: [graphic]
+						};
+						self.emit("union-complete", output);
+						deferred.resolve(output);
+					}, function (error) {
+						error.totals = new ChartData(totals);
+						deferred.reject(error);
+					});
+				} else {
+					output = {
+						chartdata: new ChartData(totals),
+						features: featureSet.features
+					};
+					deferred.resolve(output);
+					self.emit("selection-query-complete", output);
 				}
-				geometryService.union(geometries, function (geometry) {
-					graphic = new Graphic(geometry, null, totals);
-					deferred.resolve(graphic);
-				}, function (error) {
-					error.totals = totals;
-					deferred.reject(error);
-				});
 			}, function (error) {
 				self.emit("service-area-query-error", error);
 				deferred.reject(error);
