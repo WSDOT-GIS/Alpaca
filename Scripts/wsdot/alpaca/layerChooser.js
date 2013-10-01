@@ -81,7 +81,7 @@ define([
 			// Radio button
 			self.radioButton = document.createElement("input");
 			self.radioButton.type = "radio";
-			self.radioButton.id = ["layer_chooser_radio_", opLayer.layerObject.id].join("");
+			self.radioButton.id = ["layer_chooser_radio_", opLayer.layerObject ? opLayer.layerObject.id : opLayer.id].join("");
 			self.radioButton.value = opLayer.id;
 			self.radioButton.name = "layer_chooser";
 			if (options.checked) {
@@ -96,65 +96,67 @@ define([
 
 			self.domNode.appendChild(self.label);
 
-			on(self.radioButton, "click", function () {
-				self.emit("checked", {
-					id: self.radioButton.value,
-					visible: self.radioButton.checked
-				});
-			});
+
 
 			// If the layer has errors, disable the radio button
 			if (opLayer.errors && opLayer.errors.length) {
 				self.radioButton.disabled = true;
 				//self.domNode.classList.add("layer-chooser-layer-error");
 				domClass.add(self.domNode, "layer-chooser-layer-error");
-			}
-
-			// Create the controls div.
-			// The controls that are only shown when the layer is checked will be placed inside of this div.
-			// The hiding of this div is performed by the stylesheet.
-			controlsDiv = document.createElement("div");
-			domClass.add(controlsDiv, "layer-chooser-layer-controls");
-			self.domNode.appendChild(controlsDiv);
-
-			// Add the opacity slider
-
-			self.opacitySlider = new HorizontalSlider({
-				value: opLayer.layerObject.opacity,
-				minimum: 0,
-				maximum: 1,
-				onChange: function (value) {
-					opLayer.layerObject.setOpacity(value);
-				}
-			});
-
-			controlsDiv.appendChild(self.opacitySlider.domNode);
-
-
-			
-			if (options.includeSublayers) {
-				self.sublayerList = new SublayerList(opLayer.layerObject);
-				controlsDiv.appendChild(self.sublayerList.domNode);
-				self.sublayerList.on("sublayer-select", function (e) {
-					self.emit("sublayer-select", e);
+			} else {
+				on(self.radioButton, "click", function () {
+					self.emit("checked", {
+						id: self.radioButton.value,
+						visible: self.radioButton.checked
+					});
 				});
-			}
 
-			// Create the legend...
-			legendDiv = document.createElement("div");
-			////legendDiv.classList.add("layer-chooser-legend");
-			domClass.add(legendDiv, "layer-chooser-legend");
-			controlsDiv.appendChild(legendDiv);
-			self.legend = new Legend({
-				autoUpdate: true,
-				map: options.map,
-				layerInfos: [
-					{
-						layer: opLayer.layerObject,
-						title: opLayer.title
+				// Create the controls div.
+				// The controls that are only shown when the layer is checked will be placed inside of this div.
+				// The hiding of this div is performed by the stylesheet.
+				controlsDiv = document.createElement("div");
+				domClass.add(controlsDiv, "layer-chooser-layer-controls");
+				self.domNode.appendChild(controlsDiv);
+
+				// Add the opacity slider
+
+				self.opacitySlider = new HorizontalSlider({
+					value: opLayer.layerObject.opacity,
+					minimum: 0,
+					maximum: 1,
+					onChange: function (value) {
+						opLayer.layerObject.setOpacity(value);
 					}
-				]
-			}, legendDiv);
+				});
+
+				controlsDiv.appendChild(self.opacitySlider.domNode);
+
+
+
+				if (options.includeSublayers) {
+					self.sublayerList = new SublayerList(opLayer.layerObject);
+					controlsDiv.appendChild(self.sublayerList.domNode);
+					self.sublayerList.on("sublayer-select", function (e) {
+						self.emit("sublayer-select", e);
+					});
+				}
+
+				// Create the legend...
+				legendDiv = document.createElement("div");
+				////legendDiv.classList.add("layer-chooser-legend");
+				domClass.add(legendDiv, "layer-chooser-legend");
+				controlsDiv.appendChild(legendDiv);
+				self.legend = new Legend({
+					autoUpdate: true,
+					map: options.map,
+					layerInfos: [
+						{
+							layer: opLayer.layerObject,
+							title: opLayer.title
+						}
+					]
+				}, legendDiv);
+			}
 		}
 	});
 
@@ -231,37 +233,43 @@ define([
 			// Create the radio buttons and place each into a document fragment as it is created.
 
 			for (i = operationalLayers.length - 1; i >= 0; i--) {
-				opLayer = operationalLayers[i];
+				try {
+					opLayer = operationalLayers[i];
 
-				if (!options.omittedMapServices || !options.omittedMapServices.test(opLayer.title)) {
+					if (!options.omittedMapServices || !options.omittedMapServices.test(opLayer.title)) {
 
-					layerRadio = new LayerRadioButton({
-						operationalLayer: opLayer,
-						map: self.map,
-						//layerId: opLayer.id,
-						//label: opLayer.title,
-						checked: !firstLayerFound, // Only check the first valid layer's radio button.
-						//errors: opLayer.errors
-						includeSublayers: !/^(?:Boundaries)|(?:Minority)$/i.test(opLayer.title)
-					});
+						layerRadio = new LayerRadioButton({
+							operationalLayer: opLayer,
+							map: self.map,
+							//layerId: opLayer.id,
+							//label: opLayer.title,
+							checked: !firstLayerFound, // Only check the first valid layer's radio button.
+							//errors: opLayer.errors
+							includeSublayers: !/^(?:Boundaries)|(?:Minority)$/i.test(opLayer.title)
+						});
 
-					layerRadio.on("checked", toggleLayer);
-					layerRadio.on("sublayer-select", emitSublayerEvent);
+						layerRadio.on("checked", toggleLayer);
+						layerRadio.on("sublayer-select", emitSublayerEvent);
 
-					if (!(opLayer.errors && opLayer.errors.length)) {
-						// Show the first layer, hide the others.
-						if (!firstLayerFound) {
-							opLayer.layerObject.show();
-							firstLayerFound = true;
-						} else {
-							opLayer.layerObject.hide();
+						if (!(opLayer.errors && opLayer.errors.length)) {
+							// Show the first layer, hide the others.
+							if (!firstLayerFound) {
+								opLayer.layerObject.show();
+								firstLayerFound = true;
+							} else {
+								opLayer.layerObject.hide();
+							}
 						}
-					}
 
-					self.list.appendChild(layerRadio.domNode);
-					layerRadio.legend.startup();
+						self.list.appendChild(layerRadio.domNode);
+						layerRadio.legend.startup();
+					}
+				} catch (lError) {
+					if (console && console.error) {
+						console.error("Error creating layer radio button", lError);
+					}
 				}
-			}
+			} 
 		}
 	});
 

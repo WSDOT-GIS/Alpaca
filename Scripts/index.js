@@ -54,6 +54,7 @@ require([
 	"use strict";
 
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
+	////esriConfig.defaults.io.timeout = 3000;
 
 	if (!window.console) {
 		window.console = {};
@@ -420,9 +421,13 @@ require([
 
 			basemapGallery.startup();
 
-			layerChooser = new LayerChooser(response, "layerToggle", {
-				omittedMapServices: /Aggregate/i
-			});
+			try {
+				layerChooser = new LayerChooser(response, "layerToggle", {
+					omittedMapServices: /Aggregate/i
+				});
+			} catch (lcError) {
+				console.error("Error creating layer chooser", lcError);
+			}
 
 			if (aggregateLayerUrl) {
 				try {
