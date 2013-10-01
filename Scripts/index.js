@@ -54,7 +54,7 @@ require([
 	"use strict";
 
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
-	esriConfig.defaults.io.timeout = 3000;
+	////esriConfig.defaults.io.timeout = 3000;
 
 	if (!window.console) {
 		window.console = {};

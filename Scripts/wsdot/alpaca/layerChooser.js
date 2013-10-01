@@ -233,37 +233,43 @@ define([
 			// Create the radio buttons and place each into a document fragment as it is created.
 
 			for (i = operationalLayers.length - 1; i >= 0; i--) {
-				opLayer = operationalLayers[i];
+				try {
+					opLayer = operationalLayers[i];
 
-				if (!options.omittedMapServices || !options.omittedMapServices.test(opLayer.title)) {
+					if (!options.omittedMapServices || !options.omittedMapServices.test(opLayer.title)) {
 
-					layerRadio = new LayerRadioButton({
-						operationalLayer: opLayer,
-						map: self.map,
-						//layerId: opLayer.id,
-						//label: opLayer.title,
-						checked: !firstLayerFound, // Only check the first valid layer's radio button.
-						//errors: opLayer.errors
-						includeSublayers: !/^(?:Boundaries)|(?:Minority)$/i.test(opLayer.title)
-					});
+						layerRadio = new LayerRadioButton({
+							operationalLayer: opLayer,
+							map: self.map,
+							//layerId: opLayer.id,
+							//label: opLayer.title,
+							checked: !firstLayerFound, // Only check the first valid layer's radio button.
+							//errors: opLayer.errors
+							includeSublayers: !/^(?:Boundaries)|(?:Minority)$/i.test(opLayer.title)
+						});
 
-					layerRadio.on("checked", toggleLayer);
-					layerRadio.on("sublayer-select", emitSublayerEvent);
+						layerRadio.on("checked", toggleLayer);
+						layerRadio.on("sublayer-select", emitSublayerEvent);
 
-					if (!(opLayer.errors && opLayer.errors.length)) {
-						// Show the first layer, hide the others.
-						if (!firstLayerFound) {
-							opLayer.layerObject.show();
-							firstLayerFound = true;
-						} else {
-							opLayer.layerObject.hide();
+						if (!(opLayer.errors && opLayer.errors.length)) {
+							// Show the first layer, hide the others.
+							if (!firstLayerFound) {
+								opLayer.layerObject.show();
+								firstLayerFound = true;
+							} else {
+								opLayer.layerObject.hide();
+							}
 						}
-					}
 
-					self.list.appendChild(layerRadio.domNode);
-					layerRadio.legend.startup();
+						self.list.appendChild(layerRadio.domNode);
+						layerRadio.legend.startup();
+					}
+				} catch (lError) {
+					if (console && console.error) {
+						console.error("Error creating layer radio button", lError);
+					}
 				}
-			}
+			} 
 		}
 	});
 
