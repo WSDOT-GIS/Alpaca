@@ -54,7 +54,8 @@ require([
 	"use strict";
 
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
-	////esriConfig.defaults.io.timeout = 3000;
+	esriConfig.defaults.io.timeout = 3000;
+	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
 
 	if (!window.console) {
 		window.console = {};
@@ -121,7 +122,7 @@ require([
 	}
 
 	ready(function () {
-		var map, geometryService;
+		var map;
 
 
 		/** Gets the layer ids of all basemap layers currently in the map.
@@ -137,8 +138,6 @@ require([
 			}
 			return output;
 		}
-
-		geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
 
 
 
@@ -436,61 +435,33 @@ require([
 					chartDataProvider.on("totals-determined", updateCharts);
 
 					chartDataProvider.on("query-complete", function (/** {ChartDataQueryResult} */ output) {
-						if (!languageChart) {
-							languageChart = chartUtils.createLanguageChart(output.chartData.language);
-						} else {
-							// Update the language chart with the output language data.
-							languageChart.updateSeries("Language Proficiency", output.chartData.language.toColumnChartSeries());
-							languageChart.setAxisWindow("y", output.chartData.language.getNotEnglishZoomScale(), 0);
-							languageChart.render();
-						}
-						if (!raceChart) {
-							raceChart = chartUtils.createRaceChart(output.chartData.race);
-						} else {
-							// Update the race chart with the output race data.
-							raceChart.updateSeries("Race", output.chartData.race.toColumnChartSeries());
-							raceChart.render();
-						}
+						updateCharts(output.chartData);
 
 						document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(output.chartData);
-						
-						if (output.type === "service area") {
-							// TODO: Store statewide chart data in a variable.
 
-						} else if (output.type === "selection") {
-
-						} else {
-
+						if (output.features && output.features.length) {
+							(function () {
+								var i, l, layer = output.type === "service area" ? serviceAreaLayer : selectionLayer;
+								for (i = 0, l = output.features.length; i < l; i += 1) {
+									layer.add(output.features[i]);
+								}
+							}());
 						}
+						
+						////if (output.type === "service area" && output.features) {
+
+						////} else if (output.type === "selection" && output.features) {
+
+						////} else {
+						////	// TODO: Store statewide chart data in a variable.
+						////}
 					});
 
 					chartDataProvider.on("error", function (error) {
-
+						if (console && console.error) {
+							console.error(error);
+						}
 					});
-
-					////chartDataProvider.on("query-complete", function (response) {
-					////	if (!languageChart) {
-					////		languageChart = chartUtils.createLanguageChart(response.chartData.language);
-					////	} else {
-					////		// Update the language chart with the response language data.
-					////		languageChart.updateSeries("Language Proficiency", response.chartData.language.toColumnChartSeries());
-					////		languageChart.setAxisWindow("y", response.chartData.language.getNotEnglishZoomScale(), 0);
-					////		languageChart.render();
-					////	}
-					////	if (!raceChart) {
-					////		raceChart = chartUtils.createRaceChart(response.chartData.race);
-					////	} else {
-					////		// Update the race chart with the response race data.
-					////		raceChart.updateSeries("Race", response.chartData.race.toColumnChartSeries());
-					////		raceChart.render();
-					////	}
-
-					////	document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(response.chartData);
-					////});
-					////chartDataProvider.on("query-error", function (response) {
-					////	window.alert("There was an error loading the chart data.  Please reload the page.");
-					////	console.error("ChartDataProvider query-error", response);
-					////});
 				} catch (e) {
 						console.error("chartDataProvider error", e);
 				}
@@ -602,7 +573,8 @@ require([
 						}
 
 					}
-					chartDataProvider.updateCharts();
+					// TODO: Load stored statewide chart data from variable.
+					chartDataProvider.getSelectionGraphics();
 				};
 
 				// Attach click events.

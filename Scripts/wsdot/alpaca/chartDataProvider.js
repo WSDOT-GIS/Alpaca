@@ -153,6 +153,7 @@ define([
 					"Asian_PacificIsland",
 					"Other"
 				];
+				query.returnGeometry = true;
 
 				// Query to determine intersecting geometry.
 				queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
@@ -202,7 +203,7 @@ define([
 						}
 						geometryService.union(geometries, function (geometry) {
 							graphic = new Graphic(geometry, null, totals);
-							output = new ChartDataQueryResult(type, totals, [graphic]);
+							output = new ChartDataQueryResult(type, [graphic], totals);
 							self.emit("query-complete", output);
 							deferred.resolve(output);
 						}, function (error) {
@@ -210,7 +211,7 @@ define([
 							deferred.reject(error);
 						});
 					} else {
-						output = new ChartDataQueryResult(type, totals, featureSet.features);
+						output = new ChartDataQueryResult(type, featureSet.features, totals);
 						deferred.resolve(output);
 						self.emit("query-complete", output);
 					}
