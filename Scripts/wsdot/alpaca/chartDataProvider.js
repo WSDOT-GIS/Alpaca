@@ -104,24 +104,38 @@ define([
 		},
 
 		/** Determines a service area based on a given geometry and scale.
-		 * @param {esri/Geometry} geometry The geometry used to determine the service area or selection. Not required for statewide.
-		 * @param {Number} scale The scale of the map. Used to determine which query task is used (County, Tract, or Block Group). Not required for statewide.
-		 * @param {Boolean} union Set to true to union the returned geometry. (Output will be a single graphic in this case.) Set to false to skip the union operation (for selection).
+		 * @param {esri/Geometry} [geometry] The geometry used to determine the service area or selection. Not required for statewide.
+		 * @param {Number} [scale] The scale of the map. Used to determine which query task is used (County, Tract, or Block Group). Not required for statewide.
+		 * @param {Boolean} [union] Set to true to union the returned geometry. (Output will be a single graphic in this case.) Set to false to skip the union operation (for selection).
+		 * @param {esri/Geometry} [serviceAreaGeometry] When making a selection, use this parameter to filter by a service area geometry.
 		 * @returns {dojo/Deferred} The "resolve" function contains a single esri/Graphic parameter if union is true.
 		 */
-		getSelectionGraphics: function(geometry, scale, union) {
-			var self = this, query, queryTask, deferred = new Deferred(), type;
+		getSelectionGraphics: function(geometry, scale, union, serviceAreaGeometry) {
+			var self = this, deferred = new Deferred(), type, geometryService;
 
-			// Determine the type of selection query.
-			type = !geometry ? "statewide" : union ? "service area" : "selection";
+			function getGeometryService() {
+				// Get the default geometry service.
+				var geometryService = esriConfig.defaults.geometryService;
+				if (!geometryService) {
+					(function () {
+						var error = new TypeError("esri/config.defaults.geometryService not defined.");
+						deferred.reject(error);
+						self.emit("error", error);
+					}());
+				}
+				return geometryService;
+			}
 
-			queryTask = self.getQueryTaskForScale(scale);
-			query = new Query();
+			/** Performs the statewide aggregate query.
+			 */
+			function performAggregateQuery() {
+				var query, queryTask;
+				queryTask = self.getQueryTaskForScale(scale);
+				query = new Query();
 
-			if (!geometry) {
 				type = "statewide";
 				// Perform a query for statewide statistics.
-				query.outStatistics = this._statisticDefinitions;
+				query.outStatistics = self._statisticDefinitions;
 				queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
 					var results, output;
 					results = featureSet.features[0].attributes;
@@ -138,8 +152,13 @@ define([
 					self.emit("error", output);
 					deferred.reject(output);
 				});
-			} else {
+			}
+
+			function performQuery(geometry) {
+				var query, queryTask;
 				// Get the query task for the current scale.
+				queryTask = self.getQueryTaskForScale(scale);
+				query = new Query();
 
 				// Setup the query.
 				query.geometry = geometry;
@@ -157,7 +176,11 @@ define([
 
 				// Query to determine intersecting geometry.
 				queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
-					var totals, geometries = [], i, l, graphic, attrName, geometryService, output;
+					var totals, geometries = [], i, l, graphic, attrName, output;
+
+
+
+
 					// Initiate count totals.
 					totals = {};
 
@@ -192,15 +215,7 @@ define([
 							totals: totals
 						});
 
-						// Get the default geometry service.
-						geometryService = esriConfig.defaults.geometryService;
-						if (!geometryService) {
-							(function () {
-								var error = new TypeError("esri/config.defaults.geometryService not defined.");
-								deferred.reject(error);
-								self.emit("error", error);
-							}());
-						}
+						geometryService = getGeometryService();
 						geometryService.union(geometries, function (geometry) {
 							graphic = new Graphic(geometry, null, totals);
 							output = new ChartDataQueryResult(type, [graphic], totals);
@@ -219,6 +234,34 @@ define([
 					self.emit("error", error);
 					deferred.reject(error);
 				});
+			}
+
+			// Determine the type of selection query.
+			type = !geometry ? "statewide" : union ? "service area" : "selection";
+
+
+
+			if (!geometry) {
+				performAggregateQuery();
+			} else {
+				if (serviceAreaGeometry) {
+					// Perform intersect to limit geometries by service area.
+					geometryService = getGeometryService();
+
+					geometryService.intersect([geometry], serviceAreaGeometry, function (/**{esri/Geometry[]}*/ geometries) {
+						if (geometries && geometries.length >= 1) {
+							performQuery(geometries[0]);
+						}
+					}, function (error) {
+						self.emit("intersect error", error);
+						deferred.reject(error);
+					});
+					
+				} else {
+					performQuery(geometry);
+				}
+
+
 			}
 
 			/**
