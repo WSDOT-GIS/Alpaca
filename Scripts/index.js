@@ -526,10 +526,13 @@ require([
 				drawToolbar.on("draw-complete", function (drawResponse) {
 					drawToolbar.deactivate();
 					if (drawToolbar.alpacaMode === "service-area") {
+						selectionLayer.clear();
+						serviceAreaLayer.clear();
 						////setServiceArea(drawResponse);
 						chartDataProvider.getSelectionGraphics(drawResponse.geometry, map.getScale(), true);
 					} else if (drawToolbar.alpacaMode === "selection") {
-						chartDataProvider.getSelectionGraphics(drawResponse.geometry, map.getScale(), false);
+						selectionLayer.clear();
+						chartDataProvider.getSelectionGraphics(drawResponse.geometry, map.getScale(), false, getServiceAreaGeometry());
 						////setSelection(drawResponse);
 					}
 					drawToolbar.alpacaMode = null;
