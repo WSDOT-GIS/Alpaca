@@ -104,16 +104,16 @@ define([
 		},
 
 		/** Determines a service area based on a given geometry and scale.
-		 * @param {esri/Geometry} geometry The geometry used to determine the service area.
-		 * @param {Number} scale The scale of the map. Used to determine which query task is used (County, Tract, or Block Group)
-		 * @param {Boolean} union Set to true to union the returned geometry. (Output will be a single graphic in this case.) Set to false to skip the union operation.
+		 * @param {esri/Geometry} geometry The geometry used to determine the service area or selection. Not required for statewide.
+		 * @param {Number} scale The scale of the map. Used to determine which query task is used (County, Tract, or Block Group). Not required for statewide.
+		 * @param {Boolean} union Set to true to union the returned geometry. (Output will be a single graphic in this case.) Set to false to skip the union operation (for selection).
 		 * @returns {dojo/Deferred} The "resolve" function contains a single esri/Graphic parameter if union is true.
 		 */
 		getSelectionGraphics: function(geometry, scale, union) {
 			var self = this, query, queryTask, deferred = new Deferred(), type;
 
 			// Determine the type of selection query.
-			type = geometry ? "statewide" : union ? "service area" : "selection";
+			type = !geometry ? "statewide" : union ? "service area" : "selection";
 
 			queryTask = self.getQueryTaskForScale(scale);
 			query = new Query();
@@ -274,7 +274,8 @@ define([
 			this.queryTasks.tract = new QueryTask(mapServiceUrl + String(options.tractLayerId));
 			this.queryTasks.county = new QueryTask(mapServiceUrl + String(options.countyLayerId));
 
-			this.updateCharts();
+			////this.updateCharts();
+			this.getSelectionGraphics();
 		}
 	});
 
