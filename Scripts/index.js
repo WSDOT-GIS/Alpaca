@@ -278,12 +278,23 @@ require([
 			/** Gets the geometry from the first graphic in the service area layer.
 			 * @returns {esri/geometry/Geometry|null} Returns a geometry if possible, null otherwise.
 			 */
-			function getServiceAreaGeometry() {
+			function getServiceAreaGraphic() {
 				var output = null;
 				if (serviceAreaLayer) {
 					if (serviceAreaLayer.graphics.length) {
-						output = serviceAreaLayer.graphics[0].geometry;
+						output = serviceAreaLayer.graphics[0];
 					}
+				}
+				return output;
+			}
+
+			/** Gets the geometry from the first graphic in the service area layer.
+			 * @returns {esri/geometry/Geometry|null} Returns a geometry if possible, null otherwise.
+			 */
+			function getServiceAreaGeometry() {
+				var output = getServiceAreaGraphic();
+				if (output) {
+					output = output.geometry;
 				}
 				return output;
 			}
@@ -561,7 +572,7 @@ require([
 				 * @this {dijit/form/Button}
 				 */
 				clearHandler = function () {
-					var layerId;
+					var layerId, saGeometry;
 					// Get the layer ID from the button that was clicked.
 					layerId = this["data-layer-id"];
 					// Proceed if a data-layer-id is present.
@@ -576,8 +587,14 @@ require([
 						}
 
 					}
-					// TODO: Load stored statewide chart data from variable.
-					chartDataProvider.getSelectionGraphics();
+					saGeometry = getServiceAreaGraphic();
+
+					if (saGeometry) {
+						updateCharts(saGeometry.attributes);
+					} else {
+						// TODO: Load stored statewide chart data from variable.
+						chartDataProvider.getSelectionGraphics();
+					}
 				};
 
 				// Attach click events.

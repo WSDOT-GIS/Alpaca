@@ -318,10 +318,13 @@ define([
 			this.queryTasks.tract = new QueryTask(mapServiceUrl + String(options.tractLayerId));
 			this.queryTasks.county = new QueryTask(mapServiceUrl + String(options.countyLayerId));
 
-			////this.updateCharts();
 			this.getSelectionGraphics();
 		}
 	});
+
+	// Make the chart data class available outside the module.
+	ChartDataProvider.ChartData = ChartData;
+	ChartDataProvider.ChartDataQueryResult = ChartDataQueryResult;
 
 	return ChartDataProvider;
 });
