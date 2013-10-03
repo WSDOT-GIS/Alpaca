@@ -35,10 +35,11 @@ define([
 	 * @param {(ChartData|Object.<string, number>)} chartData Either a {@link ChartData} or the parameter to be passed to the {@link ChartData} constructor.
 	 * @constructor
 	 */
-	function ChartDataQueryResult(type, features, chartData) {
-		this.type = type;
-		this.features = features;
+	function ChartDataQueryResult(type, features, chartData, originalGeometry) {
+		this.type = type || null;
+		this.features = features || null;
 		this.chartData = (chartData instanceof ChartData) ? chartData : new ChartData(chartData);
+		this.originalGeometry = originalGeometry || null;
 	}
 
 
@@ -139,7 +140,7 @@ define([
 				queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
 					var results, output;
 					results = featureSet.features[0].attributes;
-					output = new ChartDataQueryResult(type, null, results);
+					output = new ChartDataQueryResult(type, null, results, geometry);
 					self.emit("totals-determined", output.chartData);
 					self.emit("query-complete", output);
 					deferred.resolve(output);
@@ -218,7 +219,7 @@ define([
 						geometryService = getGeometryService();
 						geometryService.union(geometries, function (geometry) {
 							graphic = new Graphic(geometry, null, totals);
-							output = new ChartDataQueryResult(type, [graphic], totals);
+							output = new ChartDataQueryResult(type, [graphic], totals, geometry);
 							self.emit("query-complete", output);
 							deferred.resolve(output);
 						}, function (error) {
@@ -226,7 +227,7 @@ define([
 							deferred.reject(error);
 						});
 					} else {
-						output = new ChartDataQueryResult(type, featureSet.features, totals);
+						output = new ChartDataQueryResult(type, featureSet.features, totals, geometry);
 						deferred.resolve(output);
 						self.emit("query-complete", output);
 					}

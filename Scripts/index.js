@@ -54,7 +54,7 @@ require([
 	"use strict";
 
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
-	esriConfig.defaults.io.timeout = 3000;
+	////esriConfig.defaults.io.timeout = 3000;
 	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
 
 	if (!window.console) {
@@ -458,14 +458,10 @@ require([
 								}
 							}());
 						}
-						
-						////if (output.type === "service area" && output.features) {
 
-						////} else if (output.type === "selection" && output.features) {
-
-						////} else {
-						////	// TODO: Store statewide chart data in a variable.
-						////}
+						if (output.originalGeometry) {
+							userGraphicsLayers.add(output.originalGeometry);
+						}
 					});
 
 					chartDataProvider.on("error", function (error) {
@@ -487,51 +483,51 @@ require([
 
 				userGraphicsLayers = new UserGraphicsLayers(map);
 
-				////// Setup loading and saving to / from localStorage.
-				////if (!window.addEventListener || !localStorage || !JSON) {
-				////	window.alert("This browser does not support saving of graphics. Saving of geometry requires support for window.addEventListener, window.localStorage, and window.JSON.");
-				////} else {
-				////	window.addEventListener("beforeunload", function (/*e*/) {
-				////		var selectionGeometry, serviceAreaGeometry, mapCenter;
+				// Setup loading and saving to / from localStorage.
+				if (!window.addEventListener || !localStorage || !JSON) {
+					window.alert("This browser does not support saving of graphics. Saving of geometry requires support for window.addEventListener, window.localStorage, and window.JSON.");
+				} else {
+					window.addEventListener("beforeunload", function (/*e*/) {
+						var selectionGeometry, serviceAreaGeometry, mapCenter;
 
-				////		mapCenter = map.geographicExtent.getCenter();
-				////		localStorage.setItem("alpaca_mapCenter", JSON.stringify([mapCenter.x, mapCenter.y]));
-				////		localStorage.setItem("alpaca_mapZoom", String(map.getZoom()));
+						mapCenter = map.geographicExtent.getCenter();
+						localStorage.setItem("alpaca_mapCenter", JSON.stringify([mapCenter.x, mapCenter.y]));
+						localStorage.setItem("alpaca_mapZoom", String(map.getZoom()));
 						
 
-				////		// Save the selection.
-				////		selectionGeometry = userGraphicsLayers.getGeometryForStorage();
-				////		if (selectionGeometry) {
-				////			localStorage.setItem("alpaca_selectionGeometry", selectionGeometry);
-				////		} else if (localStorage.alpaca_selectionGeometry) {
-				////			localStorage.removeItem("alpaca_selectionGeometry");
-				////		}
+						// Save the selection.
+						selectionGeometry = userGraphicsLayers.getGeometryForStorage();
+						if (selectionGeometry) {
+							localStorage.setItem("alpaca_selectionGeometry", selectionGeometry);
+						} else if (localStorage.alpaca_selectionGeometry) {
+							localStorage.removeItem("alpaca_selectionGeometry");
+						}
 
-				////		// Save the service area.
-				////		if (serviceAreaLayer.graphics && serviceAreaLayer.graphics.length) {
-				////			serviceAreaGeometry = serviceAreaLayer.graphics[0].geometry;
-				////		}
-				////		if (serviceAreaGeometry) {
-				////			// Strip unneeded properties.
-				////			if (serviceAreaGeometry.toJson) {
-				////				serviceAreaGeometry = serviceAreaGeometry.toJson();
-				////			}
-				////			serviceAreaGeometry = JSON.stringify(serviceAreaGeometry);
-				////			localStorage.setItem("alpaca_serviceAreaGeometry", serviceAreaGeometry);
-				////		} else {
-				////			localStorage.removeItem("alpaca_serviceAreaGeometry");
-				////		}
+						// Save the service area.
+						if (serviceAreaLayer.graphics && serviceAreaLayer.graphics.length) {
+							serviceAreaGeometry = serviceAreaLayer.graphics[0].geometry;
+						}
+						if (serviceAreaGeometry) {
+							// Strip unneeded properties.
+							if (serviceAreaGeometry.toJson) {
+								serviceAreaGeometry = serviceAreaGeometry.toJson();
+							}
+							serviceAreaGeometry = JSON.stringify(serviceAreaGeometry);
+							localStorage.setItem("alpaca_serviceAreaGeometry", serviceAreaGeometry);
+						} else {
+							localStorage.removeItem("alpaca_serviceAreaGeometry");
+						}
 						
 						
-				////	});
+					});
 
-				////	if (localStorage.alpaca_serviceAreaGeometry) {
-				////		setServiceArea(localStorage.alpaca_serviceAreaGeometry);
-				////	}
-				////	if (localStorage.alpaca_selectionGeometry) {
-				////		setSelection(localStorage.alpaca_selectionGeometry);
-				////	}
-				////}
+					////if (localStorage.alpaca_serviceAreaGeometry) {
+					////	setServiceArea(localStorage.alpaca_serviceAreaGeometry);
+					////}
+					////if (localStorage.alpaca_selectionGeometry) {
+					////	setSelection(localStorage.alpaca_selectionGeometry);
+					////}
+				}
 				
 
 				drawToolbar.on("draw-complete", function (drawResponse) {
@@ -701,6 +697,14 @@ require([
 					}
 				});
 			}(registry.byId("addDataButton"), registry.byId("addCsvDialog"), document.getElementById("addCsvFileInput")));
+		}, function (err) {
+			if (console && console.error) {
+				console.error("map load error", err);
+			}
+		}, function (update) {
+			if (console && console.log) {
+				console.log("map load progress", update);
+			}
 		});
 
 	});
