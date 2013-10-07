@@ -1,14 +1,20 @@
 ﻿/*global define*/
+/*jslint nomen:true*/
 define(function () {
 	"use strict";
 	var utils, SCALE_NAME_BLOCK_GROUP = "blockGroup", SCALE_NAME_TRACT = "tract", SCALE_NAME_COUNTY = "county";
 
 
 	utils = {
+		/** Determines the level for the current map scale.
+		 * @param {number} [scale=0]
+		 * @returns {string} The name of the level.
+		 */
 		getLevel: function (scale) {
 			var output;
 
-			if (scale == null) { // scale is null or undefined.
+			// 
+			if (!scale) { // scale is null or undefined.
 				scale = 0;
 			} else if (typeof scale !== "number") {
 				scale = Number(scale);
@@ -23,11 +29,14 @@ define(function () {
 			}
 			return output;
 		},
-		getVisibleLayers: function (map) {
-			var output = [];
+		/** Gets an array of currently visible layers in a map.
+		 * @returns {esri/layers/Layer[]}
+		 */
+		getVisibleLayers: function (/** {esri/Map} */ map) {
+			var output = [], p, layer;
 			for (p in map._layers) {
 				if (map._layers.hasOwnProperty(p)) {
-					var layer = map._layers[p];
+					layer = map._layers[p];
 					if (layer.visible) {
 						output.push(layer);
 					}

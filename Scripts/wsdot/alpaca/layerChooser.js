@@ -262,7 +262,9 @@ define([
 						}
 
 						self.list.appendChild(layerRadio.domNode);
-						layerRadio.legend.startup();
+						if (layerRadio.legend) {
+							layerRadio.legend.startup();
+						}
 					}
 				} catch (lError) {
 					if (console && console.error) {

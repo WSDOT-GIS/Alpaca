@@ -11,26 +11,21 @@ require([
 	"alpaca/layerChooser",
 	"alpaca/graphicsLayerList",
 	"alpaca/chartDataProvider",
-	"alpaca/utils",
 	"esri/toolbars/draw",
 	"esri/layers/GraphicsLayer",
 	"esri/renderers/SimpleRenderer",
 	"esri/symbols/SimpleLineSymbol",
 	"esri/symbols/SimpleFillSymbol",
-	"esri/graphic",
 	"esri/tasks/GeometryService",
-	"esri/tasks/query",
-	"esri/tasks/QueryTask",
 	"esri/InfoTemplate",
 
+	"esri/geometry/jsonUtils",
 	"alpaca/chartUtils",
 
 	"CSV-Reader/csvArcGis",
 	"layerUtils",
 
-	"esri/graphicsUtils",
 	"esri/config",
-	"esri/geometry/jsonUtils",
 	"alpaca/UserGraphicsLayers",
 
 	"dijit/Dialog",
@@ -45,16 +40,17 @@ require([
 	"dijit/form/Button",
 	"dijit/DropDownMenu", "dijit/MenuItem"
 ], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
-	LayerChooser, GraphicsLayerList, ChartDataProvider, t6Utils, Draw, GraphicsLayer,
+	LayerChooser, GraphicsLayerList, ChartDataProvider, Draw, GraphicsLayer,
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
-	Graphic, GeometryService, Query, QueryTask, InfoTemplate,
-	chartUtils, csvArcGis, LayerUtils,
-	graphicsUtils, esriConfig, jsonUtils, UserGraphicsLayers)
+	GeometryService, InfoTemplate,
+	jsonUtils, chartUtils, csvArcGis, LayerUtils,
+	esriConfig, UserGraphicsLayers)
 {
 	"use strict";
 
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
-	////esriConfig.defaults.io.timeout = 3000;
+	esriConfig.defaults.io.timeout = 3000;
+	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
 
 	if (!window.console) {
 		window.console = {};
@@ -113,15 +109,24 @@ require([
 			map.removeLayer(layer);
 		}
 
-		////if (url && !/\/\d+/.test(url)) {
-		////	url += "/0";
-		////}
-
 		return url;
 	}
 
+	/** Converts a string into a geometry object.
+	 * @returns {esri/geometry/Geometry}
+	 */
+	function parseGeometry(/**{string}*/ s) {
+		var json;
+		if (typeof s !== "string") {
+			throw new TypeError("Non-string parameter was supplied to parseGeometry method.");
+		} 
+
+		json = JSON.parse(s);
+		return jsonUtils.fromJson(json);
+	}
+
 	ready(function () {
-		var map, geometryService;
+		var map;
 
 
 		/** Gets the layer ids of all basemap layers currently in the map.
@@ -138,22 +143,20 @@ require([
 			return output;
 		}
 
-		geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
-
 
 
 		arcgisUtils.createMap("b96dcdee3dfa498badcf9ea871cc1895", "map", {
 			mapOptions: {
 				//basemap: "gray",
-				center: window.JSON && window.localStorage && window.localStorage.title6_mapCenter ? JSON.parse(window.localStorage.title6_mapCenter) : [-120.80566406246835, 47.41322033015946],
-				zoom: window.localStorage && window.localStorage.title6_mapZoom ? Number(window.localStorage.title6_mapZoom) : 7,
+				center: window.JSON && window.localStorage && window.localStorage.alpaca_mapCenter ? JSON.parse(window.localStorage.alpaca_mapCenter) : [-120.80566406246835, 47.41322033015946],
+				zoom: window.localStorage && window.localStorage.alpaca_mapZoom ? Number(window.localStorage.alpaca_mapZoom) : 7,
 				showAttribution: true,
 				logo: false
 			}
 		}).then(function (response) {
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
 				serviceAreaLayer, selectionLayer, languageChart,
-				raceChart, aggregateLayerUrl, aggregateQueryTasks, popupHandle, popupListener, userGraphicsLayers;
+				raceChart, aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
 
 
 
@@ -192,164 +195,66 @@ require([
 				return layer;
 			}
 
-			function queryAggregateLayerForServiceArea(/** {esri/geometry/Geometry} */ geometry) {
-				var query, aggregateQueryTask;
+			/** Updates the charts in the application
+			*/
+			function updateCharts(/** {ChartData} */ chartData) {
+				if (!languageChart) {
+					languageChart = chartUtils.createLanguageChart(chartData.language);
+				} else {
+					// Update the language chart with the response language data.
+					languageChart.updateSeries("Language Proficiency", chartData.language.toColumnChartSeries());
+					languageChart.setAxisWindow("y", chartData.language.getNotEnglishZoomScale(), 0);
+					languageChart.render();
+				}
+				if (!raceChart) {
+					raceChart = chartUtils.createRaceChart(chartData.race);
+				} else {
+					// Update the race chart with the response race data.
+					raceChart.updateSeries("Minority", chartData.race.toColumnChartSeries());
+					raceChart.render();
+				}
 
-				query = new Query();
-				query.geometry = geometry;
-				query.returnGeometry = true;
-				////query.maxAllowableOffset = 50;
-
-				aggregateQueryTask = aggregateQueryTasks[t6Utils.getLevel(map.getScale())];
-
-				aggregateQueryTask.execute(query, function (/** {esri/tasks/FeatureSet} */ featureSet) {
-					var /** {Geometry[]} */geometries;
-					if (featureSet && featureSet.features && featureSet.features.length >= 1) {
-						// Clear the existing features.
-						serviceAreaLayer.clear();
-
-						if (featureSet.features.length === 1) {
-							serviceAreaLayer.add(featureSet.features[0]);
-						} else {
-							geometries = graphicsUtils.getGeometries(featureSet.features);
-
-							geometryService.union(geometries, function (/**{Geometry}*/ geometry) {
-								var graphic;
-								if (geometry) {
-									graphic = new Graphic(geometry);
-									serviceAreaLayer.add(graphic);
-								}
-							}, function (error) {
-								if (console) {
-									if (console.error) {
-										console.error(error);
-									}
-								}
-							});
-						}
-
-
-					}
-				}, function (error) {
-					console.error("An error occured while querying for block group geometry.", error);
-				});
+				document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(chartData);
 			}
 
-			/**
-			@param drawResponse
-			@param {esri/geometry/Geometry} drawResponse.geometry
-			@param {esri/geometry/Geometry} drawResponse.geographicGeometry
-			*/
-			function setServiceArea(drawResponse) {
-				// Clear the existing graphics.
-				serviceAreaLayer.clear();
-				if (typeof drawResponse === "string") { // If it's a string, then its a geometry representation from localStorage.
-					selectionLayer.clear();
-					serviceAreaLayer.add(new Graphic(jsonUtils.fromJson(JSON.parse(drawResponse))));
-				} else {
-					queryAggregateLayerForServiceArea(drawResponse.geometry);
+			/** Gets the geometry from the first graphic in the service area layer.
+			 * @returns {esri/geometry/Geometry|null} Returns a geometry if possible, null otherwise.
+			 */
+			function getServiceAreaGraphic() {
+				var output = null;
+				if (serviceAreaLayer) {
+					if (serviceAreaLayer.graphics.length) {
+						output = serviceAreaLayer.graphics[0];
+					}
 				}
+				return output;
 			}
 
 			/** Gets the geometry from the first graphic in the service area layer.
 			 * @returns {esri/geometry/Geometry|null} Returns a geometry if possible, null otherwise.
 			 */
 			function getServiceAreaGeometry() {
-				var output = null;
-				if (serviceAreaLayer) {
-					if (serviceAreaLayer.graphics.length) {
-						output = serviceAreaLayer.graphics[0].geometry;
-					}
+				var output = getServiceAreaGraphic();
+				if (output) {
+					output = output.geometry;
 				}
 				return output;
 			}
 
-			function queryAggregateLayerForSelection(/** {esri/geometry/Geometry} */ geometry) {
-				var query, aggregateQueryTask;
-
-				query = new Query();
-				query.geometry = geometry;
-				query.returnGeometry = true;
-				//query.maxAllowableOffset = 50;
-
-				aggregateQueryTask = aggregateQueryTasks[t6Utils.getLevel(map.getScale())];
-
-				aggregateQueryTask.execute(query, function (/** {esri/tasks/FeatureSet} */ featureSet) {
-					var i, l;
-					if (featureSet) {
-						// Clear the existing features.
-						selectionLayer.clear();
-						// Add the new features.
-						for (i = 0, l = featureSet.features.length; i < l; i++) {
-							selectionLayer.add(featureSet.features[i]);
-						}
-					}
-				}, function (error) {
-					console.error("An error occured while querying for block group geometry.", error);
-				});
+			/** Sets the service area to the selected geometry after clearing the selection and service area grahpics layers.
+			 * Also updates the charts.
+			 */
+			function setServiceArea(/**{esri/geometry/Geometry}*/ geometry) {
+				selectionLayer.clear();
+				serviceAreaLayer.clear();
+				chartDataProvider.getSelectionGraphics(geometry, map.getScale(), true);
 			}
 
-			/**
-			 * @param drawResponse
-			 * @param {esri/geometry/Geometry} drawResponse.geometry
-			 * @param {esri/geometry/Geometry} drawResponse.geographicGeometry
+			/** Sets the selection to the given geometry after clearing the selection graphics layer, then updates the charts.
 			 */
-			function setSelection(drawResponse) {
-				var saGeometry, selectionGeometry;
-
-				if (drawResponse.geometry) {
-					selectionGeometry = drawResponse.geometry;
-				} else if (typeof drawResponse === "string") {
-					selectionGeometry = JSON.parse(drawResponse);
-					selectionGeometry = jsonUtils.fromJson(selectionGeometry);
-				}
-
+			function setSelection(/**{esri/geometry/Geometry}*/ geometry) {
 				selectionLayer.clear();
-
-				function updateCharts(geometry) {
-					var graphic;
-
-					// If a selection polygon is outside of the service area, its 
-					// intersection will be a geometry with an empty "rings" property.
-					// In this case we will set the geometry to null.
-					if (geometry &&
-						((geometry.rings && geometry.rings.length)
-						||
-						(geometry.points && geometry.points.length)
-						||
-						(geometry.paths && geometry.paths.length)
-						)) {
-						graphic = new Graphic(geometry);
-						selectionLayer.add(graphic);
-					} else {
-						geometry = null;
-					}
-
-					chartDataProvider.updateCharts(geometry, map.getScale());
-					queryAggregateLayerForSelection(geometry);
-				}
-
-				// Determine if there is an existing service area geometry.
-				saGeometry = getServiceAreaGeometry();
-
-				if (!saGeometry) {
-					updateCharts(selectionGeometry);
-				} else {
-					geometryService.intersect([selectionGeometry], saGeometry, function (/** {Geometry[]} */ geometries) {
-						if (geometries && geometries.length) {
-							updateCharts(geometries[0]);
-						} else {
-							updateCharts(selectionGeometry);
-						}
-					}, function (/** {Error} */ error) {
-						// Log an error to the console (if supported by browser);
-						console.error("Error with Geometry Service intersect operation", error);
-						// Update the charts with the un-intersected geometry.
-						updateCharts(selectionGeometry);
-					});
-				}
-
-				userGraphicsLayers.add(selectionGeometry);
+				chartDataProvider.getSelectionGraphics(geometry, map.getScale(), false, getServiceAreaGeometry());
 			}
 
 			popupHandle = response.clickEventHandle;
@@ -367,13 +272,6 @@ require([
 			if (!/\/$/.test(aggregateLayerUrl)) {
 				aggregateLayerUrl += "/";
 			}
-
-			////aggregateQueryTask = new QueryTask(aggregateLayerUrl);
-			aggregateQueryTasks = {
-				blockGroup: new QueryTask(aggregateLayerUrl + "0"),
-				tract: new QueryTask(aggregateLayerUrl + "1"),
-				county: new QueryTask(aggregateLayerUrl + "2")
-			};
 
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
@@ -407,28 +305,32 @@ require([
 			if (aggregateLayerUrl) {
 				try {
 					chartDataProvider = new ChartDataProvider(aggregateLayerUrl);
-					chartDataProvider.on("query-complete", function (response) {
-						if (!languageChart) {
-							languageChart = chartUtils.createLanguageChart(response.chartData.language);
-						} else {
-							// Update the language chart with the response language data.
-							languageChart.updateSeries("Language Proficiency", response.chartData.language.toColumnChartSeries());
-							languageChart.setAxisWindow("y", response.chartData.language.getNotEnglishZoomScale(), 0);
-							languageChart.render();
-						}
-						if (!raceChart) {
-							raceChart = chartUtils.createRaceChart(response.chartData.race);
-						} else {
-							// Update the race chart with the response race data.
-							raceChart.updateSeries("Minority", response.chartData.race.toColumnChartSeries());
-							raceChart.render();
+
+					chartDataProvider.on("totals-determined", updateCharts);
+
+					chartDataProvider.on("query-complete", function (/** {ChartDataQueryResult} */ output) {
+						updateCharts(output.chartData);
+
+						document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(output.chartData);
+
+						if (output.features && output.features.length) {
+							(function () {
+								var i, l, layer = output.type === "service area" ? serviceAreaLayer : selectionLayer;
+								for (i = 0, l = output.features.length; i < l; i += 1) {
+									layer.add(output.features[i]);
+								}
+							}());
 						}
 
-						document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(response.chartData);
+						if (output.originalGeometry) {
+							userGraphicsLayers.add(output.originalGeometry);
+						}
 					});
-					chartDataProvider.on("query-error", function (response) {
-						window.alert("There was an error loading the chart data.  Please reload the page.");
-						console.error("ChartDataProvider query-error", response);
+
+					chartDataProvider.on("error", function (error) {
+						if (console && console.error) {
+							console.error(error);
+						}
 					});
 				} catch (e) {
 						console.error("chartDataProvider error", e);
@@ -452,16 +354,16 @@ require([
 						var selectionGeometry, serviceAreaGeometry, mapCenter;
 
 						mapCenter = map.geographicExtent.getCenter();
-						localStorage.setItem("title6_mapCenter", JSON.stringify([mapCenter.x, mapCenter.y]));
-						localStorage.setItem("title6_mapZoom", String(map.getZoom()));
+						localStorage.setItem("alpaca_mapCenter", JSON.stringify([mapCenter.x, mapCenter.y]));
+						localStorage.setItem("alpaca_mapZoom", String(map.getZoom()));
 						
 
 						// Save the selection.
 						selectionGeometry = userGraphicsLayers.getGeometryForStorage();
 						if (selectionGeometry) {
-							localStorage.setItem("title6_selectionGeometry", selectionGeometry);
-						} else if (localStorage.title6_selectionGeometry) {
-							localStorage.removeItem("title6_selectionGeometry");
+							localStorage.setItem("alpaca_selectionGeometry", selectionGeometry);
+						} else if (localStorage.alpaca_selectionGeometry) {
+							localStorage.removeItem("alpaca_selectionGeometry");
 						}
 
 						// Save the service area.
@@ -474,36 +376,41 @@ require([
 								serviceAreaGeometry = serviceAreaGeometry.toJson();
 							}
 							serviceAreaGeometry = JSON.stringify(serviceAreaGeometry);
-							localStorage.setItem("title6_serviceAreaGeometry", serviceAreaGeometry);
+							localStorage.setItem("alpaca_serviceAreaGeometry", serviceAreaGeometry);
 						} else {
-							localStorage.removeItem("title6_serviceAreaGeometry");
+							localStorage.removeItem("alpaca_serviceAreaGeometry");
 						}
 						
 						
 					});
 
-					if (localStorage.title6_serviceAreaGeometry) {
-						setServiceArea(localStorage.title6_serviceAreaGeometry);
+					if (localStorage.alpaca_serviceAreaGeometry) {
+						setServiceArea(parseGeometry(localStorage.alpaca_serviceAreaGeometry));
 					}
-					if (localStorage.title6_selectionGeometry) {
-						setSelection(localStorage.title6_selectionGeometry);
+					if (localStorage.alpaca_selectionGeometry) {
+						setSelection(parseGeometry(localStorage.alpaca_selectionGeometry));
 					}
 				}
 				
 
+				/**
+				 * @param drawResponse
+				 * @param {esri/geometry/Geometry} drawResponse.geometry
+				 */
 				drawToolbar.on("draw-complete", function (drawResponse) {
 					drawToolbar.deactivate();
-					if (drawToolbar.title6Mode === "service-area") {
-						setServiceArea(drawResponse);
-					} else if (drawToolbar.title6Mode === "selection") {
-						setSelection(drawResponse);
+					if (drawToolbar.alpacaMode === "service-area") {
+						setServiceArea(drawResponse.geometry);
+					} else if (drawToolbar.alpacaMode === "selection") {
+						setSelection(drawResponse.geometry);
 					}
-					drawToolbar.title6Mode = null;
+					drawToolbar.alpacaMode = null;
+					// Restore the map's default on-click behavior: displaying popups.
 					popupHandle = connect.connect(map, "onClick", response.clickEventListener);
 				});
 
-				/** Activates the draw toolbar and sets the "title6Mode" property.
-				    The title6Mode property is used by the drawToolbars "draw-complete" event.
+				/** Activates the draw toolbar and sets the "alpacaMode" property.
+				    The alpacaMode property is used by the drawToolbars "draw-complete" event.
 				 * @this {dijit/form/Button}
 				 */
 				clickHandler = function () {
@@ -511,10 +418,11 @@ require([
 
 					// Get the alpaca-mode string from the button that was clicked.
 					mode = this["data-alpaca-mode"];
-					drawToolbar.title6Mode = mode;
+					drawToolbar.alpacaMode = mode;
 					fillSymbol = mode === "service-area" ? serviceAreaLayer.renderer.symbol : selectionLayer.renderer.symbol;
 					drawToolbar.setFillSymbol(fillSymbol);
 					drawToolbar.activate(Draw[this["data-geometry-type"] || "POLYGON"]);
+					// Deactivate the maps default on-click behavior: displaying popups.
 					connect.disconnect(popupHandle);
 				};
 
@@ -522,7 +430,7 @@ require([
 				 * @this {dijit/form/Button}
 				 */
 				clearHandler = function () {
-					var layerId;
+					var layerId, saGeometry;
 					// Get the layer ID from the button that was clicked.
 					layerId = this["data-layer-id"];
 					// Proceed if a data-layer-id is present.
@@ -537,7 +445,14 @@ require([
 						}
 
 					}
-					chartDataProvider.updateCharts();
+					saGeometry = getServiceAreaGraphic();
+
+					if (saGeometry) {
+						updateCharts(saGeometry.attributes);
+					} else {
+						// TODO: Load stored statewide chart data from variable.
+						chartDataProvider.getSelectionGraphics();
+					}
 				};
 
 				// Attach click events.
@@ -644,6 +559,14 @@ require([
 					}
 				});
 			}(registry.byId("addDataButton"), registry.byId("addCsvDialog"), document.getElementById("addCsvFileInput")));
+		}, function (err) {
+			if (console && console.error) {
+				console.error("map load error", err);
+			}
+		}, function (update) {
+			if (console && console.log) {
+				console.log("map load progress", update);
+			}
 		});
 
 	});
