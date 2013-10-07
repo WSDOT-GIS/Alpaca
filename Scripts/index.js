@@ -11,26 +11,21 @@ require([
 	"alpaca/layerChooser",
 	"alpaca/graphicsLayerList",
 	"alpaca/chartDataProvider",
-	"alpaca/utils",
 	"esri/toolbars/draw",
 	"esri/layers/GraphicsLayer",
 	"esri/renderers/SimpleRenderer",
 	"esri/symbols/SimpleLineSymbol",
 	"esri/symbols/SimpleFillSymbol",
-	"esri/graphic",
 	"esri/tasks/GeometryService",
-	"esri/tasks/query",
-	"esri/tasks/QueryTask",
 	"esri/InfoTemplate",
 
+	"esri/geometry/jsonUtils",
 	"alpaca/chartUtils",
 
 	"CSV-Reader/csvArcGis",
 	"layerUtils",
 
-	"esri/graphicsUtils",
 	"esri/config",
-	"esri/geometry/jsonUtils",
 	"alpaca/UserGraphicsLayers",
 
 	"dijit/Dialog",
@@ -45,11 +40,11 @@ require([
 	"dijit/form/Button",
 	"dijit/DropDownMenu", "dijit/MenuItem"
 ], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
-	LayerChooser, GraphicsLayerList, ChartDataProvider, t6Utils, Draw, GraphicsLayer,
+	LayerChooser, GraphicsLayerList, ChartDataProvider, Draw, GraphicsLayer,
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
-	Graphic, GeometryService, Query, QueryTask, InfoTemplate,
-	chartUtils, csvArcGis, LayerUtils,
-	graphicsUtils, esriConfig, jsonUtils, UserGraphicsLayers)
+	GeometryService, InfoTemplate,
+	jsonUtils, chartUtils, csvArcGis, LayerUtils,
+	esriConfig, UserGraphicsLayers)
 {
 	"use strict";
 
@@ -121,6 +116,19 @@ require([
 		return url;
 	}
 
+	/** Converts a string into a geometry object.
+	 * @returns {esri/geometry/Geometry}
+	 */
+	function parseGeometry(/**{string}*/ s) {
+		var json;
+		if (typeof s !== "string") {
+			throw new TypeError("Non-string parameter was supplied to parseGeometry method.");
+		} 
+
+		json = JSON.parse(s);
+		return jsonUtils.fromJson(json);
+	}
+
 	ready(function () {
 		var map;
 
@@ -152,7 +160,7 @@ require([
 		}).then(function (response) {
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
 				serviceAreaLayer, selectionLayer, languageChart,
-				raceChart, aggregateLayerUrl, aggregateQueryTasks, popupHandle, popupListener, userGraphicsLayers;
+				raceChart, aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
 
 
 
@@ -190,49 +198,6 @@ require([
 
 				return layer;
 			}
-
-			////function queryAggregateLayerForServiceArea(/** {esri/geometry/Geometry} */ geometry) {
-			////	var query, aggregateQueryTask;
-
-			////	query = new Query();
-			////	query.geometry = geometry;
-			////	query.returnGeometry = true;
-			////	////query.maxAllowableOffset = 50;
-
-			////	aggregateQueryTask = aggregateQueryTasks[t6Utils.getLevel(map.getScale())];
-
-			////	aggregateQueryTask.execute(query, function (/** {esri/tasks/FeatureSet} */ featureSet) {
-			////		var /** {Geometry[]} */geometries;
-			////		if (featureSet && featureSet.features && featureSet.features.length >= 1) {
-			////			// Clear the existing features.
-			////			serviceAreaLayer.clear();
-
-			////			if (featureSet.features.length === 1) {
-			////				serviceAreaLayer.add(featureSet.features[0]);
-			////			} else {
-			////				geometries = graphicsUtils.getGeometries(featureSet.features);
-
-			////				geometryService.union(geometries, function (/**{Geometry}*/ geometry) {
-			////					var graphic;
-			////					if (geometry) {
-			////						graphic = new Graphic(geometry);
-			////						serviceAreaLayer.add(graphic);
-			////					}
-			////				}, function (error) {
-			////					if (console) {
-			////						if (console.error) {
-			////							console.error(error);
-			////						}
-			////					}
-			////				});
-			////			}
-
-
-			////		}
-			////	}, function (error) {
-			////		console.error("An error occured while querying for block group geometry.", error);
-			////	});
-			////}
 
 			/////**
 			////@param drawResponse
@@ -299,93 +264,21 @@ require([
 				return output;
 			}
 
-			////function queryAggregateLayerForSelection(/** {esri/geometry/Geometry} */ geometry) {
-			////	var query, aggregateQueryTask;
+			/** Sets the service area to the selected geometry after clearing the selection and service area grahpics layers.
+			 * Also updates the charts.
+			 */
+			function setServiceArea(/**{esri/geometry/Geometry}*/ geometry) {
+				selectionLayer.clear();
+				serviceAreaLayer.clear();
+				chartDataProvider.getSelectionGraphics(geometry, map.getScale(), true);
+			}
 
-			////	query = new Query();
-			////	query.geometry = geometry;
-			////	query.returnGeometry = true;
-			////	//query.maxAllowableOffset = 50;
-
-			////	aggregateQueryTask = aggregateQueryTasks[t6Utils.getLevel(map.getScale())];
-
-			////	aggregateQueryTask.execute(query, function (/** {esri/tasks/FeatureSet} */ featureSet) {
-			////		var i, l;
-			////		if (featureSet) {
-			////			// Clear the existing features.
-			////			selectionLayer.clear();
-			////			// Add the new features.
-			////			for (i = 0, l = featureSet.features.length; i < l; i++) {
-			////				selectionLayer.add(featureSet.features[i]);
-			////			}
-			////		}
-			////	}, function (error) {
-			////		console.error("An error occured while querying for block group geometry.", error);
-			////	});
-			////}
-
-			/////**
-			//// * @param drawResponse
-			//// * @param {esri/geometry/Geometry} drawResponse.geometry
-			//// * @param {esri/geometry/Geometry} drawResponse.geographicGeometry
-			//// */
-			////function setSelection(drawResponse) {
-			////	var saGeometry, selectionGeometry;
-
-			////	if (drawResponse.geometry) {
-			////		selectionGeometry = drawResponse.geometry;
-			////	} else if (typeof drawResponse === "string") {
-			////		selectionGeometry = JSON.parse(drawResponse);
-			////		selectionGeometry = jsonUtils.fromJson(selectionGeometry);
-			////	}
-
-			////	selectionLayer.clear();
-
-			////	function updateCharts(geometry) {
-			////		var graphic;
-
-			////		// If a selection polygon is outside of the service area, its 
-			////		// intersection will be a geometry with an empty "rings" property.
-			////		// In this case we will set the geometry to null.
-			////		if (geometry &&
-			////			((geometry.rings && geometry.rings.length)
-			////			||
-			////			(geometry.points && geometry.points.length)
-			////			||
-			////			(geometry.paths && geometry.paths.length)
-			////			)) {
-			////			graphic = new Graphic(geometry);
-			////			selectionLayer.add(graphic);
-			////		} else {
-			////			geometry = null;
-			////		}
-
-			////		////chartDataProvider.updateCharts(geometry, map.getScale());
-			////		////queryAggregateLayerForSelection(geometry);
-			////	}
-
-			////	// Determine if there is an existing service area geometry.
-			////	saGeometry = getServiceAreaGeometry();
-
-			////	if (!saGeometry) {
-			////		updateCharts(selectionGeometry);
-			////	} else {
-			////		geometryService.intersect([selectionGeometry], saGeometry, function (/** {Geometry[]} */ geometries) {
-			////			if (geometries && geometries.length) {
-			////				updateCharts(geometries[0]);
-			////			} else {
-			////				updateCharts(selectionGeometry);
-			////			}
-			////		}, function (/** {Error} */ error) {
-			////			// Log an error to the console (if supported by browser);
-			////			console.error("Error with Geometry Service intersect operation", error);
-			////			// Update the charts with the un-intersected geometry.
-			////			updateCharts(selectionGeometry);
-			////		});
-			////	}
-
-			////	userGraphicsLayers.add(selectionGeometry);
-			////}
+			/** Sets the selection to the given geometry after clearing the selection graphics layer, then updates the charts.
+			 */
+			function setSelection(/**{esri/geometry/Geometry}*/ geometry) {
+				selectionLayer.clear();
+				chartDataProvider.getSelectionGraphics(geometry, map.getScale(), false, getServiceAreaGeometry());
+			}
 
 			popupHandle = response.clickEventHandle;
 			popupListener = response.clickEventListener;
@@ -404,11 +297,11 @@ require([
 			}
 
 			////aggregateQueryTask = new QueryTask(aggregateLayerUrl);
-			aggregateQueryTasks = {
-				blockGroup: new QueryTask(aggregateLayerUrl + "0"),
-				tract: new QueryTask(aggregateLayerUrl + "1"),
-				county: new QueryTask(aggregateLayerUrl + "2")
-			};
+			////aggregateQueryTasks = {
+			////	blockGroup: new QueryTask(aggregateLayerUrl + "0"),
+			////	tract: new QueryTask(aggregateLayerUrl + "1"),
+			////	county: new QueryTask(aggregateLayerUrl + "2")
+			////};
 
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
@@ -521,26 +414,30 @@ require([
 						
 					});
 
-					////if (localStorage.alpaca_serviceAreaGeometry) {
-					////	setServiceArea(localStorage.alpaca_serviceAreaGeometry);
-					////}
-					////if (localStorage.alpaca_selectionGeometry) {
-					////	setSelection(localStorage.alpaca_selectionGeometry);
-					////}
+					if (localStorage.alpaca_serviceAreaGeometry) {
+						setServiceArea(parseGeometry(localStorage.alpaca_serviceAreaGeometry));
+					}
+					if (localStorage.alpaca_selectionGeometry) {
+						setSelection(parseGeometry(localStorage.alpaca_selectionGeometry));
+					}
 				}
 				
 
+				/**
+				 * @param drawResponse
+				 * @param {esri/geometry/Geometry} drawResponse.geometry
+				 */
 				drawToolbar.on("draw-complete", function (drawResponse) {
 					drawToolbar.deactivate();
 					if (drawToolbar.alpacaMode === "service-area") {
-						selectionLayer.clear();
-						serviceAreaLayer.clear();
-						////setServiceArea(drawResponse);
-						chartDataProvider.getSelectionGraphics(drawResponse.geometry, map.getScale(), true);
+						//selectionLayer.clear();
+						//serviceAreaLayer.clear();
+						setServiceArea(drawResponse.geometry);
+						////chartDataProvider.getSelectionGraphics(drawResponse.geometry, map.getScale(), true);
 					} else if (drawToolbar.alpacaMode === "selection") {
-						selectionLayer.clear();
-						chartDataProvider.getSelectionGraphics(drawResponse.geometry, map.getScale(), false, getServiceAreaGeometry());
-						////setSelection(drawResponse);
+						////selectionLayer.clear();
+						////chartDataProvider.getSelectionGraphics(drawResponse.geometry, map.getScale(), false, getServiceAreaGeometry());
+						setSelection(drawResponse.geometry);
 					}
 					drawToolbar.alpacaMode = null;
 					// Restore the map's default on-click behavior: displaying popups.
