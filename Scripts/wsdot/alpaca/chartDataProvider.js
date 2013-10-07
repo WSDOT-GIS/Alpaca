@@ -44,7 +44,7 @@ define([
 
 
 	/** Creates an array of statistic definition objects
-	 * @returns {esri/tasks/StatisticDefinition}
+	 * @returns {esri/tasks/StatisticDefinition[]}
 	 */
 	function createStatisticDefinitions() {
 		var i, l, statDef, output;

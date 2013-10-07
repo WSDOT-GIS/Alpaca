@@ -49,7 +49,7 @@ require([
 	"use strict";
 
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
-	////esriConfig.defaults.io.timeout = 3000;
+	esriConfig.defaults.io.timeout = 3000;
 	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
 
 	if (!window.console) {
@@ -210,7 +210,7 @@ require([
 					raceChart = chartUtils.createRaceChart(chartData.race);
 				} else {
 					// Update the race chart with the response race data.
-					raceChart.updateSeries("Race", chartData.race.toColumnChartSeries());
+					raceChart.updateSeries("Minority", chartData.race.toColumnChartSeries());
 					raceChart.render();
 				}
 
