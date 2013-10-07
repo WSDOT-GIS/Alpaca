@@ -2,14 +2,17 @@
 /*jslint nomen:true,plusplus:true*/
 define([
 	"dojo/_base/declare",
+	"dojo/Deferred",
 	"dojo/Evented",
+	"esri/config",
+	"esri/graphic",
 	"esri/tasks/query",
 	"esri/tasks/QueryTask",
 	"esri/tasks/StatisticDefinition",
 	"./raceData",
 	"./languageData",
 	"./utils"
-], function (declare, Evented, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, utils) {
+], function (declare, Deferred, Evented, esriConfig, Graphic, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, utils) {
 	/** Provides classes for updating charts.
 	 * @exports wsdot/alpaca/chartDataProvider
 	 */
@@ -26,8 +29,22 @@ define([
 		this.language = new LanguageData(queryResults);
 	}
 
+	/**
+	 * @param {string} type Choices are "statewide", "service area" or "selection"
+	 * @param {esri/Graphic[]} features An array of graphics.
+	 * @param {(ChartData|Object.<string, number>)} chartData Either a {@link ChartData} or the parameter to be passed to the {@link ChartData} constructor.
+	 * @constructor
+	 */
+	function ChartDataQueryResult(type, features, chartData, originalGeometry) {
+		this.type = type || null;
+		this.features = features || null;
+		this.chartData = (chartData instanceof ChartData) ? chartData : new ChartData(chartData);
+		this.originalGeometry = originalGeometry || null;
+	}
+
+
 	/** Creates an array of statistic definition objects
-	 * @returns {esri/tasks/StatisticDefinition}
+	 * @returns {esri/tasks/StatisticDefinition[]}
 	 */
 	function createStatisticDefinitions() {
 		var i, l, statDef, output;
@@ -59,6 +76,14 @@ define([
 		return output;
 	}
 
+
+
+
+	/** An object used to provide chart data.
+	 * @fires ChartDataProvider#totals-determined Fired when the data for the charts has been calculated.
+	 * @fires ChartDataProvider#query-complete Occurs when a query has been completed.
+	 * @fires ChartDataProvider#error
+	 */
 	ChartDataProvider = declare(Evented, {
 
 		_statisticDefinitions: createStatisticDefinitions(),
@@ -78,33 +103,190 @@ define([
 			qt = this.queryTasks[levelName];
 			return qt;
 		},
-		/** Trigger the chart update events.
-		 * @param {esri/geometry/Geometry} [geometry]
-		 * @param {number} [scale]
-		 * @returns {dojo/Deferred} Returns the output of the query tasks execute function.
+
+		/** Determines a service area based on a given geometry and scale.
+		 * @param {esri/Geometry} [geometry] The geometry used to determine the service area or selection. Not required for statewide.
+		 * @param {Number} [scale] The scale of the map. Used to determine which query task is used (County, Tract, or Block Group). Not required for statewide.
+		 * @param {Boolean} [union] Set to true to union the returned geometry. (Output will be a single graphic in this case.) Set to false to skip the union operation (for selection).
+		 * @param {esri/Geometry} [serviceAreaGeometry] When making a selection, use this parameter to filter by a service area geometry.
+		 * @returns {dojo/Deferred} The "resolve" function contains a single esri/Graphic parameter if union is true.
 		 */
-		updateCharts: function (geometry, scale) {
-			var self = this, query, queryTask;
-			query = new Query();
-			query.outStatistics = this._statisticDefinitions;
-			if (geometry) {
-				query.geometry = geometry;
+		getSelectionGraphics: function(geometry, scale, union, serviceAreaGeometry) {
+			var self = this, deferred = new Deferred(), type, geometryService;
+
+			function getGeometryService() {
+				// Get the default geometry service.
+				var geometryService = esriConfig.defaults.geometryService;
+				if (!geometryService) {
+					(function () {
+						var error = new TypeError("esri/config.defaults.geometryService not defined.");
+						deferred.reject(error);
+						self.emit("error", error);
+					}());
+				}
+				return geometryService;
 			}
-			queryTask = this.getQueryTaskForScale(scale);
-			return queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
-				var results, output;
-				results = featureSet.features[0].attributes;
-				output = {
-					geometry: geometry || null,
-					chartData: new ChartData(results)
-				};
-				self.emit("query-complete", output);
-			}, function (/** {Error} */error) {
-				self.emit("query-error", {
-					query: query,
-					error: error
+
+			/** Performs the statewide aggregate query.
+			 */
+			function performAggregateQuery() {
+				var query, queryTask;
+				queryTask = self.getQueryTaskForScale(scale);
+				query = new Query();
+
+				type = "statewide";
+				// Perform a query for statewide statistics.
+				query.outStatistics = self._statisticDefinitions;
+				queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
+					var results, output;
+					results = featureSet.features[0].attributes;
+					output = new ChartDataQueryResult(type, null, results, geometry);
+					self.emit("totals-determined", output.chartData);
+					self.emit("query-complete", output);
+					deferred.resolve(output);
+				}, function (/** {Error} */error) {
+					var output = {
+						type: type,
+						query: query,
+						error: error
+					};
+					self.emit("error", output);
+					deferred.reject(output);
 				});
-			});
+			}
+
+			function performQuery(geometry) {
+				var query, queryTask;
+				// Get the query task for the current scale.
+				queryTask = self.getQueryTaskForScale(scale);
+				query = new Query();
+
+				// Setup the query.
+				query.geometry = geometry;
+				query.outFields = [
+					"OneRace",
+					"White",
+					"NotWhite",
+					"English",
+					"Spanish",
+					"Indo_European",
+					"Asian_PacificIsland",
+					"Other"
+				];
+				query.returnGeometry = true;
+
+				// Query to determine intersecting geometry.
+				queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
+					var totals, geometries = [], i, l, graphic, attrName, output;
+
+
+
+
+					// Initiate count totals.
+					totals = {};
+
+					for (i = 0, l = featureSet.features.length; i < l; i += 1) {
+						graphic = featureSet.features[i];
+						// Add the geometry to the geometries array.
+						if (graphic.geometry) {
+							geometries.push(graphic.geometry);
+						}
+						// Add the values from the attributes to the totals
+						for (attrName in graphic.attributes) {
+							if (graphic.attributes.hasOwnProperty(attrName)) {
+								if (!totals[attrName]) {
+									totals[attrName] = graphic.attributes[attrName];
+								} else {
+									totals[attrName] += graphic.attributes[attrName];
+								}
+							}
+						}
+					}
+
+					totals = new ChartData(totals);
+
+					if (union) {
+
+
+						self.emit("totals-determined", totals);
+
+						// Update progress on the deferred object.
+						deferred.progress({
+							message: "totals determined",
+							totals: totals
+						});
+
+						geometryService = getGeometryService();
+						geometryService.union(geometries, function (geometry) {
+							graphic = new Graphic(geometry, null, totals);
+							output = new ChartDataQueryResult(type, [graphic], totals, geometry);
+							self.emit("query-complete", output);
+							deferred.resolve(output);
+						}, function (error) {
+							error.totals = totals;
+							deferred.reject(error);
+						});
+					} else {
+						output = new ChartDataQueryResult(type, featureSet.features, totals, geometry);
+						deferred.resolve(output);
+						self.emit("query-complete", output);
+					}
+				}, function (error) {
+					self.emit("error", error);
+					deferred.reject(error);
+				});
+			}
+
+			// Determine the type of selection query.
+			type = !geometry ? "statewide" : union ? "service area" : "selection";
+
+
+
+			if (!geometry) {
+				performAggregateQuery();
+			} else {
+				if (serviceAreaGeometry) {
+					// Perform intersect to limit geometries by service area.
+					geometryService = getGeometryService();
+
+					geometryService.intersect([geometry], serviceAreaGeometry, function (/**{esri/Geometry[]}*/ geometries) {
+						if (geometries && geometries.length >= 1) {
+							performQuery(geometries[0]);
+						}
+					}, function (error) {
+						self.emit("intersect error", error);
+						deferred.reject(error);
+					});
+					
+				} else {
+					performQuery(geometry);
+				}
+
+
+			}
+
+			/**
+			 * totals determined event
+			 *
+			 * @event chartDataProvider#totals-determined
+			 * @type {ChartData}
+			 */
+
+			/**
+			 * query complete event.
+			 *
+			 * @event chartDataProvider#query-complete
+			 * @type {ChartDataQueryResult}
+			 */
+
+			/**
+			 * error event.
+			 *
+			 * @event chartDataProvider#error
+			 * @type {(error|object)}
+			 */
+
+			return deferred.promise;
 		},
 		/**
 		 * @param {string} mapServiceUrl The map service that provides aggregate census data.
@@ -137,9 +319,13 @@ define([
 			this.queryTasks.tract = new QueryTask(mapServiceUrl + String(options.tractLayerId));
 			this.queryTasks.county = new QueryTask(mapServiceUrl + String(options.countyLayerId));
 
-			this.updateCharts();
+			this.getSelectionGraphics();
 		}
 	});
+
+	// Make the chart data class available outside the module.
+	ChartDataProvider.ChartData = ChartData;
+	ChartDataProvider.ChartDataQueryResult = ChartDataQueryResult;
 
 	return ChartDataProvider;
 });

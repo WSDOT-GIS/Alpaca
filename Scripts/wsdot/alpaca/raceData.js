@@ -8,17 +8,17 @@ define(["dojo/number"], function (number) {
 	 */
 	function RaceData(/**{Object.<string,number>}*/ queryResults) {
 		/** @member {!number} */
-		this.white = queryResults.SUM_White || queryResults.white || 0;
+		this.white = queryResults.SUM_White || queryResults.white || queryResults.White || 0;
 		/** @member {!number} */
-		this.minority = queryResults.SUM_NotWhite || queryResults.minority || 0;
+		this.minority = queryResults.SUM_NotWhite || queryResults.minority || queryResults.NotWhite || 0;
 		/** @member {!number} */
-		this.oneRace = queryResults.SUM_OneRace || queryResults.oneRace || 0;
-		/** @member {Object.<string, number>} */
-		this.marginOfError = queryResults.marginOfError || {
-			white: queryResults.MAX_MEWhite,
-			oneRace: queryResults.MAX_MEOneRace,
-			total: queryResults.MAX_METotal
-		};
+		this.oneRace = queryResults.SUM_OneRace || queryResults.oneRace || queryResults.OneRace || 0;
+		/////** @member {Object.<string, number>} */
+		////this.marginOfError = queryResults.marginOfError || {
+		////	white: queryResults.MAX_MEWhite,
+		////	oneRace: queryResults.MAX_MEOneRace,
+		////	total: queryResults.MAX_METotal
+		////};
 	}
 
 	/** @static {Object.<string, string>} */

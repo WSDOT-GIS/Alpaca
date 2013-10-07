@@ -6,15 +6,15 @@ define(["dojo/number"], function (number) {
 	/** @constructor */
 	function LanguageData(/**{Object.<string,number>}*/ queryResults) {
 		/** @type {number} */
-		this.english = queryResults.english || queryResults.SUM_English || 0;
+		this.english = queryResults.english || queryResults.English || queryResults.SUM_English || 0;
 		/** @type {number} */
-		this.spanish = queryResults.spanish || queryResults.SUM_Spanish || 0;
+		this.spanish = queryResults.spanish || queryResults.Spanish || queryResults.SUM_Spanish || 0;
 		/** @type {number} */
-		this.indoEuropean = queryResults.indoEuropean || queryResults.SUM_Indo_European || 0;
+		this.indoEuropean = queryResults.indoEuropean || queryResults.Indo_European || queryResults.SUM_Indo_European || 0;
 		/** @type {number} */
-		this.asianPacificIsland = queryResults.asianPacificIsland || queryResults.SUM_Asian_PacificIsland || 0;
+		this.asianPacificIsland = queryResults.asianPacificIsland || queryResults.Asian_PacificIsland || queryResults.SUM_Asian_PacificIsland || 0;
 		/** @type {number} */
-		this.other = queryResults.other || queryResults.SUM_Other || 0;
+		this.other = queryResults.other || queryResults.Other || queryResults.SUM_Other || 0;
 	}
 
 	/** Provides labels for each of the LanguageData properties.
