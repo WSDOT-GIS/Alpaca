@@ -109,10 +109,6 @@ require([
 			map.removeLayer(layer);
 		}
 
-		////if (url && !/\/\d+/.test(url)) {
-		////	url += "/0";
-		////}
-
 		return url;
 	}
 
@@ -199,25 +195,6 @@ require([
 				return layer;
 			}
 
-			/////**
-			////@param drawResponse
-			////@param {esri/geometry/Geometry} drawResponse.geometry
-			////@param {esri/geometry/Geometry} drawResponse.geographicGeometry
-			////*/
-			////function setServiceArea(drawResponse) {
-			////	// Clear the existing graphics.
-			////	serviceAreaLayer.clear();
-			////	selectionLayer.clear();
-			////	userGraphicsLayers.clear();
-			////	if (typeof drawResponse === "string") { // If it's a string, then its a geometry representation from localStorage.
-			////		serviceAreaLayer.add(new Graphic(jsonUtils.fromJson(JSON.parse(drawResponse))));
-			////	} else {
-			////		////queryAggregateLayerForServiceArea(drawResponse.geometry);
-			////		chartDataProvider.getSelectionGraphics(drawResponse.geometry, map.getScale(), true);
-			////	}
-			////}
-			///
-
 			/** Updates the charts in the application
 			*/
 			function updateCharts(/** {ChartData} */ chartData) {
@@ -295,13 +272,6 @@ require([
 			if (!/\/$/.test(aggregateLayerUrl)) {
 				aggregateLayerUrl += "/";
 			}
-
-			////aggregateQueryTask = new QueryTask(aggregateLayerUrl);
-			////aggregateQueryTasks = {
-			////	blockGroup: new QueryTask(aggregateLayerUrl + "0"),
-			////	tract: new QueryTask(aggregateLayerUrl + "1"),
-			////	county: new QueryTask(aggregateLayerUrl + "2")
-			////};
 
 			// Setup the progress bar to display when the map is loading data.
 			map.on("update-start", function () {
@@ -430,13 +400,8 @@ require([
 				drawToolbar.on("draw-complete", function (drawResponse) {
 					drawToolbar.deactivate();
 					if (drawToolbar.alpacaMode === "service-area") {
-						//selectionLayer.clear();
-						//serviceAreaLayer.clear();
 						setServiceArea(drawResponse.geometry);
-						////chartDataProvider.getSelectionGraphics(drawResponse.geometry, map.getScale(), true);
 					} else if (drawToolbar.alpacaMode === "selection") {
-						////selectionLayer.clear();
-						////chartDataProvider.getSelectionGraphics(drawResponse.geometry, map.getScale(), false, getServiceAreaGeometry());
 						setSelection(drawResponse.geometry);
 					}
 					drawToolbar.alpacaMode = null;
