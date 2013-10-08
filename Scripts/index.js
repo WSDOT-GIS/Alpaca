@@ -27,6 +27,7 @@ require([
 
 	"esri/config",
 	"alpaca/UserGraphicsLayers",
+	"esri/request",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -44,13 +45,20 @@ require([
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
-	esriConfig, UserGraphicsLayers)
+	esriConfig, UserGraphicsLayers, esriRequest)
 {
 	"use strict";
 
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
-	esriConfig.defaults.io.timeout = 3000;
 	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
+
+	// Census .gov is down due to federal gov't shutdown.  Set a short timeout for these services.
+	esriRequest.setRequestPreCallback(function (ioArgs) {
+		if (/census\.gov/.test(ioArgs.url)) {
+			ioArgs.timeout = 500;
+		}
+		return ioArgs;
+	});
 
 	if (!window.console) {
 		window.console = {};
