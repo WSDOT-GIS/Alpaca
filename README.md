@@ -1,33 +1,49 @@
 ﻿ALPACA (Application for Local Planning and Community Accessibility)
 ===================================================================
 
-## Chart Data Provider ##
+## Accordion panes ##
 
-* There is one map service per chart. While only one of these map services will be displayed at a time on the map, the charts for all will be displayed at all times. (Charts may be hidden by Dojo controls, but chart visibility is not dependant on the corresponding layer's visibility in the map.)
-	* Language
-	* Minority
-* Each map service contains three sublevels.  Each only one sublevel is visible at a time, depending on the map's zoom level. Each map service's chart will be updated as the zoom level changes in the map.
-	* Block Group (up to 499,999)
-	* Tract (500,000 - 3,999,999)
-	* County (4,000,000 and up)
+### *View* pane ###
 
-### Filtering by geometry ###
+You can use the radio buttons in this list to change the layer that is displayed on the map.
 
-1. User selects an area, generating a geometry.
-2. **If there is a service area defined**, the selection area is intersected with the service area to ensure that the selection is not outside the service area. This generates a new selection geometry.
-	* This operation will require a call to a geometry service unless a client-side library can be found that will perform this operation.
-3. Query the aggregate block group service for the sums, this time filtering by the selection geometry.
-4. When the query returns results, update the charts.
+### *Title VI*, *Env. Justice*, *Population* panes ###
 
-The user can select a service area by drawing it on the map.
+These sections display charts for the given service area and / or selection. If no service area or selection has been made, the charts display data for all of Washington.
 
-## Printing ##
+## *Tools* menu ##
 
-Parameters
+### Service Area ###
 
-* Map extent
-* Selection geometries (optional)
-* Service area geometry (optional)
+These tools allow the user to define a *service area*.
+
+#### Draw ####
+
+Activates the *service area* drawing tool.
+
+#### Clear ####
+
+Clears the selected *service area*.  This will also clear the current *selection*.
+
+### Selection ###
+
+Allows the user to define a *selection*.  If a *service area* is defined, the *selection* will be confined to the *service area*.
+
+#### Draw ####
+
+Activates one of the *selection* drawing tools. A selection can be defined using points, a line, or a polygon.
+
+#### Clear ####
+
+Clears the *selection*.
+
+### Basemap ###
+
+This allows you to change the basemap.
+
+### Print ###
+
+Opens a "printer-friendly" version of the map.
 
 ## License ##
 Licensed under [The MIT License]. See the `LICENSE.txt` file for details.
