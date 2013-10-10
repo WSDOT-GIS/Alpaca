@@ -24,9 +24,9 @@ define([
 	 */
 	function ChartData(/**{Object}*/ queryResults) {
 		/** Provices race data */
-		this.race = new RaceData(queryResults);
+		this.race = queryResults.race ? new RaceData(queryResults.race) : new RaceData(queryResults);
 		/** Provides language data */
-		this.language = new LanguageData(queryResults);
+		this.language = queryResults.language  ? new LanguageData(queryResults.language) : new LanguageData(queryResults);
 	}
 
 	/**
@@ -105,13 +105,13 @@ define([
 		},
 
 		/** Determines a service area based on a given geometry and scale.
-		 * @param {esri/Geometry} [geometry] The geometry used to determine the service area or selection. Not required for statewide.
+		 * @param {esri/Geometry} [drawnGeometry] The geometry used to determine the service area or selection. Not required for statewide.
 		 * @param {Number} [scale] The scale of the map. Used to determine which query task is used (County, Tract, or Block Group). Not required for statewide.
 		 * @param {Boolean} [union] Set to true to union the returned geometry. (Output will be a single graphic in this case.) Set to false to skip the union operation (for selection).
 		 * @param {esri/Geometry} [serviceAreaGeometry] When making a selection, use this parameter to filter by a service area geometry.
 		 * @returns {dojo/Deferred} The "resolve" function contains a single esri/Graphic parameter if union is true.
 		 */
-		getSelectionGraphics: function(geometry, scale, union, serviceAreaGeometry) {
+		getSelectionGraphics: function(drawnGeometry, scale, union, serviceAreaGeometry) {
 			var self = this, deferred = new Deferred(), type, geometryService;
 
 			function getGeometryService() {
@@ -140,7 +140,7 @@ define([
 				queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
 					var results, output;
 					results = featureSet.features[0].attributes;
-					output = new ChartDataQueryResult(type, null, results, geometry);
+					output = new ChartDataQueryResult(type, null, results);
 					self.emit("totals-determined", output.chartData);
 					self.emit("query-complete", output);
 					deferred.resolve(output);
@@ -219,7 +219,7 @@ define([
 						geometryService = getGeometryService();
 						geometryService.union(geometries, function (geometry) {
 							graphic = new Graphic(geometry, null, totals);
-							output = new ChartDataQueryResult(type, [graphic], totals, geometry);
+							output = new ChartDataQueryResult(type, [graphic], totals, null);
 							self.emit("query-complete", output);
 							deferred.resolve(output);
 						}, function (error) {
@@ -227,7 +227,7 @@ define([
 							deferred.reject(error);
 						});
 					} else {
-						output = new ChartDataQueryResult(type, featureSet.features, totals, geometry);
+						output = new ChartDataQueryResult(type, featureSet.features, totals, drawnGeometry);
 						deferred.resolve(output);
 						self.emit("query-complete", output);
 					}
@@ -238,18 +238,18 @@ define([
 			}
 
 			// Determine the type of selection query.
-			type = !geometry ? "statewide" : union ? "service area" : "selection";
+			type = !drawnGeometry ? "statewide" : union ? "service area" : "selection";
 
 
 
-			if (!geometry) {
+			if (!drawnGeometry) {
 				performAggregateQuery();
 			} else {
 				if (serviceAreaGeometry) {
 					// Perform intersect to limit geometries by service area.
 					geometryService = getGeometryService();
 
-					geometryService.intersect([geometry], serviceAreaGeometry, function (/**{esri/Geometry[]}*/ geometries) {
+					geometryService.intersect([drawnGeometry], serviceAreaGeometry, function (/**{esri/Geometry[]}*/ geometries) {
 						if (geometries && geometries.length >= 1) {
 							performQuery(geometries[0]);
 						}
@@ -259,7 +259,7 @@ define([
 					});
 					
 				} else {
-					performQuery(geometry);
+					performQuery(drawnGeometry);
 				}
 
 

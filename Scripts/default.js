@@ -5,6 +5,7 @@ require([
 	"dojo/_base/Color",
 	"dojo/_base/connect",
 	"dijit/registry",
+	"esri/graphic",
 	"esri/arcgis/utils",
 	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
@@ -40,7 +41,7 @@ require([
 	"dijit/layout/TabContainer",
 	"dijit/form/Button",
 	"dijit/DropDownMenu", "dijit/MenuItem"
-], function (ready, Color, connect, registry, arcgisUtils, domUtils, BasemapGallery,
+], function (ready, Color, connect, registry, Graphic, arcgisUtils, domUtils, BasemapGallery,
 	LayerChooser, GraphicsLayerList, ChartDataProvider, Draw, GraphicsLayer,
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
@@ -251,11 +252,17 @@ require([
 
 			/** Sets the service area to the selected geometry after clearing the selection and service area grahpics layers.
 			 * Also updates the charts.
+			 * @param {(esri/geometry/Geometry|esri/Graphic)} serviceArea
 			 */
-			function setServiceArea(/**{esri/geometry/Geometry}*/ geometry) {
+			function setServiceArea(serviceArea) {
 				selectionLayer.clear();
 				serviceAreaLayer.clear();
-				chartDataProvider.getSelectionGraphics(geometry, map.getScale(), true);
+				if (serviceArea && serviceArea.geometry) { // Is serviceArea a graphic?
+					serviceAreaLayer.add(serviceArea);
+					updateCharts(new ChartDataProvider.ChartData(serviceArea.attributes));
+				} else {
+					chartDataProvider.getSelectionGraphics(serviceArea, map.getScale(), true);
+				}
 			}
 
 			/** Sets the selection to the given geometry after clearing the selection graphics layer, then updates the charts.
@@ -359,7 +366,7 @@ require([
 					window.alert("This browser does not support saving of graphics. Saving of geometry requires support for window.addEventListener, window.localStorage, and window.JSON.");
 				} else {
 					window.addEventListener("beforeunload", function (/*e*/) {
-						var selectionGeometry, serviceAreaGeometry, mapCenter;
+						var selectionGeometry, serviceAreaGraphic, mapCenter;
 
 						mapCenter = map.geographicExtent.getCenter();
 						localStorage.setItem("alpaca_mapCenter", JSON.stringify([mapCenter.x, mapCenter.y]));
@@ -376,24 +383,24 @@ require([
 
 						// Save the service area.
 						if (serviceAreaLayer.graphics && serviceAreaLayer.graphics.length) {
-							serviceAreaGeometry = serviceAreaLayer.graphics[0].geometry;
+							serviceAreaGraphic = serviceAreaLayer.graphics[0];
 						}
-						if (serviceAreaGeometry) {
+						if (serviceAreaGraphic) {
 							// Strip unneeded properties.
-							if (serviceAreaGeometry.toJson) {
-								serviceAreaGeometry = serviceAreaGeometry.toJson();
+							if (serviceAreaGraphic.toJson) {
+								serviceAreaGraphic = serviceAreaGraphic.toJson();
 							}
-							serviceAreaGeometry = JSON.stringify(serviceAreaGeometry);
-							localStorage.setItem("alpaca_serviceAreaGeometry", serviceAreaGeometry);
+							serviceAreaGraphic = JSON.stringify(serviceAreaGraphic);
+							localStorage.setItem("alpaca_serviceAreaGraphic", serviceAreaGraphic);
 						} else {
-							localStorage.removeItem("alpaca_serviceAreaGeometry");
+							localStorage.removeItem("alpaca_serviceAreaGraphic");
 						}
 						
 						
 					});
 
-					if (localStorage.alpaca_serviceAreaGeometry) {
-						setServiceArea(parseGeometry(localStorage.alpaca_serviceAreaGeometry));
+					if (localStorage.alpaca_serviceAreaGraphic) {
+						setServiceArea(new Graphic(JSON.parse(localStorage.alpaca_serviceAreaGraphic)));
 					}
 					if (localStorage.alpaca_selectionGeometry) {
 						setSelection(parseGeometry(localStorage.alpaca_selectionGeometry));
