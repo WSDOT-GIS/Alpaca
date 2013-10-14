@@ -319,7 +319,7 @@ define([
 			this.queryTasks.tract = new QueryTask(mapServiceUrl + String(options.tractLayerId));
 			this.queryTasks.county = new QueryTask(mapServiceUrl + String(options.countyLayerId));
 
-			this.getSelectionGraphics();
+			
 		}
 	});
 

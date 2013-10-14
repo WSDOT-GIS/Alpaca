@@ -347,6 +347,22 @@ require([
 							console.error(error);
 						}
 					});
+
+					if (window.localStorage) {
+						if (localStorage.alpaca_serviceAreaGraphic) {
+							setServiceArea(new Graphic(JSON.parse(localStorage.alpaca_serviceAreaGraphic)));
+							if (localStorage.alpaca_selectionGeometry) {
+								setSelection(parseGeometry(localStorage.alpaca_selectionGeometry));
+							}
+						}
+						else if (localStorage.alpaca_selectionGeometry) {
+							setSelection(parseGeometry(localStorage.alpaca_selectionGeometry));
+						} else {
+							chartDataProvider.getSelectionGraphics();
+						}
+					} else {
+						chartDataProvider.getSelectionGraphics();
+					}
 				} catch (e) {
 						console.error("chartDataProvider error", e);
 				}
@@ -399,12 +415,7 @@ require([
 						
 					});
 
-					if (localStorage.alpaca_serviceAreaGraphic) {
-						setServiceArea(new Graphic(JSON.parse(localStorage.alpaca_serviceAreaGraphic)));
-					}
-					if (localStorage.alpaca_selectionGeometry) {
-						setSelection(parseGeometry(localStorage.alpaca_selectionGeometry));
-					}
+
 				}
 				
 
