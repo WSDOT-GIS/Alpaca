@@ -350,7 +350,15 @@ require([
 
 					if (window.localStorage) {
 						if (localStorage.alpaca_serviceAreaGraphic) {
-							setServiceArea(new Graphic(JSON.parse(localStorage.alpaca_serviceAreaGraphic)));
+							setServiceArea(new Graphic(JSON.parse(localStorage.alpaca_serviceAreaGraphic, function (k, v) {
+								var output;
+								if (k === "attributes") {
+									output = new ChartDataProvider.ChartData(v);
+								} else {
+									output = v;
+								}
+								return output;
+							})));
 							if (localStorage.alpaca_selectionGeometry) {
 								setSelection(parseGeometry(localStorage.alpaca_selectionGeometry));
 							}
