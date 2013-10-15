@@ -15,15 +15,15 @@ define(["dojo/number"], function (number) {
 		this.oneRace = queryResults.SUM_OneRace || queryResults.oneRace || queryResults.OneRace || 0;
 
 		/** @member {!number} */
-		this.africanAmerican_Black = queryResults.SUM_AfricanAmerican_Black || queryResults.africanAmerican_Black || queryResults.AfricanAmerican_Black || 0;
+		this.black = queryResults.SUM_AfricanAmerican_Black || queryResults.black || queryResults.AfricanAmerican_Black || 0;
 		/** @member {!number} */
-		this.americanIndian_AlaskaNative = queryResults.SUM_AmericanIndian_AlaskaNative || queryResults.americanIndian_AlaskaNative || queryResults.AmericanIndian_AlaskaNative || 0;
+		this.native = queryResults.SUM_AmericanIndian_AlaskaNative || queryResults.native || queryResults.AmericanIndian_AlaskaNative || 0;
 		/** @member {!number} */
-		this.asianAlone = queryResults.SUM_AsianAlone || queryResults.asianAlone || queryResults.AsianAlone || 0;
+		this.asian = queryResults.SUM_AsianAlone || queryResults.asian || queryResults.AsianAlone || 0;
 		/** @member {!number} */
-		this.nativeHawaiian_PasificIsl = queryResults.SUM_NativeHawaiian_PasificIsl || queryResults.nativeHawaiian_PasificIsl || queryResults.NativeHawaiian_PasificIsl || 0;
+		this.pacificIslander = queryResults.SUM_NativeHawaiian_PacificIsl || queryResults.pacificIslander || queryResults.NativeHawaiian_PasificIsl || 0;
 		/** @member {!number} */
-		this.someOtherRace = queryResults.SUM_SomeOtherRace || queryResults.someOtherRace || queryResults.SomeOtherRace || 0;
+		this.other = queryResults.SUM_SomeOtherRace || queryResults.other || queryResults.SomeOtherRace || 0;
 		/** @member {!number} */
 		this.twoOrMoreRaces = queryResults.SUM_TwoOrMoreRaces || queryResults.twoOrMoreRaces || queryResults.TwoOrMoreRaces || 0;
 
@@ -40,9 +40,16 @@ define(["dojo/number"], function (number) {
 		/** @member {string} */
 		white: "White",
 		/** @member {string} */
-		minority: "Minority"
+		black: "Black",
+		/** @member {string} */
+		native: "American Indian",
+		/** @member {string} */
+		asian: "Asian",
+		/** @member {string} */
+		pacificIslander: "Native HI / Pacific Island",
+		/** @member {string} */
+		other: "Other"
 
-		// TODO: Add labels for new fields.
 	};
 
 	/** Returns the total number of people.
@@ -80,7 +87,7 @@ define(["dojo/number"], function (number) {
 				item = {
 					y: this[race],
 					text: label,
-					fill: race === "white" ? "RGB(255,235,204)" : "RGB(240,118,5)",
+					////fill: race === "white" ? "RGB(255,235,204)" : "RGB(240,118,5)",
 					stroke: "black",
 					tooltip: [label, ": (~", Math.round((this[race] / total) * 10000) / 100, "%)"].join("")
 				};
