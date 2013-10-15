@@ -107,7 +107,7 @@ define(["dojo/number"], function (number) {
 		total = this.getTotal();
 
 		table = document.createElement("table");
-		table.createCaption().textContent = "Minority";
+		table.createCaption().textContent = "Race";
 		table.createTHead().innerHTML = "<tr><th>Race</th><th>Count</th><th>%</th></tr>";
 		tbody = document.createElement("tbody");
 		table.appendChild(tbody);

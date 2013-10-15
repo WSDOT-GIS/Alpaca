@@ -1,8 +1,20 @@
-﻿define(function () {
+﻿/*global define*/
+define(function () {
 	"use strict";
 
 	var AgeData, SingleGenderAgeData, categoryNames;
 
+	/** Adds spaces between words / numbers.
+	 * @returns {string}
+	 */
+	function formatCategoryName(/**{string}*/ categoryName) {
+		var output, re = /([0-9]*?)([a-z]*)([0-9]+)/i, match;
+		if (categoryName) {
+			match = categoryName.match(re);
+			output = match.slice(1, 4).join(" ").trim();
+		}
+		return output || categoryName;
+	}
 
 	categoryNames = [
 		"Under5",
@@ -32,51 +44,115 @@
 
 	/**
 	 * @constructor
-	 * @member {number} Under5
-	 * @member {number} 5to9
-	 * @member {number} 10to14
-	 * @member {number} 15to17
-	 * @member {number} 18to19
+	 * @param {Object.<string, number>} queryResults
+	 * @param {string} prefix Either "M" or "F"
+	 * @member {number} "Under 5"
+	 * @member {number} "5 to 9"
+	 * @member {number} "10 to 14"
+	 * @member {number} "15 to 17"
+	 * @member {number} "18 to 19"
 	 * @member {number} 20
 	 * @member {number} 21
-	 * @member {number} 22to24
-	 * @member {number} 25to29
-	 * @member {number} 30to34
-	 * @member {number} 35to39
-	 * @member {number} 40to44
-	 * @member {number} 45to49
-	 * @member {number} 50to54
-	 * @member {number} 55to59
-	 * @member {number} 60to61
-	 * @member {number} 62to64
-	 * @member {number} 65to66
-	 * @member {number} 67to69
-	 * @member {number} 70to74
-	 * @member {number} 75to79
-	 * @member {number} 80to84
-	 * @member {number} Over85
+	 * @member {number} "22 to 24"
+	 * @member {number} "25 to 29"
+	 * @member {number} "30 to 34"
+	 * @member {number} "35 to 39"
+	 * @member {number} "40 to 44"
+	 * @member {number} "45 to 49"
+	 * @member {number} "50 to 54"
+	 * @member {number} "55 to 59"
+	 * @member {number} "60 to 61"
+	 * @member {number} "62 to 64"
+	 * @member {number} "65 to 66"
+	 * @member {number} "67 to 69"
+	 * @member {number} "70 to 74"
+	 * @member {number} "75 to 79"
+	 * @member {number} "80 to 84"
+	 * @member {number} "Over 85"
 	 */
 	SingleGenderAgeData = function (queryResults, prefix) {
-		var i, l, fieldName, cName;
+		var i, l, fieldName, cName, outName;
+
 		if (prefix !== "M" && prefix !== "F") {
-			throw new TypeError("Invalid prefix")
+			throw new TypeError("Invalid prefix");
 		}
 		for (i = 0, l = categoryNames.length; i < l; i += 1) {
 			// Add the prefix to get the field name.
 			cName = categoryNames[i];
+			outName = formatCategoryName(cName);
 			fieldName = [prefix, cName].join("_");
-			this[cName] = queryResults[fieldName] || queryResults["SUM_" + fieldName] || 0;
+			this[outName] = queryResults[fieldName] || queryResults["SUM_" + fieldName] || 0;
 		}
+	};
+
+	SingleGenderAgeData.prototype.getTotal = function () {
+		var propName, v, output = 0;
+		for (propName in this) {
+			if (this.hasOwnProperty(propName)) {
+				v = this[propName];
+				if (typeof v === "number") {
+					output += v;
+				}
+			}
+		}
+		return output;
+	};
+
+	function getPercent(v, total) {
+		var output;
+		if (total) {
+			output = Math.round((v / total) * 10000) / 100;
+		}
+		return output;
 	}
+
+	SingleGenderAgeData.prototype.toColumnChartSeries = function (/** {number} */ total, /** {string} */ color) {
+		var output = [], item, v, propName;
+		for (propName in this) {
+			if (this.hasOwnProperty(propName)) {
+				v = this[v];
+				if (typeof v === "number") {
+					item = {
+						y: v,
+						text: propName,
+						fill: color || null,
+						stroke: "black",
+						tooltip: total ? [propName, ": (~", getPercent(v, total), "%)"].join("") : [propName, ": ", v].join("")
+					};
+
+					output.push(item);
+				}
+			}
+
+		}
+		return output;
+	};
 
 	AgeData = function (queryResults) {
 		/** @member {SingleGenderAgeData} */
 		this.male = new SingleGenderAgeData(queryResults, "M");
 		/** @member {SingleGenderAgeData} */
 		this.female = new SingleGenderAgeData(queryResults, "F");
-	}
+	};
+
+	AgeData.prototype.getTotal = function () {
+		return this.male.getTotal() + this.female.getTotal();
+	};
 
 	AgeData.SingleGenderAgeData = SingleGenderAgeData;
+
+	/** Creates objects used to populate a column chart.
+	 * @returns {Object[]}
+	 */
+	AgeData.prototype.toColumnChartSeries = function () {
+		var output, total;
+
+		total = this.getTotal();
+
+		output = this.male.toColumnChartSeries(total, "blue").concat(this.female.toColumnChartSeries(total, "pink"));
+
+		return output;
+	};
 
 	return AgeData;
 });
