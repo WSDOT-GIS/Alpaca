@@ -13,6 +13,20 @@ define(["dojo/number"], function (number) {
 		this.minority = queryResults.SUM_NotWhite || queryResults.minority || queryResults.NotWhite || 0;
 		/** @member {!number} */
 		this.oneRace = queryResults.SUM_OneRace || queryResults.oneRace || queryResults.OneRace || 0;
+
+		/** @member {!number} */
+		this.africanAmerican_Black = queryResults.SUM_AfricanAmerican_Black || queryResults.africanAmerican_Black || queryResults.AfricanAmerican_Black || 0;
+		/** @member {!number} */
+		this.americanIndian_AlaskaNative = queryResults.SUM_AmericanIndian_AlaskaNative || queryResults.americanIndian_AlaskaNative || queryResults.AmericanIndian_AlaskaNative || 0;
+		/** @member {!number} */
+		this.asianAlone = queryResults.SUM_AsianAlone || queryResults.asianAlone || queryResults.AsianAlone || 0;
+		/** @member {!number} */
+		this.nativeHawaiian_PasificIsl = queryResults.SUM_NativeHawaiian_PasificIsl || queryResults.nativeHawaiian_PasificIsl || queryResults.NativeHawaiian_PasificIsl || 0;
+		/** @member {!number} */
+		this.someOtherRace = queryResults.SUM_SomeOtherRace || queryResults.someOtherRace || queryResults.SomeOtherRace || 0;
+		/** @member {!number} */
+		this.twoOrMoreRaces = queryResults.SUM_TwoOrMoreRaces || queryResults.twoOrMoreRaces || queryResults.TwoOrMoreRaces || 0;
+
 		/////** @member {Object.<string, number>} */
 		////this.marginOfError = queryResults.marginOfError || {
 		////	white: queryResults.MAX_MEWhite,
@@ -27,6 +41,8 @@ define(["dojo/number"], function (number) {
 		white: "White",
 		/** @member {string} */
 		minority: "Minority"
+
+		// TODO: Add labels for new fields.
 	};
 
 	/** Returns the total number of people.
