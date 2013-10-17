@@ -11,13 +11,84 @@ define([
 	"esri/tasks/StatisticDefinition",
 	"./raceData",
 	"./languageData",
-	"./utils"
-], function (declare, Deferred, Evented, esriConfig, Graphic, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, utils) {
+	"./utils",
+	"dojo/text!alpaca/aggregate_fields.txt"
+], function (declare, Deferred, Evented, esriConfig, Graphic, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, utils, fields) {
 	/** Provides classes for updating charts.
 	 * @exports wsdot/alpaca/chartDataProvider
 	 */
 	"use strict";
-	var ChartDataProvider;
+	var ChartDataProvider, marginOfErrorRe, raceFieldRe, popFieldRe, vetFieldRe, povFieldRe, langFieldRe;
+
+	// These regular expressions detect the charts
+	marginOfErrorRe = /^ME/;
+	langFieldRe = /^(?:Total(?:(?:English)|(?:Spanish)|(?:IndoEuropean)|(?:AsianPacificIsland)|(?:Other)))$/i;
+	popFieldRe = /^[MF]_([0-9]{1,2})?([a-z]+)?[0-9]+$/i;
+	vetFieldRe = /^[MF](Age[0-9]{1,2})?([a-z]+)?[0-9]+(?:Non)?Vet$/i;
+	povFieldRe = /^((?:Total_POV)|(?:Poverty_(?:Fed)|(?:State))|(?:PctPoverty)|(?:Income))$/i;
+	raceFieldRe = /^(?:(?:(?:Not)?White)|(?:AfricanAmerican_Black)|(?:AmericanIndian_AlaskaNative)|(?:AsianAlone)|(?:NativeHawaiian_PacificIsl)|(?:SomeOtherRace)|(?:TwoOrMoreRaces))$/i;
+
+	/** Represents a field.
+	 * @constructor
+	 */
+	function Field(v) {
+		this.alias = v.alias || null;
+		this.domain = v.domain || null;
+		this.editable = v.editable || false;
+		this.length = v.length || null;
+		this.name = v.name || null;
+		this.type = v.type || null;
+	}
+
+	/** Used by JSON.parse to create esri/layers/Field objects.
+	 */
+	function parseField(k, v) {
+		var output;
+		if (v && v.name && v.type) {
+			output = new Field(v);
+		} else {
+			output = v;
+		}
+		return output;
+	}
+
+
+	function FieldGroups(/**{Field}*/ fields) {
+		var i, l, field;
+		this.language = [];
+		this.population = [];
+		this.veteran = [];
+		this.poverty = [];
+		this.race = [];
+		this.other = [];
+
+		for (i = 0, l = fields.length; i < l; i += 1) {
+			field = fields[i];
+			if (field && field.name && !marginOfErrorRe.test(field.name)) {
+				if (langFieldRe.test(field.name)) {
+					this.language.push(field);
+				} else if (popFieldRe.test(field.name)) {
+					this.population.push(field);
+				} else if (vetFieldRe.test(field.name)) {
+					this.veteran.push(field);
+				} else if (povFieldRe.test(field.name)) {
+					this.poverty.push(field);
+				} else if (raceFieldRe.test(field.name)) {
+					this.race.push(field);
+				} else {
+					this.other.push(field);
+				}
+			} else {
+				this.other.push(field);
+			}
+		}
+	}
+
+	// Fields is a string containing JSON: An array of field objects. Parse to actual Field objects.
+	fields = JSON.parse(fields, parseField);
+	fields = new FieldGroups(fields);
+
+	console.log(fields);
 
 	/**
 	 * @constructor
@@ -48,6 +119,8 @@ define([
 	 */
 	function createStatisticDefinitions() {
 		var i, l, statDef, output;
+
+
 
 		output = [
 			{ "statisticType": "sum", "onStatisticField": "White" },

@@ -45,6 +45,7 @@
     <Content Include="Scripts\default.js" />
     <Content Include="Scripts\Print.js" />
     <Content Include="Scripts\wsdot\alpaca\ageData.js" />
+    <Content Include="Scripts\wsdot\alpaca\aggregate_fields.txt" />
     <Content Include="Scripts\wsdot\alpaca\chartDataProvider.js" />
     <Content Include="Scripts\wsdot\alpaca\chartUtils.js" />
     <Content Include="Scripts\wsdot\alpaca\graphicsLayerList.js" />
