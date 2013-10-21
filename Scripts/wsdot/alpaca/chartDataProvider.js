@@ -124,8 +124,6 @@ define([
 	fields = JSON.parse(fields, parseField);
 	fields = new FieldGroups(fields);
 
-	console.log(fields.toStatisticDefinitions());
-
 	/**
 	 * @constructor
 	 */
