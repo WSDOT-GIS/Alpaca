@@ -83,6 +83,12 @@
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
     <Content Include="web.config" />
+    <Content Include="Scripts\wsdot\alpaca\chartDataProvider.min.js.map">
+      <DependentUpon>chartDataProvider.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\wsdot\alpaca\ageData.min.js.map">
+      <DependentUpon>ageData.js</DependentUpon>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

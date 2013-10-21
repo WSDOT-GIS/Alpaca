@@ -40,6 +40,22 @@ define([
 		this.type = v.type || null;
 	}
 
+	/** Generate a statistic definition
+	 * @param {string} [statisticType] Specify a statistic type. Defaults to "sum" if omitted.
+	 * @param {string} [outStatisticFieldName]
+	 * @returns {esri/tasks/StatisticDefinition}
+	 */
+	Field.prototype.toStatisticDefinition = function (statisticType, outStatisticFieldName) {
+		var statDef;
+		statDef = new StatisticDefinition();
+		statDef.onStatisticField = this.name;
+		statDef.statisticType = statisticType || "sum";
+		if (outStatisticFieldName) {
+			statDef.outStatisticFieldName = outStatisticFieldName;
+		}
+		return statDef;
+	};
+
 	/** Used by JSON.parse to create esri/layers/Field objects.
 	 */
 	function parseField(k, v) {
@@ -84,11 +100,31 @@ define([
 		}
 	}
 
+
+	/** Creates an array of statistic definitions.
+	 * @returns {StatisticDefinition[]}
+	 */
+	FieldGroups.prototype.toStatisticDefinitions = function () {
+		var output = [];
+
+		function toSD(value /*, index, traversedObject*/) {
+			return value.toStatisticDefinition();
+		}
+
+		output = output.concat(this.language.map(toSD));
+		output = output.concat(this.population.map(toSD));
+		output = output.concat(this.veteran.map(toSD));
+		output = output.concat(this.poverty.map(toSD));
+		output = output.concat(this.race.map(toSD));
+
+		return output;
+	};
+
 	// Fields is a string containing JSON: An array of field objects. Parse to actual Field objects.
 	fields = JSON.parse(fields, parseField);
 	fields = new FieldGroups(fields);
 
-	console.log(fields);
+	console.log(fields.toStatisticDefinitions());
 
 	/**
 	 * @constructor
@@ -113,45 +149,6 @@ define([
 		this.originalGeometry = originalGeometry || null;
 	}
 
-
-	/** Creates an array of statistic definition objects
-	 * @returns {esri/tasks/StatisticDefinition[]}
-	 */
-	function createStatisticDefinitions() {
-		var i, l, statDef, output;
-
-
-
-		output = [
-			{ "statisticType": "sum", "onStatisticField": "White" },
-			{ "statisticType": "sum", "onStatisticField": "NotWhite" },
-			{ "statisticType": "sum", "onStatisticField": "OneRace" },
-
-			////{ "statisticType": "max", "onStatisticField": "MEWhite" },
-			////{ "statisticType": "max", "onStatisticField": "MEOneRace" },
-			////{ "statisticType": "max", "onStatisticField": "METotal" },
-
-
-			{ "statisticType": "sum", "onStatisticField": "English" },
-			{ "statisticType": "sum", "onStatisticField": "Spanish" },
-			{ "statisticType": "sum", "onStatisticField": "Indo_European" },
-			{ "statisticType": "sum", "onStatisticField": "Asian_PacificIsland" },
-			{ "statisticType": "sum", "onStatisticField": "Other" }
-		];
-
-		for (i = 0, l = output.length; i < l; i += 1) {
-			statDef = new StatisticDefinition();
-			statDef.onStatisticField = output[i].onStatisticField;
-			statDef.statisticType = output[i].statisticType;
-			output[i] = statDef;
-		}
-
-		return output;
-	}
-
-
-
-
 	/** An object used to provide chart data.
 	 * @fires ChartDataProvider#totals-determined Fired when the data for the charts has been calculated.
 	 * @fires ChartDataProvider#query-complete Occurs when a query has been completed.
@@ -159,7 +156,7 @@ define([
 	 */
 	ChartDataProvider = declare(Evented, {
 
-		_statisticDefinitions: createStatisticDefinitions(),
+		_statisticDefinitions: fields.toStatisticDefinitions(),
 		/** The query tasks for each zoom level: blockGroup, tract, and county. */
 		queryTasks: {
 			blockGroup: null,
