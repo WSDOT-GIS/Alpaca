@@ -1,974 +1,974 @@
 ﻿[
-	{
-		"name": "OBJECTID",
-		"type": "esriFieldTypeOID",
-		"alias": "OBJECTID",
-		"domain": null
-	},
-	{
-		"name": "STATE",
-		"type": "esriFieldTypeString",
-		"alias": "STATE",
-		"length": 2,
-		"domain": null
-	},
-	{
-		"name": "COUNTY",
-		"type": "esriFieldTypeString",
-		"alias": "COUNTY",
-		"length": 3,
-		"domain": null
-	},
-	{
-		"name": "TRACT",
-		"type": "esriFieldTypeString",
-		"alias": "TRACT",
-		"length": 6,
-		"domain": null
-	},
-	{
-		"name": "BLKGRP",
-		"type": "esriFieldTypeString",
-		"alias": "Block Group",
-		"length": 2,
-		"domain": null
-	},
-	{
-		"name": "GEOID",
-		"type": "esriFieldTypeString",
-		"alias": "GEOID",
-		"length": 15,
-		"domain": null
-	},
-	{
-		"name": "Table_ID_RACE",
-		"type": "esriFieldTypeString",
-		"alias": "ACS Table Number (Race)",
-		"length": 7,
-		"domain": null
-	},
-	{
-		"name": "Title_RACE",
-		"type": "esriFieldTypeString",
-		"alias": "Table Name (Race)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Universe_RACE",
-		"type": "esriFieldTypeString",
-		"alias": "Universe (Race)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Total_RACE",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Population (Race)",
-		"domain": null
-	},
-	{
-		"name": "OneRace",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Identify as One Race",
-		"domain": null
-	},
-	{
-		"name": "White",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total White",
-		"domain": null
-	},
-	{
-		"name": "NotWhite",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Minority",
-		"domain": null
-	},
-	{
-		"name": "PctNotWhite",
-		"type": "esriFieldTypeDouble",
-		"alias": "Percent Minority",
-		"domain": null
-	},
-	{
-		"name": "AfricanAmerican_Black",
-		"type": "esriFieldTypeInteger",
-		"alias": "African American or Black",
-		"domain": null
-	},
-	{
-		"name": "AmericanIndian_AlaskaNative",
-		"type": "esriFieldTypeInteger",
-		"alias": "American Indian or Alaska Native",
-		"domain": null
-	},
-	{
-		"name": "AsianAlone",
-		"type": "esriFieldTypeInteger",
-		"alias": "Asian",
-		"domain": null
-	},
-	{
-		"name": "NativeHawaiian_PacificIsl",
-		"type": "esriFieldTypeInteger",
-		"alias": "Native Hawaiian or Pacific Island",
-		"domain": null
-	},
-	{
-		"name": "SomeOtherRace",
-		"type": "esriFieldTypeInteger",
-		"alias": "Some Other Race",
-		"domain": null
-	},
-	{
-		"name": "TwoOrMoreRaces",
-		"type": "esriFieldTypeInteger",
-		"alias": "Two Or More Races",
-		"domain": null
-	},
-	{
-		"name": "METotal_RACE",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Population (Race) (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEOneRace",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Identify as One Race (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEWhite",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total White (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEAfricanAmerican_Black",
-		"type": "esriFieldTypeInteger",
-		"alias": "African American or Black (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEAmericanIndian_AlaskaNative",
-		"type": "esriFieldTypeInteger",
-		"alias": "American Indian or Alaska Native (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEAsianAlone",
-		"type": "esriFieldTypeInteger",
-		"alias": "Asian (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MENativeHawaiian_PacificIsl",
-		"type": "esriFieldTypeInteger",
-		"alias": "Native Hawaiian or Pacific Island (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MESomeOtherRace",
-		"type": "esriFieldTypeInteger",
-		"alias": "Some Other Race (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "METwoOrMoreRaces",
-		"type": "esriFieldTypeInteger",
-		"alias": "Two or More Races (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "Table_ID_AGE",
-		"type": "esriFieldTypeString",
-		"alias": "ACS Table Number (Age)",
-		"length": 7,
-		"domain": null
-	},
-	{
-		"name": "Title_AGE",
-		"type": "esriFieldTypeString",
-		"alias": "Table Name (Age)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Universe_AGE",
-		"type": "esriFieldTypeString",
-		"alias": "Universe (Age)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Total_AGE",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Population (Age)",
-		"domain": null
-	},
-	{
-		"name": "Male_AGE",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male (Age)",
-		"domain": null
-	},
-	{
-		"name": "M_Under5",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male under 5",
-		"domain": null
-	},
-	{
-		"name": "M_5to9",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 5 to 9",
-		"domain": null
-	},
-	{
-		"name": "M_10to14",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 10 to 14",
-		"domain": null
-	},
-	{
-		"name": "M_15to17",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 15 to 17",
-		"domain": null
-	},
-	{
-		"name": "M_18to19",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 18 to 19",
-		"domain": null
-	},
-	{
-		"name": "M_20",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 20",
-		"domain": null
-	},
-	{
-		"name": "M_21",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 21",
-		"domain": null
-	},
-	{
-		"name": "M_22to24",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 22 to 24",
-		"domain": null
-	},
-	{
-		"name": "M_25to29",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 25 to 29",
-		"domain": null
-	},
-	{
-		"name": "M_30to34",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 30 to 34",
-		"domain": null
-	},
-	{
-		"name": "M_35to39",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 35 to 39",
-		"domain": null
-	},
-	{
-		"name": "M_40to44",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 40 to 44",
-		"domain": null
-	},
-	{
-		"name": "M_45to49",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 45 to 49",
-		"domain": null
-	},
-	{
-		"name": "M_50to54",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 50 to 54",
-		"domain": null
-	},
-	{
-		"name": "M_55to59",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 55 to 59",
-		"domain": null
-	},
-	{
-		"name": "M_60to61",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 60 to 61",
-		"domain": null
-	},
-	{
-		"name": "M_62to64",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 62 to 64",
-		"domain": null
-	},
-	{
-		"name": "M_65to66",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 65 to 66",
-		"domain": null
-	},
-	{
-		"name": "M_67to69",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 67 to 69",
-		"domain": null
-	},
-	{
-		"name": "M_70to74",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 70 to 74",
-		"domain": null
-	},
-	{
-		"name": "M_75to79",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 75 to 79",
-		"domain": null
-	},
-	{
-		"name": "M_80to84",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male 80 to 84",
-		"domain": null
-	},
-	{
-		"name": "M_Over85",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Over 85",
-		"domain": null
-	},
-	{
-		"name": "Female_AGE",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female (Age)",
-		"domain": null
-	},
-	{
-		"name": "F_Under5",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Under 5",
-		"domain": null
-	},
-	{
-		"name": "F_5to9",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 5 to 9",
-		"domain": null
-	},
-	{
-		"name": "F_10to14",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 10 to 14",
-		"domain": null
-	},
-	{
-		"name": "F_15to17",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 15 to 17",
-		"domain": null
-	},
-	{
-		"name": "F_18to19",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 18 to 19",
-		"domain": null
-	},
-	{
-		"name": "F_20",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 20",
-		"domain": null
-	},
-	{
-		"name": "F_21",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 21",
-		"domain": null
-	},
-	{
-		"name": "F_22to24",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 22 to 24",
-		"domain": null
-	},
-	{
-		"name": "F_25to29",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 25 to 29",
-		"domain": null
-	},
-	{
-		"name": "F_30to34",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 30 to 34",
-		"domain": null
-	},
-	{
-		"name": "F_35to39",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 35 to 39",
-		"domain": null
-	},
-	{
-		"name": "F_40to44",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 40 to 44",
-		"domain": null
-	},
-	{
-		"name": "F_45to49",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 45 to 49",
-		"domain": null
-	},
-	{
-		"name": "F_50to54",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 50 to 54",
-		"domain": null
-	},
-	{
-		"name": "F_55to59",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 55 to 59",
-		"domain": null
-	},
-	{
-		"name": "F_60to61",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 60 to 61",
-		"domain": null
-	},
-	{
-		"name": "F_62to64",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 62 to 64",
-		"domain": null
-	},
-	{
-		"name": "F_65to66",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 65 to 66",
-		"domain": null
-	},
-	{
-		"name": "F_67to69",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 67 to 69",
-		"domain": null
-	},
-	{
-		"name": "F_70to74",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 70 to 74",
-		"domain": null
-	},
-	{
-		"name": "F_75to79",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 75 to 79",
-		"domain": null
-	},
-	{
-		"name": "F_80to84",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female 80 to 84",
-		"domain": null
-	},
-	{
-		"name": "F_Over85",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Over 85",
-		"domain": null
-	},
-	{
-		"name": "Table_ID_VET",
-		"type": "esriFieldTypeString",
-		"alias": "ACS Table Number (Veteran)",
-		"length": 7,
-		"domain": null
-	},
-	{
-		"name": "Title_VET",
-		"type": "esriFieldTypeString",
-		"alias": "Table Name (Veteran)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Universe_VET",
-		"type": "esriFieldTypeString",
-		"alias": "Universe (Veteran)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Total_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Population (Veteran)",
-		"domain": null
-	},
-	{
-		"name": "Veteran",
-		"type": "esriFieldTypeInteger",
-		"alias": "Veteran",
-		"domain": null
-	},
-	{
-		"name": "NonVeteran",
-		"type": "esriFieldTypeInteger",
-		"alias": "Non Veteran",
-		"domain": null
-	},
-	{
-		"name": "Male_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male (Veteran)",
-		"domain": null
-	},
-	{
-		"name": "MVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Veterans",
-		"domain": null
-	},
-	{
-		"name": "MNonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Non Veteran",
-		"domain": null
-	},
-	{
-		"name": "MAge65to74_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Age 65 to 74 (Veteran)",
-		"domain": null
-	},
-	{
-		"name": "MAge65to74Vet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Age 65 to 74 Veteran",
-		"domain": null
-	},
-	{
-		"name": "MAge65to74NonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Age 65 to 74 Non Veteran",
-		"domain": null
-	},
-	{
-		"name": "MOver75_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Over 75 (Veteran)",
-		"domain": null
-	},
-	{
-		"name": "MOver75Vet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Over 75 Veteran",
-		"domain": null
-	},
-	{
-		"name": "MOver75NonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Over 75 Non Veteran",
-		"domain": null
-	},
-	{
-		"name": "Female_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female (Veteran)",
-		"domain": null
-	},
-	{
-		"name": "FVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Veteran",
-		"domain": null
-	},
-	{
-		"name": "FNonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Non Veteran",
-		"domain": null
-	},
-	{
-		"name": "FAge65to74_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Age 65 to 74 (Veteran)",
-		"domain": null
-	},
-	{
-		"name": "FAge65to74Vet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Age 65 to 74 Veteran",
-		"domain": null
-	},
-	{
-		"name": "FAge65to74NonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Age 65 to 74 Non Veteran",
-		"domain": null
-	},
-	{
-		"name": "FOver75_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Over 75 (Veteran)",
-		"domain": null
-	},
-	{
-		"name": "FOver75Vet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Over 75 Veteran",
-		"domain": null
-	},
-	{
-		"name": "FOver75NonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Over 75 Non Veteran",
-		"domain": null
-	},
-	{
-		"name": "METotal_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Population (Veteran) (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEVeteran",
-		"type": "esriFieldTypeInteger",
-		"alias": "Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MENonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Non Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEMale_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male (Veteran) (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEMVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEMNonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Non Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEMAge65to74_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Age 65 to 74 (Veteran) (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEMAge65to74Vet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Age 65 to 74 Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEMAge65to74NonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male Age 65 to 74 Non Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEMOver75_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male over 75 (Veteran) (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEMOver75Vet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male over 75 Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEMOver75NonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Male over 75 Non Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEFemale_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female (Veteran) (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEFVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEFNonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Non Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEFAge65to74_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Age 65 to 74 (Veteran) (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEFAge65to74Vet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Age 65 to 74 Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEFAge65to74NonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female Age 65 to 74 Non Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEFOver75_VET",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female over 75 (Veteran) (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEFOver75Vet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female over 75 Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEFOver75NonVet",
-		"type": "esriFieldTypeInteger",
-		"alias": "Female over 75 Non Veteran (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "Table_ID_POV",
-		"type": "esriFieldTypeString",
-		"alias": "ACS Table Number (Poverty)",
-		"length": 7,
-		"domain": null
-	},
-	{
-		"name": "Title_POV",
-		"type": "esriFieldTypeString",
-		"alias": "Table Name (Poverty)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Universe_POV",
-		"type": "esriFieldTypeString",
-		"alias": "Universe (Poverty)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Total_POV",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Population (Poverty)",
-		"domain": null
-	},
-	{
-		"name": "Poverty_Fed",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total in Poverty (Federal)",
-		"domain": null
-	},
-	{
-		"name": "Poverty_State",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total in Poverty (State)",
-		"domain": null
-	},
-	{
-		"name": "METotal_POV",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Population (Poverty) (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "MEPoverty_Fed",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total in Poverty (Federal) (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "PctPoverty",
-		"type": "esriFieldTypeDouble",
-		"alias": "Percent in Poverty",
-		"domain": null
-	},
-	{
-		"name": "Table_ID_INC",
-		"type": "esriFieldTypeString",
-		"alias": "ACS Table Number (Income)",
-		"length": 7,
-		"domain": null
-	},
-	{
-		"name": "Title_INC",
-		"type": "esriFieldTypeString",
-		"alias": "Table Name (Income)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Universe_INC",
-		"type": "esriFieldTypeString",
-		"alias": "Universe (Income)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Income",
-		"type": "esriFieldTypeInteger",
-		"alias": "Median Income",
-		"domain": null
-	},
-	{
-		"name": "MEIncome",
-		"type": "esriFieldTypeInteger",
-		"alias": "Median Income (Margin of Error)",
-		"domain": null
-	},
-	{
-		"name": "Table_ID_LANG",
-		"type": "esriFieldTypeString",
-		"alias": "ACS Table Number (Language)",
-		"length": 7,
-		"domain": null
-	},
-	{
-		"name": "Title_LANG",
-		"type": "esriFieldTypeString",
-		"alias": "Table Name (Language)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Universe_LANG",
-		"type": "esriFieldTypeString",
-		"alias": "Universe (Language)",
-		"length": 254,
-		"domain": null
-	},
-	{
-		"name": "Total_LANG",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Population (Language)",
-		"domain": null
-	},
-	{
-		"name": "TotalEnglish",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total English Speaking",
-		"domain": null
-	},
-	{
-		"name": "TotalSpanish",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Spanish Speaking",
-		"domain": null
-	},
-	{
-		"name": "TotalIndoEuropean",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Indo or European Speaking",
-		"domain": null
-	},
-	{
-		"name": "TotalAsianPacificIsland",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Asian or Pacific Island Speaking",
-		"domain": null
-	},
-	{
-		"name": "TotalOther",
-		"type": "esriFieldTypeInteger",
-		"alias": "Total Other Languages",
-		"domain": null
-	},
-	{
-		"name": "PercentEnglish",
-		"type": "esriFieldTypeDouble",
-		"alias": "Percent English Speaking",
-		"domain": null
-	},
-	{
-		"name": "PercentSpanish",
-		"type": "esriFieldTypeDouble",
-		"alias": "Percent Spanish Speaking",
-		"domain": null
-	},
-	{
-		"name": "PercentIndoEuropean",
-		"type": "esriFieldTypeDouble",
-		"alias": "Percent Indo or European Speaking",
-		"domain": null
-	},
-	{
-		"name": "PercentAsianPacificIsland",
-		"type": "esriFieldTypeDouble",
-		"alias": "Percent Asian or Pacific Island Speaking",
-		"domain": null
-	},
-	{
-		"name": "PercentOther",
-		"type": "esriFieldTypeDouble",
-		"alias": "Percent Other Speaking",
-		"domain": null
-	},
-	{
-		"name": "LEPThreshold",
-		"type": "esriFieldTypeString",
-		"alias": "Meets Title VI LEP Criteria",
-		"length": 50,
-		"domain": null
-	},
-	{
-		"name": "SHAPE",
-		"type": "esriFieldTypeGeometry",
-		"alias": "SHAPE",
-		"domain": null
-	},
-	{
-		"name": "SHAPE.STArea()",
-		"type": "esriFieldTypeDouble",
-		"alias": "SHAPE.STArea()",
-		"domain": null
-	},
-	{
-		"name": "SHAPE.STLength()",
-		"type": "esriFieldTypeDouble",
-		"alias": "SHAPE.STLength()",
-		"domain": null
-	}
+    {
+        "name": "OBJECTID",
+        "type": "esriFieldTypeOID",
+        "alias": "OBJECTID",
+        "domain": null
+    },
+    {
+        "name": "SHAPE",
+        "type": "esriFieldTypeGeometry",
+        "alias": "Shape",
+        "domain": null
+    },
+    {
+        "name": "STATE",
+        "type": "esriFieldTypeString",
+        "alias": "STATE",
+        "length": 2,
+        "domain": null
+    },
+    {
+        "name": "COUNTY",
+        "type": "esriFieldTypeString",
+        "alias": "COUNTY",
+        "length": 3,
+        "domain": null
+    },
+    {
+        "name": "TRACT",
+        "type": "esriFieldTypeString",
+        "alias": "TRACT",
+        "length": 6,
+        "domain": null
+    },
+    {
+        "name": "BLKGRP",
+        "type": "esriFieldTypeString",
+        "alias": "Block Group",
+        "length": 2,
+        "domain": null
+    },
+    {
+        "name": "GEOID",
+        "type": "esriFieldTypeString",
+        "alias": "GEOID",
+        "length": 15,
+        "domain": null
+    },
+    {
+        "name": "NotWhite",
+        "type": "esriFieldTypeInteger",
+        "alias": "Not White",
+        "domain": null
+    },
+    {
+        "name": "Table_ID_RACE",
+        "type": "esriFieldTypeString",
+        "alias": "ACS Table Number (Race)",
+        "length": 7,
+        "domain": null
+    },
+    {
+        "name": "Title_RACE",
+        "type": "esriFieldTypeString",
+        "alias": "Table Name (Race)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Universe_RACE",
+        "type": "esriFieldTypeString",
+        "alias": "Universe (Race)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Total_RACE",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Population (Race)",
+        "domain": null
+    },
+    {
+        "name": "OneRace",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Identify as One Race",
+        "domain": null
+    },
+    {
+        "name": "White",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total White",
+        "domain": null
+    },
+    {
+        "name": "PctNotWhite",
+        "type": "esriFieldTypeDouble",
+        "alias": "Percent Minority",
+        "domain": null
+    },
+    {
+        "name": "AfricanAmerican_Black",
+        "type": "esriFieldTypeInteger",
+        "alias": "African American or Black",
+        "domain": null
+    },
+    {
+        "name": "AmericanIndian_AlaskaNative",
+        "type": "esriFieldTypeInteger",
+        "alias": "American Indian or Alaska Native",
+        "domain": null
+    },
+    {
+        "name": "AsianAlone",
+        "type": "esriFieldTypeInteger",
+        "alias": "Asian",
+        "domain": null
+    },
+    {
+        "name": "NativeHawaiian_PacificIsl",
+        "type": "esriFieldTypeInteger",
+        "alias": "Native Hawaiian or Pacific Island",
+        "domain": null
+    },
+    {
+        "name": "SomeOtherRace",
+        "type": "esriFieldTypeInteger",
+        "alias": "Some Other Race",
+        "domain": null
+    },
+    {
+        "name": "TwoOrMoreRaces",
+        "type": "esriFieldTypeInteger",
+        "alias": "Two Or More Races",
+        "domain": null
+    },
+    {
+        "name": "METotal_RACE",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Population (Race) (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEOneRace",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Identify as One Race (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEWhite",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total White (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEAfricanAmerican_Black",
+        "type": "esriFieldTypeInteger",
+        "alias": "African American or Black (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEAmericanIndian_AlaskaNative",
+        "type": "esriFieldTypeInteger",
+        "alias": "American Indian or Alaska Native (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEAsianAlone",
+        "type": "esriFieldTypeInteger",
+        "alias": "Asian (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MENativeHawaiian_PacificIsl",
+        "type": "esriFieldTypeInteger",
+        "alias": "Native Hawaiian or Pacific Island (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MESomeOtherRace",
+        "type": "esriFieldTypeInteger",
+        "alias": "Some Other Race (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "METwoOrMoreRaces",
+        "type": "esriFieldTypeInteger",
+        "alias": "Two or More Races (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "Table_ID_AGE",
+        "type": "esriFieldTypeString",
+        "alias": "ACS Table Number (Age)",
+        "length": 7,
+        "domain": null
+    },
+    {
+        "name": "Title_AGE",
+        "type": "esriFieldTypeString",
+        "alias": "Table Name (Age)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Universe_AGE",
+        "type": "esriFieldTypeString",
+        "alias": "Universe (Age)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Total_AGE",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Population (Age)",
+        "domain": null
+    },
+    {
+        "name": "Male_AGE",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male (Age)",
+        "domain": null
+    },
+    {
+        "name": "M_Under5",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male under 5",
+        "domain": null
+    },
+    {
+        "name": "M_5to9",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 5 to 9",
+        "domain": null
+    },
+    {
+        "name": "M_10to14",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 10 to 14",
+        "domain": null
+    },
+    {
+        "name": "M_15to17",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 15 to 17",
+        "domain": null
+    },
+    {
+        "name": "M_18to19",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 18 to 19",
+        "domain": null
+    },
+    {
+        "name": "M_20",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 20",
+        "domain": null
+    },
+    {
+        "name": "M_21",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 21",
+        "domain": null
+    },
+    {
+        "name": "M_22to24",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 22 to 24",
+        "domain": null
+    },
+    {
+        "name": "M_25to29",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 25 to 29",
+        "domain": null
+    },
+    {
+        "name": "M_30to34",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 30 to 34",
+        "domain": null
+    },
+    {
+        "name": "M_35to39",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 35 to 39",
+        "domain": null
+    },
+    {
+        "name": "M_40to44",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 40 to 44",
+        "domain": null
+    },
+    {
+        "name": "M_45to49",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 45 to 49",
+        "domain": null
+    },
+    {
+        "name": "M_50to54",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 50 to 54",
+        "domain": null
+    },
+    {
+        "name": "M_55to59",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 55 to 59",
+        "domain": null
+    },
+    {
+        "name": "M_60to61",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 60 to 61",
+        "domain": null
+    },
+    {
+        "name": "M_62to64",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 62 to 64",
+        "domain": null
+    },
+    {
+        "name": "M_65to66",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 65 to 66",
+        "domain": null
+    },
+    {
+        "name": "M_67to69",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 67 to 69",
+        "domain": null
+    },
+    {
+        "name": "M_70to74",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 70 to 74",
+        "domain": null
+    },
+    {
+        "name": "M_75to79",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 75 to 79",
+        "domain": null
+    },
+    {
+        "name": "M_80to84",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male 80 to 84",
+        "domain": null
+    },
+    {
+        "name": "M_Over85",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Over 85",
+        "domain": null
+    },
+    {
+        "name": "Female_AGE",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female (Age)",
+        "domain": null
+    },
+    {
+        "name": "F_Under5",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Under 5",
+        "domain": null
+    },
+    {
+        "name": "F_5to9",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 5 to 9",
+        "domain": null
+    },
+    {
+        "name": "F_10to14",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 10 to 14",
+        "domain": null
+    },
+    {
+        "name": "F_15to17",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 15 to 17",
+        "domain": null
+    },
+    {
+        "name": "F_18to19",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 18 to 19",
+        "domain": null
+    },
+    {
+        "name": "F_20",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 20",
+        "domain": null
+    },
+    {
+        "name": "F_21",
+        "type": "esriFieldTypeInteger",
+        "alias": "Femail 21",
+        "domain": null
+    },
+    {
+        "name": "F_22to24",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 22 to 24",
+        "domain": null
+    },
+    {
+        "name": "F_25to29",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 25 to 29",
+        "domain": null
+    },
+    {
+        "name": "F_30to34",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 30 to 34",
+        "domain": null
+    },
+    {
+        "name": "F_35to39",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 35 to 39",
+        "domain": null
+    },
+    {
+        "name": "F_40to44",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 40 to 44",
+        "domain": null
+    },
+    {
+        "name": "F_45to49",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 45 to 49",
+        "domain": null
+    },
+    {
+        "name": "F_50to54",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 50 to 54",
+        "domain": null
+    },
+    {
+        "name": "F_55to59",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 55 to 59",
+        "domain": null
+    },
+    {
+        "name": "F_60to61",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 60 to 61",
+        "domain": null
+    },
+    {
+        "name": "F_62to64",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 62 to 64",
+        "domain": null
+    },
+    {
+        "name": "F_65to66",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 65 to 66",
+        "domain": null
+    },
+    {
+        "name": "F_67to69",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 67 to 69",
+        "domain": null
+    },
+    {
+        "name": "F_70to74",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 70 to 74",
+        "domain": null
+    },
+    {
+        "name": "F_75to79",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 75 to 79",
+        "domain": null
+    },
+    {
+        "name": "F_80to84",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female 80 to 84",
+        "domain": null
+    },
+    {
+        "name": "F_Over85",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Over 85",
+        "domain": null
+    },
+    {
+        "name": "Table_ID_VET",
+        "type": "esriFieldTypeString",
+        "alias": "ACS Table Number (Veteran)",
+        "length": 7,
+        "domain": null
+    },
+    {
+        "name": "Title_VET",
+        "type": "esriFieldTypeString",
+        "alias": "Table Name (Veteran)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Universe_VET",
+        "type": "esriFieldTypeString",
+        "alias": "Universe (Veteran)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Total_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Population (Veteran)",
+        "domain": null
+    },
+    {
+        "name": "Veteran",
+        "type": "esriFieldTypeInteger",
+        "alias": "Veteran",
+        "domain": null
+    },
+    {
+        "name": "NonVeteran",
+        "type": "esriFieldTypeInteger",
+        "alias": "Non Veteran",
+        "domain": null
+    },
+    {
+        "name": "Male_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male (Veteran)",
+        "domain": null
+    },
+    {
+        "name": "MVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Veterans",
+        "domain": null
+    },
+    {
+        "name": "MNonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Non Veteran",
+        "domain": null
+    },
+    {
+        "name": "MAge65to74_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Age 65 to 74 (Veteran)",
+        "domain": null
+    },
+    {
+        "name": "MAge65to74Vet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Age 65 to 74 Veteran",
+        "domain": null
+    },
+    {
+        "name": "MAge65to74NonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Age 65 to 74 Non Veteran",
+        "domain": null
+    },
+    {
+        "name": "MOver75_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Over 75 (Veteran)",
+        "domain": null
+    },
+    {
+        "name": "MOver75Vet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Over 75 Veteran",
+        "domain": null
+    },
+    {
+        "name": "MOver75NonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Over 75 Non Veteran",
+        "domain": null
+    },
+    {
+        "name": "Female_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female (Veteran)",
+        "domain": null
+    },
+    {
+        "name": "FVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Veteran",
+        "domain": null
+    },
+    {
+        "name": "FNonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Non Veteran",
+        "domain": null
+    },
+    {
+        "name": "FAge65to74_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Age 65 to 74 (Veteran)",
+        "domain": null
+    },
+    {
+        "name": "FAge65to74Vet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Age 65 to 74 Veteran",
+        "domain": null
+    },
+    {
+        "name": "FAge65to74NonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Age 65 to 74 Non Veteran",
+        "domain": null
+    },
+    {
+        "name": "FOver75_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Over 75 (Veteran)",
+        "domain": null
+    },
+    {
+        "name": "FOver75Vet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Over 75 Veteran",
+        "domain": null
+    },
+    {
+        "name": "FOver75NonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Over 75 Non Veteran",
+        "domain": null
+    },
+    {
+        "name": "METotal_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Population (Veteran) (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEVeteran",
+        "type": "esriFieldTypeInteger",
+        "alias": "Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MENonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Non Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEMale_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male (Veteran) (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEMVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEMNonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Non Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEMAge65to74_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Age 65 to 74 (Veteran) (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEMAge65to74Vet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Age 65 to 74 Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEMAge65to74NonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male Age 65 to 74 Non Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEMOver75_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male over 75 (Veteran) (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEMOver75Vet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male over 75 Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEMOver75NonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Male over 75 Non Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEFemale_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female (Veteran) (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEFVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEFNonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Non Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEFAge65to74_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Age 65 to 74 (Veteran) (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEFAge65to74Vet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Age 65 to 74 Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEFAge65to74NonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female Age 65 to 74 Non Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEFOver75_VET",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female over 75 (Veteran) (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEFOver75Vet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female over 75 Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEFOver75NonVet",
+        "type": "esriFieldTypeInteger",
+        "alias": "Female over 75 Non Veteran (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "Table_ID_POV",
+        "type": "esriFieldTypeString",
+        "alias": "ACS Table Number (Poverty)",
+        "length": 7,
+        "domain": null
+    },
+    {
+        "name": "Title_POV",
+        "type": "esriFieldTypeString",
+        "alias": "Table Name (Poverty)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Universe_POV",
+        "type": "esriFieldTypeString",
+        "alias": "Universe (Poverty)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Total_POV",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Population (Poverty)",
+        "domain": null
+    },
+    {
+        "name": "Poverty_Fed",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total in Poverty (Federal)",
+        "domain": null
+    },
+    {
+        "name": "Poverty_State",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total in Poverty (State)",
+        "domain": null
+    },
+    {
+        "name": "METotal_POV",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Population (Poverty) (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "MEPoverty_Fed",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total in Poverty (Federal) (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "PctPoverty",
+        "type": "esriFieldTypeDouble",
+        "alias": "Percent in Poverty",
+        "domain": null
+    },
+    {
+        "name": "Table_ID_INC",
+        "type": "esriFieldTypeString",
+        "alias": "ACS Table Number (Income)",
+        "length": 7,
+        "domain": null
+    },
+    {
+        "name": "Title_INC",
+        "type": "esriFieldTypeString",
+        "alias": "Table Name (Income)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Universe_INC",
+        "type": "esriFieldTypeString",
+        "alias": "Universe (Income)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Income",
+        "type": "esriFieldTypeInteger",
+        "alias": "Median Income",
+        "domain": null
+    },
+    {
+        "name": "MEIncome",
+        "type": "esriFieldTypeInteger",
+        "alias": "Median Income (Margin of Error)",
+        "domain": null
+    },
+    {
+        "name": "Table_ID_LANG",
+        "type": "esriFieldTypeString",
+        "alias": "ACS Table Number (Language)",
+        "length": 7,
+        "domain": null
+    },
+    {
+        "name": "Title_LANG",
+        "type": "esriFieldTypeString",
+        "alias": "Table Name (Language)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Universe_LANG",
+        "type": "esriFieldTypeString",
+        "alias": "Universe (Language)",
+        "length": 254,
+        "domain": null
+    },
+    {
+        "name": "Total_LANG",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Population (Language)",
+        "domain": null
+    },
+    {
+        "name": "TotalEnglish",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total English Speaking",
+        "domain": null
+    },
+    {
+        "name": "TotalSpanish",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Spanish Speaking",
+        "domain": null
+    },
+    {
+        "name": "TotalIndoEuropean",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Indo or European Speaking",
+        "domain": null
+    },
+    {
+        "name": "TotalAsianPacificIsland",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Asian or Pacific Island Speaking",
+        "domain": null
+    },
+    {
+        "name": "TotalOther",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Other Languages",
+        "domain": null
+    },
+    {
+        "name": "PercentEnglish",
+        "type": "esriFieldTypeDouble",
+        "alias": "Percent English Speaking",
+        "domain": null
+    },
+    {
+        "name": "PercentSpanish",
+        "type": "esriFieldTypeDouble",
+        "alias": "Percent Spanish Speaking",
+        "domain": null
+    },
+    {
+        "name": "PercentIndoEuropean",
+        "type": "esriFieldTypeDouble",
+        "alias": "Percent Indo or European Speaking",
+        "domain": null
+    },
+    {
+        "name": "PercentAsianPacificIsland",
+        "type": "esriFieldTypeDouble",
+        "alias": "Percent Asian or Pacific Island Speaking",
+        "domain": null
+    },
+    {
+        "name": "PercentOther",
+        "type": "esriFieldTypeDouble",
+        "alias": "Percent Other Speaking",
+        "domain": null
+    },
+    {
+        "name": "LEPThreshold",
+        "type": "esriFieldTypeString",
+        "alias": "Meets Title VI LEP Criteria",
+        "length": 50,
+        "domain": null
+    },
+    {
+        "name": "SHAPE.STArea()",
+        "type": "esriFieldTypeDouble",
+        "alias": "SHAPE.STArea()",
+        "domain": null
+    },
+    {
+        "name": "SHAPE.STLength()",
+        "type": "esriFieldTypeDouble",
+        "alias": "SHAPE.STLength()",
+        "domain": null
+    }
 ]

@@ -28,7 +28,6 @@ require([
 
 	"esri/config",
 	"alpaca/UserGraphicsLayers",
-	"esri/request",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -46,7 +45,7 @@ require([
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
-	esriConfig, UserGraphicsLayers, esriRequest)
+	esriConfig, UserGraphicsLayers)
 {
 	"use strict";
 
@@ -154,7 +153,7 @@ require([
 
 
 
-		arcgisUtils.createMap("b96dcdee3dfa498badcf9ea871cc1895", "map", {
+		arcgisUtils.createMap("68303ea67e47418ab134ca3c0d3ba3a4", "map", { //"b96dcdee3dfa498badcf9ea871cc1895", "map", {
 			mapOptions: {
 				//basemap: "gray",
 				center: window.JSON && window.localStorage && window.localStorage.alpaca_mapCenter ? JSON.parse(window.localStorage.alpaca_mapCenter) : [-120.80566406246835, 47.41322033015946],

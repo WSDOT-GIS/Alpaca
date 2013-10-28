@@ -18,7 +18,7 @@ define([
 	 * @exports wsdot/alpaca/chartDataProvider
 	 */
 	"use strict";
-	var ChartDataProvider, marginOfErrorRe, raceFieldRe, popFieldRe, vetFieldRe, povFieldRe, langFieldRe;
+	var ChartDataProvider, marginOfErrorRe, raceFieldRe, popFieldRe, vetFieldRe, povFieldRe, langFieldRe, numberTypesRe;
 
 	// These regular expressions detect the charts
 	marginOfErrorRe = /^ME/;
@@ -27,6 +27,8 @@ define([
 	vetFieldRe = /^[MF](Age[0-9]{1,2})?([a-z]+)?[0-9]+(?:Non)?Vet$/i;
 	povFieldRe = /^((?:Total_POV)|(?:Poverty_(?:Fed)|(?:State))|(?:PctPoverty)|(?:Income))$/i;
 	raceFieldRe = /^(?:(?:(?:Not)?White)|(?:AfricanAmerican_Black)|(?:AmericanIndian_AlaskaNative)|(?:AsianAlone)|(?:NativeHawaiian_PacificIsl)|(?:SomeOtherRace)|(?:TwoOrMoreRaces))$/i;
+	numberTypesRe = /(?:Integer)|(?:Double})/i;
+
 
 	/** Represents a field.
 	 * @constructor
@@ -80,7 +82,7 @@ define([
 
 		for (i = 0, l = fields.length; i < l; i += 1) {
 			field = fields[i];
-			if (field && field.name && !marginOfErrorRe.test(field.name)) {
+			if (field && field.name && !marginOfErrorRe.test(field.name) && numberTypesRe.test(field.type)) {
 				if (langFieldRe.test(field.name)) {
 					this.language.push(field);
 				} else if (popFieldRe.test(field.name)) {
