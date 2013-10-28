@@ -46,7 +46,7 @@ define(["dojo/number"], function (number) {
 		/** @member {string} */
 		asian: "Asian",
 		/** @member {string} */
-		pacificIslander: "Native HI / Pacific Island",
+		pacificIslander: "Native HI or Pacific Island",
 		/** @member {string} */
 		other: "Other"
 
@@ -87,7 +87,7 @@ define(["dojo/number"], function (number) {
 				item = {
 					y: this[race],
 					text: label,
-					////fill: race === "white" ? "RGB(255,235,204)" : "RGB(240,118,5)",
+					fill: race === "white" ? "RGB(255,235,204)" : "RGB(240,118,5)",
 					stroke: "black",
 					tooltip: [label, ": (~", Math.round((this[race] / total) * 10000) / 100, "%)"].join("")
 				};

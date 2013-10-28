@@ -218,7 +218,7 @@ require([
 					raceChart = chartUtils.createRaceChart(chartData.race);
 				} else {
 					// Update the race chart with the response race data.
-					raceChart.updateSeries("Minority", chartData.race.toColumnChartSeries());
+					raceChart.updateSeries("Race", chartData.race.toColumnChartSeries());
 					raceChart.render();
 				}
 

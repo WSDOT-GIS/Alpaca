@@ -52,9 +52,7 @@ define([
 		statDef = new StatisticDefinition();
 		statDef.onStatisticField = this.name;
 		statDef.statisticType = statisticType || "sum";
-		if (outStatisticFieldName) {
-			statDef.outStatisticFieldName = outStatisticFieldName;
-		}
+		statDef.outStatisticFieldName = outStatisticFieldName || this.name;
 		return statDef;
 	};
 
@@ -118,6 +116,22 @@ define([
 		output = output.concat(this.veteran.map(toSD));
 		output = output.concat(this.poverty.map(toSD));
 		output = output.concat(this.race.map(toSD));
+
+		return output;
+	};
+
+	FieldGroups.prototype.getOutFields = function () {
+		var output = [];
+
+		function getName(value) {
+			return value.name;
+		}
+
+		output = output.concat(this.language.map(getName));
+		output = output.concat(this.population.map(getName));
+		output = output.concat(this.veteran.map(getName));
+		output = output.concat(this.poverty.map(getName));
+		output = output.concat(this.race.map(getName));
 
 		return output;
 	};
@@ -233,16 +247,7 @@ define([
 
 				// Setup the query.
 				query.geometry = geometry;
-				query.outFields = [
-					"OneRace",
-					"White",
-					"NotWhite",
-					"English",
-					"Spanish",
-					"Indo_European",
-					"Asian_PacificIsland",
-					"Other"
-				];
+				query.outFields = fields.getOutFields();
 				query.returnGeometry = true;
 
 				// Query to determine intersecting geometry.
