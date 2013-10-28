@@ -71,7 +71,7 @@ define([
 	}
 
 
-	function FieldGroups(/**{Field}*/ fields) {
+	function FieldGroups(/**{Field[]}*/ fields) {
 		var i, l, field;
 		this.language = [];
 		this.population = [];
