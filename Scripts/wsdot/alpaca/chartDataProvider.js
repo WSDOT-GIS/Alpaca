@@ -11,9 +11,10 @@ define([
 	"esri/tasks/StatisticDefinition",
 	"./raceData",
 	"./languageData",
+	"./ageData",
 	"./utils",
 	"dojo/text!alpaca/aggregate_fields.txt"
-], function (declare, Deferred, Evented, esriConfig, Graphic, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, utils, fields) {
+], function (declare, Deferred, Evented, esriConfig, Graphic, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, AgeData, utils, fields) {
 	/** Provides classes for updating charts.
 	 * @exports wsdot/alpaca/chartDataProvider
 	 */
@@ -147,7 +148,9 @@ define([
 		/** Provices race data */
 		this.race = queryResults.race ? new RaceData(queryResults.race) : new RaceData(queryResults);
 		/** Provides language data */
-		this.language = queryResults.language  ? new LanguageData(queryResults.language) : new LanguageData(queryResults);
+		this.language = queryResults.language ? new LanguageData(queryResults.language) : new LanguageData(queryResults);
+
+		this.age = queryResults.age ? new AgeData(queryResults.age) : new AgeData(queryResults);
 	}
 
 	/**

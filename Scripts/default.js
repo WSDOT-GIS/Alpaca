@@ -19,13 +19,10 @@ require([
 	"esri/symbols/SimpleFillSymbol",
 	"esri/tasks/GeometryService",
 	"esri/InfoTemplate",
-
 	"esri/geometry/jsonUtils",
 	"alpaca/chartUtils",
-
 	"CSV-Reader/csvArcGis",
 	"layerUtils",
-
 	"esri/config",
 	"alpaca/UserGraphicsLayers",
 
@@ -163,8 +160,8 @@ require([
 			}
 		}).then(function (response) {
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
-				serviceAreaLayer, selectionLayer, languageChart,
-				raceChart, aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
+				serviceAreaLayer, selectionLayer, languageChart, raceChart, ageChart,
+				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
 
 
 
@@ -220,6 +217,13 @@ require([
 					// Update the race chart with the response race data.
 					raceChart.updateSeries("Race", chartData.race.toColumnChartSeries());
 					raceChart.render();
+				}
+
+				if (!ageChart) {
+					ageChart = chartUtils.createAgeChart(chartData.age);
+				} else {
+					ageChart.updateSeries("Age", chartData.age.toColumnChartSeries());
+					ageChart.render();
 				}
 
 				document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(chartData);

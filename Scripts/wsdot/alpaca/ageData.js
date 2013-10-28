@@ -8,7 +8,7 @@ define(function () {
 	 * @returns {string}
 	 */
 	function formatCategoryName(/**{string}*/ categoryName) {
-		var output, re = /([0-9]*?)([a-z]*)([0-9]+)/i, match;
+		var output, re = /^([0-9]*?)([a-z]*)([0-9]+)$/i, match;
 		if (categoryName) {
 			match = categoryName.match(re);
 			output = match.slice(1, 4).join(" ").trim();
@@ -110,7 +110,7 @@ define(function () {
 		var output = [], item, v, propName;
 		for (propName in this) {
 			if (this.hasOwnProperty(propName)) {
-				v = this[v];
+				v = this[propName];
 				if (typeof v === "number") {
 					item = {
 						y: v,
