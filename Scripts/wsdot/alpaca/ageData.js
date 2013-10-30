@@ -45,7 +45,7 @@ define(function () {
 	/**
 	 * @constructor
 	 * @param {Object.<string, number>} queryResults
-	 * @param {string} prefix Either "M" or "F"
+	 * @param {string} [prefix] Either "M" or "F"
 	 * @member {number} "Under 5"
 	 * @member {number} "5 to 9"
 	 * @member {number} "10 to 14"
@@ -74,14 +74,19 @@ define(function () {
 		var i, l, fieldName, cName, outName;
 
 		if (prefix !== "M" && prefix !== "F") {
-			throw new TypeError("Invalid prefix");
-		}
-		for (i = 0, l = categoryNames.length; i < l; i += 1) {
-			// Add the prefix to get the field name.
-			cName = categoryNames[i];
-			outName = formatCategoryName(cName);
-			fieldName = [prefix, cName].join("_");
-			this[outName] = queryResults[fieldName] || queryResults["SUM_" + fieldName] || 0;
+			for (var outName in queryResults) {
+				if (queryResults.hasOwnProperty(outName)) {
+					this[outName] = queryResults[outName] || 0;
+				}
+			}
+		} else {
+			for (i = 0, l = categoryNames.length; i < l; i += 1) {
+				// Add the prefix to get the field name.
+				cName = categoryNames[i];
+				outName = formatCategoryName(cName);
+				fieldName = [prefix, cName].join("_");
+				this[outName] = queryResults[fieldName] || queryResults["SUM_" + fieldName] || 0;
+			}
 		}
 	};
 
@@ -128,11 +133,24 @@ define(function () {
 		return output;
 	};
 
+	/** 
+	 * @member {AgeGroupedData} 
+	 * @member {AgeGroupedData}  
+	 * @member {AgeGroupedData} 
+	*/
 	AgeData = function (queryResults) {
-		/** @member {AgeGroupedData} */
 		this.male = new AgeGroupedData(queryResults, "M");
-		/** @member {AgeGroupedData} */
 		this.female = new AgeGroupedData(queryResults, "F");
+
+		this.combined = {};
+
+		for (var propName in this.male) {
+			if (this.male.hasOwnProperty(propName) && this.female.hasOwnProperty(propName)) {
+				this.combined[propName] = this.male[propName] + this.female[propName];
+			}
+		}
+
+		this.combined = new AgeGroupedData(this.combined);
 	};
 
 	AgeData.prototype.getTotal = function () {
@@ -149,7 +167,7 @@ define(function () {
 
 		total = this.getTotal();
 
-		output = this.male.toColumnChartSeries(total, "blue").concat(this.female.toColumnChartSeries(total, "pink"));
+		output = this.combined.toColumnChartSeries(total, "purple"); // this.male.toColumnChartSeries(total, "blue").concat(this.female.toColumnChartSeries(total, "pink"));
 
 		return output;
 	};
