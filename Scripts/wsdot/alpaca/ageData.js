@@ -2,7 +2,7 @@
 define(function () {
 	"use strict";
 
-	var AgeData, SingleGenderAgeData, categoryNames;
+	var AgeData, AgeGroupedData, categoryNames;
 
 	/** Adds spaces between words / numbers.
 	 * @returns {string}
@@ -70,7 +70,7 @@ define(function () {
 	 * @member {number} "80 to 84"
 	 * @member {number} "Over 85"
 	 */
-	SingleGenderAgeData = function (queryResults, prefix) {
+	AgeGroupedData = function (queryResults, prefix) {
 		var i, l, fieldName, cName, outName;
 
 		if (prefix !== "M" && prefix !== "F") {
@@ -85,7 +85,7 @@ define(function () {
 		}
 	};
 
-	SingleGenderAgeData.prototype.getTotal = function () {
+	AgeGroupedData.prototype.getTotal = function () {
 		var propName, v, output = 0;
 		for (propName in this) {
 			if (this.hasOwnProperty(propName)) {
@@ -106,7 +106,7 @@ define(function () {
 		return output;
 	}
 
-	SingleGenderAgeData.prototype.toColumnChartSeries = function (/** {number} */ total, /** {string} */ color) {
+	AgeGroupedData.prototype.toColumnChartSeries = function (/** {number} */ total, /** {string} */ color) {
 		var output = [], item, v, propName;
 		for (propName in this) {
 			if (this.hasOwnProperty(propName)) {
@@ -129,17 +129,17 @@ define(function () {
 	};
 
 	AgeData = function (queryResults) {
-		/** @member {SingleGenderAgeData} */
-		this.male = new SingleGenderAgeData(queryResults, "M");
-		/** @member {SingleGenderAgeData} */
-		this.female = new SingleGenderAgeData(queryResults, "F");
+		/** @member {AgeGroupedData} */
+		this.male = new AgeGroupedData(queryResults, "M");
+		/** @member {AgeGroupedData} */
+		this.female = new AgeGroupedData(queryResults, "F");
 	};
 
 	AgeData.prototype.getTotal = function () {
 		return this.male.getTotal() + this.female.getTotal();
 	};
 
-	AgeData.SingleGenderAgeData = SingleGenderAgeData;
+	AgeData.AgeGroupedData = AgeGroupedData;
 
 	/** Creates objects used to populate a column chart.
 	 * @returns {Object[]}
