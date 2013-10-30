@@ -54,6 +54,7 @@
     <Content Include="Scripts\wsdot\alpaca\raceData.js" />
     <Content Include="Scripts\wsdot\alpaca\UserGraphicsLayers.js" />
     <Content Include="Scripts\wsdot\alpaca\utils.js" />
+    <Content Include="Scripts\wsdot\alpaca\veteranData.js" />
     <Content Include="Scripts\wsdot\CSV-Reader\csvArcGis.js" />
     <Content Include="Scripts\wsdot\CSV-Reader\csvHtml.js" />
     <Content Include="Scripts\wsdot\CSV-Reader\main.js" />

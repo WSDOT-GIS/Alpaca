@@ -25,7 +25,7 @@ define([
 	marginOfErrorRe = /^ME/;
 	langFieldRe = /^(?:Total(?:(?:English)|(?:Spanish)|(?:IndoEuropean)|(?:AsianPacificIsland)|(?:Other)))$/i;
 	popFieldRe = /^[MF]_([0-9]{1,2})?([a-z]+)?[0-9]+$/i;
-	vetFieldRe = /^[MF](Age[0-9]{1,2})?([a-z]+)?[0-9]+(?:Non)?Vet$/i;
+	vetFieldRe = /^(Non\s?)?Veteran$/i; // /^[MF](Age[0-9]{1,2})?([a-z]+)?[0-9]+(?:Non)?Vet$/i;
 	povFieldRe = /^((?:Total_POV)|(?:Poverty_(?:Fed)|(?:State))|(?:PctPoverty)|(?:Income))$/i;
 	raceFieldRe = /^(?:(?:(?:Not)?White)|(?:AfricanAmerican_Black)|(?:AmericanIndian_AlaskaNative)|(?:AsianAlone)|(?:NativeHawaiian_PacificIsl)|(?:SomeOtherRace)|(?:TwoOrMoreRaces))$/i;
 	numberTypesRe = /(?:Integer)|(?:Double})/i;

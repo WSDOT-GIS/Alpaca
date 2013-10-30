@@ -134,9 +134,9 @@ define(function () {
 	};
 
 	/** 
-	 * @member {AgeGroupedData} 
-	 * @member {AgeGroupedData}  
-	 * @member {AgeGroupedData} 
+	 * @member {AgeGroupedData} male
+	 * @member {AgeGroupedData} female
+	 * @member {AgeGroupedData} combined - combined male and female age data.
 	*/
 	AgeData = function (queryResults) {
 		this.male = new AgeGroupedData(queryResults, "M");
