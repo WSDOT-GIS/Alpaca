@@ -12,6 +12,8 @@ define(function () {
 		this.FederalTotalInPoverty = queryResults.Poverty_Fed || 0;
 		/** @member {number} */
 		this.StateTotalInPoverty = queryResults.Poverty_State || 0;
+		/** @member {number} */
+		this.MedianIncome = queryResults.Income || 0;
 	}
 
 	/**

@@ -13,11 +13,12 @@ define([
 	"./languageData",
 	"./ageData",
 	"./veteranData",
+	"./povertyData",
 	"./utils",
 	"dojo/text!alpaca/aggregate_fields.txt"
 ], function (
 	declare, Deferred, Evented, esriConfig, Graphic, Query, QueryTask, StatisticDefinition,
-	RaceData, LanguageData, AgeData, VeteranData, utils, fields)
+	RaceData, LanguageData, AgeData, VeteranData, PovertyData, utils, fields)
 {
 	/** Provides classes for updating charts.
 	 * @exports wsdot/alpaca/chartDataProvider
