@@ -155,5 +155,27 @@ define([
 			chart.render();
 			return chart;
 		},
+
+		createPovertyChart: function (povertyData) {
+			var chart, anim_a, anim_b, anim_c;
+			chart = new Chart("povertyChart", {
+				title: "Poverty",
+				titlePos: "top",
+				titleGap: 5
+			});
+			chart.addPlot("default", {
+				type: Pie,
+				labels: true,
+				font: "normal normal 8pt Tahoma",
+				fontColor: "black",
+				labelOffset: -30,
+				radius: 100
+			}).addSeries("Poverty", povertyData.toChartSeries());
+			anim_a = new MoveSlice(chart, "default");
+			anim_b = new Highlight(chart, "default");
+			anim_c = new Tooltip(chart, "default");
+			chart.render();
+			return chart;
+		}
 	};
 });

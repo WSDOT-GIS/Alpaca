@@ -158,6 +158,8 @@ define([
 		this.age = queryResults.age ? new AgeData(queryResults.age) : new AgeData(queryResults);
 
 		this.veteran = queryResults.veteran ? new VeteranData(queryResults.age) : new VeteranData(queryResults);
+
+		this.poverty = queryResults.poverty ? new PovertyData(queryResults.poverty) : new PovertyData(queryResults);
 	}
 
 	/**

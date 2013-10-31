@@ -160,7 +160,7 @@ require([
 			}
 		}).then(function (response) {
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
-				serviceAreaLayer, selectionLayer, languageChart, raceChart, ageChart, veteranChart,
+				serviceAreaLayer, selectionLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
 				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
 
 
@@ -232,6 +232,15 @@ require([
 					veteranChart.updateSeries("Veterans", chartData.veteran.toColumnChartSeries());
 					veteranChart.render();
 				}
+
+				if (!povertyChart) {
+					povertyChart = chartUtils.createPovertyChart(chartData.poverty);
+				} else {
+					povertyChart.updateSeries("Poverty", chartData.poverty.toChartSeries());
+					povertyChart.render();
+				}
+
+
 
 				document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(chartData);
 			}

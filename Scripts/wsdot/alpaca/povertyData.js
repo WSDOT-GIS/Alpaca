@@ -1,5 +1,5 @@
 ﻿/*global define */
-define(function () {
+define(["dojo/number"], function (number) {
 	"use strict";
 
 	/**
@@ -7,27 +7,67 @@ define(function () {
 	 */
 	function PovertyData(queryResults) {
 		/** @member {number} */
-		this.TotalPopulation = queryResults.Total_POV || 0;
+		this.totalPopulation = queryResults.Total_POV || 0;
 		/** @member {number} */
-		this.FederalTotalInPoverty = queryResults.Poverty_Fed || 0;
+		this.federalTotalInPoverty = queryResults.Poverty_Fed || 0;
+		/////** @member {number} */
+		////this.stateTotalInPoverty = queryResults.Poverty_State || 0;
+
+		this.nonPoverty = (this.totalPopulation - this.federalTotalInPoverty) || 0;
+
 		/** @member {number} */
-		this.StateTotalInPoverty = queryResults.Poverty_State || 0;
-		/** @member {number} */
-		this.MedianIncome = queryResults.Income || 0;
+		this.medianIncome = queryResults.Income || 0;
 	}
 
 	/**
 	 * @returns {number}
 	 */
 	PovertyData.prototype.getPercentInPovertyForState = function () {
-		return (this.StateTotalInPoverty / this.TotalPopulation) * 100;
+		return (this.stateTotalInPoverty / this.totalPopulation) * 100;
 	};
 
 	/**
 	 * @returns {number}
 	 */
 	PovertyData.prototype.getPercentInPovertyForFederal = function () {
-		return (this.FederalTotalInPoverty / this.TotalPopulation) * 100;
+		return (this.federalTotalInPoverty / this.totalPopulation) * 100;
+	};
+
+
+	/** 
+	 * @typedef ColumnChartSeriesItem
+	 * @property {number} y - The y value.
+	 * @property {string} text - The label.
+	 * @property {string} stroke - The color of the outline.
+	 * @property {string} fill - The fill color.
+	 * @property {stirng} tooltip - The string used for the tooltip.
+	 */
+
+	/** Creates objects used to populate a column chart.
+	 * @returns {ColumnChartSeriesItem[]}
+	 */
+	PovertyData.prototype.toChartSeries = function () {
+		var output, pctInPoverty;
+
+		pctInPoverty = Math.round(this.getPercentInPovertyForFederal());
+
+		output = [
+			{
+				y: this.federalTotalInPoverty,
+				text: "Poverty",
+				stroke: "black",
+				fill: "red",
+				tooltip: ["Poverty: ", number.format(this.federalInPoverty), "(~", pctInPoverty, "%)"].join("")
+			}, {
+				y: this.nonPoverty,
+				text: "Non-Poverty",
+				stroke: "black",
+				fill: "gray",
+				tooltip: ["Non-Poverty: ", number.format(this.nonPoverty), "(~", 100 - pctInPoverty, "%)"].join("")
+			}
+		];
+
+		return output;
 	};
 
 	return PovertyData;
