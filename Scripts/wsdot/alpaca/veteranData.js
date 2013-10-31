@@ -61,23 +61,23 @@ define(["dojo/number"], function (number) {
 	 * @returns {ColumnChartSeriesItem[]}
 	 */
 	VeteranData.prototype.toColumnChartSeries = function () {
-		var output = [], total;
+		var output = [], total, vet = this.getTotalVet(), nonVet = this.getTotalNonVet();
 		total = this.getTotal();
 
 
-		output.push([{
-			y: this.Veteran,
+		output.push({
+			y: vet,
 			text: "Veteran",
 			stroke: "black",
 			fill: "green",
-			tooltip: ["Veteran: ", number.format(this.Veteran), "(~", getPercent(this.Veteran, total), "%)"].join("")
+			tooltip: ["Veteran: ", number.format(vet), "(~", getPercent(vet, total), "%)"].join("")
 		}, {
-			y: this.NonVeteran,
+			y: nonVet,
 			text: "Non-Veteran",
 			stroke: "black",
 			fill: "gray",
-			tooltip: ["Non Veteran: ", number.format(this.NonVeteran), "(~", getPercent(this.NonVeteran, total), "%)"].join("")
-		}]);
+			tooltip: ["Non Veteran: ", number.format(nonVet), "(~", getPercent(nonVet, total), "%)"].join("")
+		});
 
 		return output;
 	};

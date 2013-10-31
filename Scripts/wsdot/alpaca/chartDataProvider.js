@@ -24,7 +24,7 @@ define([
 	 * @exports wsdot/alpaca/chartDataProvider
 	 */
 	"use strict";
-	var ChartDataProvider, marginOfErrorRe, raceFieldRe, popFieldRe, vetFieldRe, povFieldRe, langFieldRe, numberTypesRe;
+	var ChartDataProvider, marginOfErrorRe, raceFieldRe, popFieldRe, povFieldRe, langFieldRe, numberTypesRe;
 
 	// These regular expressions detect the charts
 	marginOfErrorRe = /^ME/;
@@ -156,6 +156,8 @@ define([
 		this.language = queryResults.language ? new LanguageData(queryResults.language) : new LanguageData(queryResults);
 
 		this.age = queryResults.age ? new AgeData(queryResults.age) : new AgeData(queryResults);
+
+		this.veteran = queryResults.veteran ? new VeteranData(queryResults.age) : new VeteranData(queryResults);
 	}
 
 	/**
