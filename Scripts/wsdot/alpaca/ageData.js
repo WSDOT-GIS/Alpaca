@@ -74,7 +74,7 @@ define(function () {
 		var i, l, fieldName, cName, outName;
 
 		if (prefix !== "M" && prefix !== "F") {
-			for (var outName in queryResults) {
+			for (outName in queryResults) {
 				if (queryResults.hasOwnProperty(outName)) {
 					this[outName] = queryResults[outName] || 0;
 				}

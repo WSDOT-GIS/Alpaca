@@ -1,10 +1,10 @@
 ﻿/*global define*/
 
-define(function () {
+define(["dojo/number"], function (number) {
 	"use strict";
 	var fieldRegExp;
 
-	fieldRegExp =  /^([MF])(Non)?Vet$/i // /^[MF](Age[0-9]{1,2})?([a-z]+)?[0-9]+(?:Non)?Vet$/i;
+	fieldRegExp = /^([MF])(Non)?Vet$/i; // /^[MF](Age[0-9]{1,2})?([a-z]+)?[0-9]+(?:Non)?Vet$/i;
 
 	/**
 	 * @constructor
@@ -25,21 +25,21 @@ define(function () {
 	 */
 	VeteranData.prototype.getTotal = function () {
 		return this.MVet + this.FVet + this.MNonVet + this.FNonVet;
-	}
+	};
 
 	/** Returns the combined number of veterans, both male and female.
 	 * @returns {number}
 	 */
 	VeteranData.prototype.getTotalVet = function () {
 		return this.MVet + this.FVet;
-	}
+	};
 
 	/** Returns the combined number of non-veterans, both male and female.
 	 * @returns {number}
 	 */
 	VeteranData.prototype.getTotalNonVet = function () {
 		return this.MNonVet + this.FNonVet;
-	}
+	};
 
 
 	
@@ -61,7 +61,7 @@ define(function () {
 	 * @returns {ColumnChartSeriesItem[]}
 	 */
 	VeteranData.prototype.toColumnChartSeries = function () {
-		var output = [];
+		var output = [], total;
 		total = this.getTotal();
 
 
@@ -70,13 +70,13 @@ define(function () {
 			text: "Veteran",
 			stroke: "black",
 			fill: "green",
-			tooltip: [Veteran, ": ", number.format(this.Veteran), "(~", getPercent(this.Veteran, total), "%)"].join("")
+			tooltip: ["Veteran: ", number.format(this.Veteran), "(~", getPercent(this.Veteran, total), "%)"].join("")
 		}, {
 			y: this.NonVeteran,
 			text: "Non-Veteran",
 			stroke: "black",
 			fill: "gray",
-			tooltip: [NonVeteran, ": ", number.format(this.NonVeteran), "(~", getPercent(this.NonVeteran, total), "%)"].join("")
+			tooltip: ["Non Veteran: ", number.format(this.NonVeteran), "(~", getPercent(this.NonVeteran, total), "%)"].join("")
 		}]);
 
 		return output;
