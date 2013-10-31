@@ -12,9 +12,13 @@ define([
 	"./raceData",
 	"./languageData",
 	"./ageData",
+	"./veteranData",
 	"./utils",
 	"dojo/text!alpaca/aggregate_fields.txt"
-], function (declare, Deferred, Evented, esriConfig, Graphic, Query, QueryTask, StatisticDefinition, RaceData, LanguageData, AgeData, utils, fields) {
+], function (
+	declare, Deferred, Evented, esriConfig, Graphic, Query, QueryTask, StatisticDefinition,
+	RaceData, LanguageData, AgeData, VeteranData, utils, fields)
+{
 	/** Provides classes for updating charts.
 	 * @exports wsdot/alpaca/chartDataProvider
 	 */
@@ -25,7 +29,7 @@ define([
 	marginOfErrorRe = /^ME/;
 	langFieldRe = /^(?:Total(?:(?:English)|(?:Spanish)|(?:IndoEuropean)|(?:AsianPacificIsland)|(?:Other)))$/i;
 	popFieldRe = /^[MF]_([0-9]{1,2})?([a-z]+)?[0-9]+$/i;
-	vetFieldRe = /^(Non\s?)?Veteran$/i; // /^[MF](Age[0-9]{1,2})?([a-z]+)?[0-9]+(?:Non)?Vet$/i;
+	// vetFieldRe = /^[MF](Age[0-9]{1,2})?([a-z]+)?[0-9]+(?:Non)?Vet$/i;
 	povFieldRe = /^((?:Total_POV)|(?:Poverty_(?:Fed)|(?:State))|(?:PctPoverty)|(?:Income))$/i;
 	raceFieldRe = /^(?:(?:(?:Not)?White)|(?:AfricanAmerican_Black)|(?:AmericanIndian_AlaskaNative)|(?:AsianAlone)|(?:NativeHawaiian_PacificIsl)|(?:SomeOtherRace)|(?:TwoOrMoreRaces))$/i;
 	numberTypesRe = /(?:Integer)|(?:Double})/i;
@@ -86,7 +90,7 @@ define([
 					this.language.push(field);
 				} else if (popFieldRe.test(field.name)) {
 					this.population.push(field);
-				} else if (vetFieldRe.test(field.name)) {
+				} else if (VeteranData.fieldRegExp.test(field.name)) {
 					this.veteran.push(field);
 				} else if (povFieldRe.test(field.name)) {
 					this.poverty.push(field);
