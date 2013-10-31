@@ -1,6 +1,7 @@
 ﻿/*global define*/
 
 define(function () {
+	"use strict";
 	var fieldRegExp;
 
 	fieldRegExp =  /^([MF])(Non)?Vet$/i // /^[MF](Age[0-9]{1,2})?([a-z]+)?[0-9]+(?:Non)?Vet$/i;
