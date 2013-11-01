@@ -79,18 +79,29 @@ define(function () {
 		return output;
 	}
 
+	/** @returns {string} */
+	function createLabelFromPropertyName(/**{string}*/ propertyName) {
+		var rangeRe = /^age(\d*?)([a-z]*)(\d+)$/i, m;
+		m = propertyName.match(rangeRe);
+		if (m) {
+			m = m.slice(1);
+		}
+		return m.join(" ").trim();
+	}
+
 	AgeGroupedData.prototype.toColumnChartSeries = function (/** {number} */ total, /** {string} */ color) {
-		var output = [], item, v, propName;
+		var output = [], item, v, propName, label;
 		for (propName in this) {
 			if (this.hasOwnProperty(propName)) {
 				v = this[propName];
+				label = createLabelFromPropertyName(propName);
 				if (typeof v === "number") {
 					item = {
 						y: v,
-						text: propName,
+						text: label,
 						fill: color || null,
 						stroke: "black",
-						tooltip: total ? [propName, ": (~", getPercent(v, total), "%)"].join("") : [propName, ": ", v].join("")
+						tooltip: total ? [label, ": (~", getPercent(v, total), "%)"].join("") : [label, ": ", v].join("")
 					};
 
 					output.push(item);
@@ -137,6 +148,22 @@ define(function () {
 
 		output = this.combined.toColumnChartSeries(total, "hsl(240,100%, 50%)"); // this.male.toColumnChartSeries(total, "blue").concat(this.female.toColumnChartSeries(total, "pink"));
 
+		return output;
+	};
+
+	/** Creates labels for the chart.
+	 * @returns {string}
+	 */
+	AgeData.prototype.createLabels = function () {
+		var output = [], i = 0;
+		for (var propName in this.combined) {
+			if (this.combined.hasOwnProperty(propName)) {
+				output.push({
+					text: createLabelFromPropertyName(propName),
+					value: ++i
+				});
+			}
+		}
 		return output;
 	};
 

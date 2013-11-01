@@ -82,19 +82,7 @@ define([
 		},
 
 		createAgeChart: function (/**{AgeData}*/ ageData) {
-			var chart, anim_a, anim_b, anim_c, mouseZoomAndPan, combinedAgeData, labels = [], i = 0;
-
-			combinedAgeData = ageData.combined;
-
-			// Create the labels.
-			for (var propertyName in combinedAgeData) {
-				if (combinedAgeData.hasOwnProperty(propertyName)) {
-					labels.push({
-						value: ++i,
-						text: propertyName
-					});
-				}
-			}
+			var chart, anim_a, anim_b, anim_c, mouseZoomAndPan, labels = ageData.createLabels();
 
 
 			chart = new Chart("ageChart", {
@@ -109,8 +97,8 @@ define([
 			chart.addAxis("x", {
 				labels: labels,
 				////dropLabels: false,
-				////minorLabels: false,
-				//title: "Language",
+				minorLabels: false,
+				title: "Age groups",
 				titleOrientation: "away",
 				majorTickStep: 1,
 				minorTickStep: 0.5,
@@ -119,11 +107,11 @@ define([
 			chart.addAxis("y", {
 				vertical: true,
 				//max: ageData.getTotal() - ageData.english,
-				//title: "No. of speakers"
+				title: "Population",
 				includeZero: true
 			});
 			chart.addSeries("Age", ageData.toColumnChartSeries());
-			mouseZoomAndPan = new MouseZoomAndPan(chart, "default", { axis: "y" });
+			mouseZoomAndPan = new MouseZoomAndPan(chart, "default", { axis: "x" });
 			anim_a = new Shake(chart, "default", {
 				shiftX: 10,
 				shiftY: 10
