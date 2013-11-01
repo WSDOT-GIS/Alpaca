@@ -403,7 +403,7 @@
     {
         "name": "F_21",
         "type": "esriFieldTypeInteger",
-        "alias": "Femail 21",
+        "alias": "Female 21",
         "domain": null
     },
     {

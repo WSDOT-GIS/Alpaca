@@ -2,92 +2,60 @@
 define(function () {
 	"use strict";
 
-	var AgeData, AgeGroupedData, categoryNames;
-
-	/** Adds spaces between words / numbers.
-	 * @returns {string}
-	 */
-	function formatCategoryName(/**{string}*/ categoryName) {
-		var output, re = /^([0-9]*?)([a-z]*)([0-9]+)$/i, match;
-		if (categoryName) {
-			match = categoryName.match(re);
-			output = match.slice(1, 4).join(" ").trim();
-		}
-		return output || categoryName;
-	}
-
-	categoryNames = [
-		"Under5",
-		"5to9",
-		"10to14",
-		"15to17",
-		"18to19",
-		"20",
-		"21",
-		"22to24",
-		"25to29",
-		"30to34",
-		"35to39",
-		"40to44",
-		"45to49",
-		"50to54",
-		"55to59",
-		"60to61",
-		"62to64",
-		"65to66",
-		"67to69",
-		"70to74",
-		"75to79",
-		"80to84",
-		"Over85"
-	];
+	var AgeData, AgeGroupedData;
 
 	/**
 	 * @constructor
-	 * @param {Object.<string, number>} queryResults
-	 * @param {string} [prefix] Either "M" or "F"
-	 * @member {number} "Under 5"
-	 * @member {number} "5 to 9"
-	 * @member {number} "10 to 14"
-	 * @member {number} "15 to 17"
-	 * @member {number} "18 to 19"
-	 * @member {number} 20
-	 * @member {number} 21
-	 * @member {number} "22 to 24"
-	 * @member {number} "25 to 29"
-	 * @member {number} "30 to 34"
-	 * @member {number} "35 to 39"
-	 * @member {number} "40 to 44"
-	 * @member {number} "45 to 49"
-	 * @member {number} "50 to 54"
-	 * @member {number} "55 to 59"
-	 * @member {number} "60 to 61"
-	 * @member {number} "62 to 64"
-	 * @member {number} "65 to 66"
-	 * @member {number} "67 to 69"
-	 * @member {number} "70 to 74"
-	 * @member {number} "75 to 79"
-	 * @member {number} "80 to 84"
-	 * @member {number} "Over 85"
+	 * @param {Object.<string,number>} queryResults
+	 * @param {string] [prefix] - If provided, valid values are "M" or "F".
+	 * @member {number} ageUnder5 - Number of people in the age range Under5
+	 * @member {number} age5to9 - Number of people in the age range 5to9
+	 * @member {number} age10to14 - Number of people in the age range 10to14
+	 * @member {number} age15to17 - Number of people in the age range 15to17
+	 * @member {number} age18to19 - Number of people in the age range 18to19
+	 * @member {number} age20 - Number of people in the age range 20
+	 * @member {number} age21 - Number of people in the age range 21
+	 * @member {number} age22to24 - Number of people in the age range 22to24
+	 * @member {number} age25to29 - Number of people in the age range 25to29
+	 * @member {number} age30to34 - Number of people in the age range 30to34
+	 * @member {number} age35to39 - Number of people in the age range 35to39
+	 * @member {number} age40to44 - Number of people in the age range 40to44
+	 * @member {number} age45to49 - Number of people in the age range 45to49
+	 * @member {number} age50to54 - Number of people in the age range 50to54
+	 * @member {number} age55to59 - Number of people in the age range 55to59
+	 * @member {number} age60to61 - Number of people in the age range 60to61
+	 * @member {number} age62to64 - Number of people in the age range 62to64
+	 * @member {number} age65to66 - Number of people in the age range 65to66
+	 * @member {number} age67to69 - Number of people in the age range 67to69
+	 * @member {number} age70to74 - Number of people in the age range 70to74
+	 * @member {number} age75to79 - Number of people in the age range 75to79
+	 * @member {number} age80to84 - Number of people in the age range 80to84
+	 * @member {number} ageOver85 - Number of people in the age range Over85
 	 */
 	AgeGroupedData = function (queryResults, prefix) {
-		var i, l, fieldName, cName, outName;
-
-		if (prefix !== "M" && prefix !== "F") {
-			for (outName in queryResults) {
-				if (queryResults.hasOwnProperty(outName)) {
-					this[outName] = queryResults[outName] || 0;
-				}
-			}
-		} else {
-			for (i = 0, l = categoryNames.length; i < l; i += 1) {
-				// Add the prefix to get the field name.
-				cName = categoryNames[i];
-				outName = formatCategoryName(cName);
-				fieldName = [prefix, cName].join("_");
-				this[outName] = queryResults[fieldName] || queryResults["SUM_" + fieldName] || 0;
-			}
-		}
+		this.ageUnder5 = queryResults[ prefix ? prefix + "_Under5" : "ageUnder5"] || 0;
+		this.age5to9 = queryResults[ prefix ? prefix + "_5to9" : "age5to9"] || 0;
+		this.age10to14 = queryResults[ prefix ? prefix + "_10to14" : "age10to14"] || 0;
+		this.age15to17 = queryResults[ prefix ? prefix + "_15to17" : "age15to17"] || 0;
+		this.age18to19 = queryResults[ prefix ? prefix + "_18to19" : "age18to19"] || 0;
+		this.age20 = queryResults[ prefix ? prefix + "_20" : "age20"] || 0;
+		this.age21 = queryResults[ prefix ? prefix + "_21" : "age21"] || 0;
+		this.age22to24 = queryResults[ prefix ? prefix + "_22to24" : "age22to24"] || 0;
+		this.age25to29 = queryResults[ prefix ? prefix + "_25to29" : "age25to29"] || 0;
+		this.age30to34 = queryResults[ prefix ? prefix + "_30to34" : "age30to34"] || 0;
+		this.age35to39 = queryResults[ prefix ? prefix + "_35to39" : "age35to39"] || 0;
+		this.age40to44 = queryResults[ prefix ? prefix + "_40to44" : "age40to44"] || 0;
+		this.age45to49 = queryResults[ prefix ? prefix + "_45to49" : "age45to49"] || 0;
+		this.age50to54 = queryResults[ prefix ? prefix + "_50to54" : "age50to54"] || 0;
+		this.age55to59 = queryResults[ prefix ? prefix + "_55to59" : "age55to59"] || 0;
+		this.age60to61 = queryResults[ prefix ? prefix + "_60to61" : "age60to61"] || 0;
+		this.age62to64 = queryResults[ prefix ? prefix + "_62to64" : "age62to64"] || 0;
+		this.age65to66 = queryResults[ prefix ? prefix + "_65to66" : "age65to66"] || 0;
+		this.age67to69 = queryResults[ prefix ? prefix + "_67to69" : "age67to69"] || 0;
+		this.age70to74 = queryResults[ prefix ? prefix + "_70to74" : "age70to74"] || 0;
+		this.age75to79 = queryResults[ prefix ? prefix + "_75to79" : "age75to79"] || 0;
+		this.age80to84 = queryResults[ prefix ? prefix + "_80to84" : "age80to84"] || 0;
+		this.ageOver85 = queryResults[ prefix ? prefix + "_Over85" : "ageOver85"] || 0;
 	};
 
 	AgeGroupedData.prototype.getTotal = function () {
@@ -167,7 +135,7 @@ define(function () {
 
 		total = this.getTotal();
 
-		output = this.combined.toColumnChartSeries(total, "purple"); // this.male.toColumnChartSeries(total, "blue").concat(this.female.toColumnChartSeries(total, "pink"));
+		output = this.combined.toColumnChartSeries(total, "hsl(240,100%, 50%)"); // this.male.toColumnChartSeries(total, "blue").concat(this.female.toColumnChartSeries(total, "pink"));
 
 		return output;
 	};
