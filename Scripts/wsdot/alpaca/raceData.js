@@ -46,7 +46,7 @@ define(["dojo/number"], function (number) {
 		/** @member {string} */
 		asian: "Asian",
 		/** @member {string} */
-		pacificIslander: "Native HI or Pacific Island",
+		pacificIslander: "N.HI / Pac. Isl.",
 		/** @member {string} */
 		other: "Other"
 
