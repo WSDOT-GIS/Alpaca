@@ -199,9 +199,10 @@ define([
 	}
 
 	/** An object used to provide chart data.
-	 * @fires ChartDataProvider#totals-determined Fired when the data for the charts has been calculated.
-	 * @fires ChartDataProvider#query-complete Occurs when a query has been completed.
-	 * @fires ChartDataProvider#error
+	 * @exports ChartDataProvider
+	 * @fires ChartDataProvider#totals-determined - Fired when the data for the charts has been calculated.
+	 * @fires ChartDataProvider#query-complete - Occurs when a query has been completed.
+	 * @fires ChartDataProvider#error - LabelInfo
 	 */
 	ChartDataProvider = declare(Evented, {
 
