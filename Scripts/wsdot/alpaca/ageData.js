@@ -58,6 +58,9 @@ define(function () {
 		this.ageOver85 = queryResults[ prefix ? prefix + "_Over85" : "ageOver85"] || 0;
 	};
 
+	/** Gets the total number of people in all age groups
+	 * @returns {number}
+	 */
 	AgeGroupedData.prototype.getTotal = function () {
 		var propName, v, output = 0;
 		for (propName in this) {
@@ -71,6 +74,10 @@ define(function () {
 		return output;
 	};
 
+	/** Gets the percentage of a value of the total.
+	 * @param {number} v - A number of people ≦ total.
+	 * @param {number} total - The total number of people.
+	 */
 	function getPercent(v, total) {
 		var output;
 		if (total) {
@@ -79,7 +86,9 @@ define(function () {
 		return output;
 	}
 
-	/** @returns {string} */
+	/** Creates a label from a property name, removing the "age" prefix and adding spaces between numbers and words.
+	 * @returns {string} 
+	 */
 	function createLabelFromPropertyName(/**{string}*/ propertyName) {
 		var rangeRe = /^age(\d*?)([a-z]*)(\d+)$/i, m;
 		m = propertyName.match(rangeRe);
@@ -89,6 +98,19 @@ define(function () {
 		return m.join(" ").trim();
 	}
 
+	/** @typedef {Object} ColumnChartSeriesItem
+	 * @property {number} y
+	 * @property {string} text
+	 * @property {(string|null)} fill - the fill color
+	 * @property {string} stroke - the stroke color
+	 * @property {string} tooltip
+	 */
+
+	/** Creates a column chart series for a dojo chart.
+	 * @param {number} total
+	 * @param {string} {string} [color=null]
+	 * @returns {ColumnChartSeriesItem[]}
+	 */
 	AgeGroupedData.prototype.toColumnChartSeries = function (/** {number} */ total, /** {string} */ color) {
 		var output = [], item, v, propName, label;
 		for (propName in this) {
@@ -113,10 +135,11 @@ define(function () {
 	};
 
 	/** 
+	 * @exports AgeData
 	 * @member {AgeGroupedData} male
 	 * @member {AgeGroupedData} female
 	 * @member {AgeGroupedData} combined - combined male and female age data.
-	*/
+	 */
 	AgeData = function (queryResults) {
 		this.male = new AgeGroupedData(queryResults, "M");
 		this.female = new AgeGroupedData(queryResults, "F");
@@ -132,9 +155,13 @@ define(function () {
 		this.combined = new AgeGroupedData(this.combined);
 	};
 
+	/** Returns the total number of people, both male and female.
+	 * @returns {number}
+	 */
 	AgeData.prototype.getTotal = function () {
 		return this.male.getTotal() + this.female.getTotal();
 	};
+	
 
 	AgeData.AgeGroupedData = AgeGroupedData;
 
@@ -151,8 +178,13 @@ define(function () {
 		return output;
 	};
 
+	/** @typedef {Object} LabelInfo
+	 * @property {string} text - The label that will be displayed on the chart.
+	 * @property {number} value - The index that the label corresponds to on the chart.
+	 */
+
 	/** Creates labels for the chart.
-	 * @returns {string}
+	 * @returns {LabelInfo[]}
 	 */
 	AgeData.prototype.createLabels = function () {
 		var output = [], i = 0;
