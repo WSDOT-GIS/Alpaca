@@ -60,6 +60,7 @@
     <Content Include="Scripts\wsdot\CSV-Reader\csvHtml.js" />
     <Content Include="Scripts\wsdot\CSV-Reader\main.js" />
     <Content Include="Scripts\wsdot\layerUtils\main.js" />
+    <Content Include="Docs\Technical Info.md" />
     <None Include="Scripts\_references.js" />
     <Content Include="Style\index.css" />
     <Content Include="Style\index.min.css">
