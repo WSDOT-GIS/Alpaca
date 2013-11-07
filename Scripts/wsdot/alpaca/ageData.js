@@ -136,6 +136,7 @@ define(function () {
 
 	/** 
 	 * @exports AgeData
+	 * @constructor
 	 * @member {AgeGroupedData} male
 	 * @member {AgeGroupedData} female
 	 * @member {AgeGroupedData} combined - combined male and female age data.
