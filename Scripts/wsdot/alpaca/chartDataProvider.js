@@ -179,10 +179,16 @@ define([
 		this.poverty = queryResults.poverty ? new PovertyData(queryResults.poverty) : new PovertyData(queryResults);
 	}
 
-	/**
-	 * @param {string} type Choices are "statewide", "service area" or "selection"
-	 * @param {esri/Graphic[]} features An array of graphics.
-	 * @param {(ChartData|Object.<string, number>)} chartData Either a {@link ChartData} or the parameter to be passed to the {@link ChartData} constructor.
+	/** 
+	 * @param {string} type - Choices are "statewide", "service area" or "selection"
+	 * @param {esri/Graphic[]} features - An array of graphics.
+	 * @param {(ChartData|Object.<string, number>)} chartData - Either a {@link ChartData} or the parameter to be passed to the {@link ChartData} constructor.
+	 * @param {Geometry} [originalGeometry=null]
+
+	 * @member {string} type - Will have one of the following values: "statewide", "service area" or "selection"
+	 * @member {esri/Graphic[]} features - An array of graphics.
+	 * @member {ChartData} chartData
+	 * @member {Geometry} originalGeometry
 	 * @constructor
 	 */
 	function ChartDataQueryResult(type, features, chartData, originalGeometry) {
@@ -200,7 +206,14 @@ define([
 	ChartDataProvider = declare(Evented, {
 
 		_statisticDefinitions: fields.toStatisticDefinitions(),
-		/** The query tasks for each zoom level: blockGroup, tract, and county. */
+
+		/** @typedef {Object} ChartDataProvider~QueryTasks
+		 * @property {esri/tasks/QueryTask} blockGroup
+		 * @property {esri/tasks/QueryTask} tract
+		 * @property {esri/tasks/QueryTask} county
+		 */
+
+		/** @member {ChartDataProvider~QueryTasks} The query tasks for each zoom level: blockGroup, tract, and county. */
 		queryTasks: {
 			blockGroup: null,
 			tract: null,
@@ -268,6 +281,9 @@ define([
 				});
 			}
 
+			/** Performs a query against the aggregate layer using user-specified geometry.
+			 * @param {esri/geometry/Geometry} geometry - The geometry that the user drew on the map.
+			 */
 			function performQuery(geometry) {
 				var query, queryTask;
 				// Get the query task for the current scale.
@@ -347,6 +363,7 @@ define([
 
 
 			if (!drawnGeometry) {
+				// If the user has not drawn a geometry, perform the statewide query.
 				performAggregateQuery();
 			} else {
 				if (serviceAreaGeometry) {
@@ -392,12 +409,13 @@ define([
 
 			return deferred.promise;
 		},
+
 		/**
 		 * @param {string} mapServiceUrl The map service that provides aggregate census data.
-		 * @param {Object} [options]
-		 * @param {number} options.blockGroupLayerId The ID of layer that provides block group level data. Defaults to 0 if options is omitted.
-		 * @param {number} options.tractLayerId The ID of layer that provides tract level data. Defaults to 1 if options is omitted.
-		 * @param {number} options.countyLayerId The ID of layer that provides county level data. Defaults to 2 if options is omitted.
+		 * @param {ChartDataProviderConstructorOptions} [options]
+		 * @param {number} [options.blockGroupLayerId=0] The ID of layer that provides block group level data.
+		 * @param {number} [options.tractLayerId=1] The ID of layer that provides tract level data.
+		 * @param {number} [options.countyLayerId=2] The ID of layer that provides county level data.
 		 * @constructs
 		 */
 		constructor: function (mapServiceUrl, options) {
