@@ -75,13 +75,22 @@ define([
 	}
 
 
+	/** This object, upon creation, sorts fields into categories.
+	 * @constructor
+	 */
 	function FieldGroups(/**{Field[]}*/ fields) {
 		var i, l, field;
+		/**@member {Field[]}*/
 		this.language = [];
+		/**@member {Field[]}*/
 		this.population = [];
+		/**@member {Field[]}*/
 		this.veteran = [];
+		/**@member {Field[]}*/
 		this.poverty = [];
+		/**@member {Field[]}*/
 		this.race = [];
+		/**@member {Field[]}*/
 		this.other = [];
 
 		for (i = 0, l = fields.length; i < l; i += 1) {
@@ -126,6 +135,9 @@ define([
 		return output;
 	};
 
+	/** Ungroups the fields in the FieldGroups object into an array of Field objects.  The results can be used as the value of the Query.outFields property.
+	 * @returns {Field[]}
+	 */
 	FieldGroups.prototype.getOutFields = function () {
 		var output = [];
 
@@ -146,10 +158,15 @@ define([
 	fields = JSON.parse(fields, parseField);
 	fields = new FieldGroups(fields);
 
-	/**
+	/** The results of a map service layer query, grouped into categories of data objects.
+	 * @member {RaceData} race
+	 * @member {LanguageData} language
+	 * @member {AgeData} age
+	 * @member {VeteranData} veteran
+	 * @member {PovertyData} poverty
 	 * @constructor
 	 */
-	function ChartData(/**{Object}*/ queryResults) {
+	function ChartData(/**{(Object|ChartData)}*/ queryResults) {
 		/** Provices race data */
 		this.race = queryResults.race ? new RaceData(queryResults.race) : new RaceData(queryResults);
 		/** Provides language data */
