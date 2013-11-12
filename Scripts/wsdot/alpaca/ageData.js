@@ -90,12 +90,28 @@ define(function () {
 	 * @returns {string} 
 	 */
 	function createLabelFromPropertyName(/**{string}*/ propertyName) {
-		var rangeRe = /^age(\d*?)([a-z]*)(\d+)$/i, m;
+		////var rangeRe = /^age(\d*?)([a-z]*)(\d+)$/i, m, output;
+		////m = propertyName.match(rangeRe);
+		////if (m) {
+		////	output = m.slice(1).join(" ").trim();
+		////} else {
+		////	output = propertyName;
+		////}
+		////return output;
+
+		var rangeRe = /(\d+)to(\d+)/i, re = /(?:\d+)|(?:[A-Z][a-z]+)/g, output = [], m;
 		m = propertyName.match(rangeRe);
 		if (m) {
-			m = m.slice(1);
+			output = m.slice(1).join('-');
+		} else {
+			m = re.exec(propertyName);
+			while (m) {
+				output.push(m[0]);
+				m = re.exec(propertyName);
+			}
+			output = output.join(" ");
 		}
-		return m.join(" ").trim();
+		return output;
 	}
 
 	/** @typedef {Object} ColumnChartSeriesItem
@@ -152,7 +168,7 @@ define(function () {
 		/** @member {number} */
 		this.age65to84 = agd.age65to66 + agd.age67to69 + agd.age70to74 + agd.age75to79 + agd.age80to84;
 		/** @member {number} */
-		this.age85AndOver = agd.ageOver85;
+		this.age85Plus = agd.ageOver85;
 	}
 
 	SubGroupedAgeData.prototype.toColumnChartSeries = toColumnChartSeries;

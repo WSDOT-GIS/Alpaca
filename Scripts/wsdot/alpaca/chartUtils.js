@@ -8,7 +8,7 @@ define([
 	"dojox/charting/action2d/MoveSlice",
 	"dojox/charting/action2d/Tooltip",
 	"dojox/charting/action2d/Shake",
-	"dojox/charting/action2d/MouseZoomAndPan"
+	"dojox/charting/action2d/MouseZoomAndPan",
 ], function (Chart, Pie, Columns, Highlight, MoveSlice, Tooltip, Shake, MouseZoomAndPan) {
 	"use strict";
 
