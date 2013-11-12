@@ -111,7 +111,7 @@ define(function () {
 	 * @param {string} {string} [color=null]
 	 * @returns {ColumnChartSeriesItem[]}
 	 */
-	AgeGroupedData.prototype.toColumnChartSeries = function (/** {number} */ total, /** {string} */ color) {
+	var toColumnChartSeries = function (/** {number} */ total, /** {string} */ color) {
 		var output = [], item, v, propName, label;
 		for (propName in this) {
 			if (this.hasOwnProperty(propName)) {
@@ -134,6 +134,29 @@ define(function () {
 		return output;
 	};
 
+	AgeGroupedData.prototype.toColumnChartSeries = toColumnChartSeries;
+
+	/**
+	 * @param {AgeGroupedData} agd
+	 * @constructor
+	 */
+	function SubGroupedAgeData(agd) {
+		/** @member {number} */
+		this.ageUnder5 = agd.ageUnder5;
+		/** @member {number} */
+		this.age5to17 = agd.age5to9 + agd.age10to14 + agd.age15to17;
+		/** @member {number} */
+		this.age18to64 = agd.age18to19 + agd.age20 + agd.age21 + agd.age22to24 +
+			agd.age25to29 + agd.age30to34 + agd.age35to39 + agd.age40to44 + agd.age45to49 +
+			agd.age50to54 + agd.age55to59 + agd.age60to61 + agd.age62to64;
+		/** @member {number} */
+		this.age65to84 = agd.age65to66 + agd.age67to69 + agd.age70to74 + agd.age75to79 + agd.age80to84;
+		/** @member {number} */
+		this.age85AndOver = agd.ageOver85;
+	}
+
+	SubGroupedAgeData.prototype.toColumnChartSeries = toColumnChartSeries;
+
 	/** 
 	 * @exports AgeData
 	 * @constructor
@@ -154,6 +177,7 @@ define(function () {
 		}
 
 		this.combined = new AgeGroupedData(this.combined);
+		this.combinedSubgrouped = new SubGroupedAgeData(this.combined);
 	};
 
 	/** Returns the total number of people, both male and female.
@@ -174,7 +198,7 @@ define(function () {
 
 		total = this.getTotal();
 
-		output = this.combined.toColumnChartSeries(total, "hsl(240,100%, 50%)"); // this.male.toColumnChartSeries(total, "blue").concat(this.female.toColumnChartSeries(total, "pink"));
+		output = this.combinedSubgrouped.toColumnChartSeries(total, "hsl(240,100%, 50%)"); // this.male.toColumnChartSeries(total, "blue").concat(this.female.toColumnChartSeries(total, "pink"));
 
 		return output;
 	};
@@ -189,8 +213,8 @@ define(function () {
 	 */
 	AgeData.prototype.createLabels = function () {
 		var output = [], i = 0;
-		for (var propName in this.combined) {
-			if (this.combined.hasOwnProperty(propName)) {
+		for (var propName in this.combinedSubgrouped) {
+			if (this.combinedSubgrouped.hasOwnProperty(propName)) {
 				output.push({
 					text: createLabelFromPropertyName(propName),
 					value: ++i
