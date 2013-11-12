@@ -90,26 +90,23 @@ define(function () {
 	 * @returns {string} 
 	 */
 	function createLabelFromPropertyName(/**{string}*/ propertyName) {
-		////var rangeRe = /^age(\d*?)([a-z]*)(\d+)$/i, m, output;
-		////m = propertyName.match(rangeRe);
-		////if (m) {
-		////	output = m.slice(1).join(" ").trim();
-		////} else {
-		////	output = propertyName;
-		////}
-		////return output;
-
-		var rangeRe = /(\d+)to(\d+)/i, re = /(?:\d+)|(?:[A-Z][a-z]+)/g, output = [], m;
+		var rangeRe = /(\d+)to(\d+)/i, overRe = /(\d+)(?:(?:Plus)|(?:AndOver))/i, re = /(?:\d+)|(?:[A-Z][a-z]+)/g, output = [], m;
 		m = propertyName.match(rangeRe);
 		if (m) {
 			output = m.slice(1).join('-');
 		} else {
-			m = re.exec(propertyName);
-			while (m) {
-				output.push(m[0]);
+			m = propertyName.match(overRe);
+			if (m) {
+				output = m[1] + "+";
+			} else {
+
 				m = re.exec(propertyName);
+				while (m) {
+					output.push(m[0]);
+					m = re.exec(propertyName);
+				}
+				output = output.join(" ");
 			}
-			output = output.join(" ");
 		}
 		return output;
 	}
