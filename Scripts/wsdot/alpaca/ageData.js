@@ -93,13 +93,15 @@ define(function () {
 		var rangeRe = /(\d+)to(\d+)/i, overRe = /(\d+)(?:(?:Plus)|(?:AndOver))/i, re = /(?:\d+)|(?:[A-Z][a-z]+)/g, output = [], m;
 		m = propertyName.match(rangeRe);
 		if (m) {
+			// If it's a range, separate the two numbers with "-"
 			output = m.slice(1).join('-');
 		} else {
 			m = propertyName.match(overRe);
 			if (m) {
+				// If it's "OverXX", output "XX+"
 				output = m[1] + "+";
 			} else {
-
+				// Separate words and numbers.
 				m = re.exec(propertyName);
 				while (m) {
 					output.push(m[0]);
