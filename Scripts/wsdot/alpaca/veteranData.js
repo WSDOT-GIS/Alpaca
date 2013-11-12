@@ -69,14 +69,14 @@ define(["dojo/number"], function (number) {
 			y: vet,
 			text: "Veteran",
 			stroke: "black",
-			fill: "green",
+			fill: "RGB(133,90,150)",
 			tooltip: ["Veteran: ", number.format(vet), "(~", getPercent(vet, total), "%)"].join("")
 		}, {
 			y: nonVet,
-			text: "Non-Veteran",
+			text: "Civilian",
 			stroke: "black",
-			fill: "gray",
-			tooltip: ["Non Veteran: ", number.format(nonVet), "(~", getPercent(nonVet, total), "%)"].join("")
+			fill: "RGB(229,213,242)",
+			tooltip: ["Civilian: ", number.format(nonVet), "(~", getPercent(nonVet, total), "%)"].join("")
 		});
 
 		return output;
