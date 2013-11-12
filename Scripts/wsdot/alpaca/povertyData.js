@@ -56,13 +56,13 @@ define(["dojo/number"], function (number) {
 				y: this.federalTotalInPoverty,
 				text: "Poverty",
 				stroke: "black",
-				fill: "red",
+				fill: "RGB(87,145,101)",
 				tooltip: ["Poverty: ", number.format(this.federalInPoverty), "(~", pctInPoverty, "%)"].join("")
 			}, {
 				y: this.nonPoverty,
 				text: "Non-Poverty",
 				stroke: "black",
-				fill: "gray",
+				fill: "RGB(220,245,233)",
 				tooltip: ["Non-Poverty: ", number.format(this.nonPoverty), "(~", 100 - pctInPoverty, "%)"].join("")
 			}
 		];
