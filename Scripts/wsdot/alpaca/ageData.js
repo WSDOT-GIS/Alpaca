@@ -1,5 +1,5 @@
 ﻿/*global define*/
-define(function () {
+define(["dojo/number"], function (number) {
 	"use strict";
 
 	var AgeData, AgeGroupedData;
@@ -138,7 +138,7 @@ define(function () {
 						text: label,
 						fill: color || null,
 						stroke: "black",
-						tooltip: total ? [label, ": (~", getPercent(v, total), "%)"].join("") : [label, ": ", v].join("")
+						tooltip: total ? [label, ": ", number.format(total), " (~", getPercent(v, total), "%)"].join("") : [label, ": ", v].join("")
 					};
 
 					output.push(item);

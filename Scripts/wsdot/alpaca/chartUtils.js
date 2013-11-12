@@ -110,7 +110,7 @@ define([
 				labels: labels,
 				////dropLabels: false,
 				minorLabels: false,
-				title: "Age groups",
+				//title: "Age groups",
 				titleOrientation: "away",
 				majorTickStep: 1,
 				minorTickStep: 0.5,
@@ -119,11 +119,11 @@ define([
 			chart.addAxis("y", {
 				vertical: true,
 				//max: ageData.getTotal() - ageData.english,
-				title: "Population",
+				//title: "Population",
 				includeZero: true
 			});
 			chart.addSeries("Age", ageData.toColumnChartSeries());
-			mouseZoomAndPan = new MouseZoomAndPan(chart, "default", { axis: "x" });
+			mouseZoomAndPan = new MouseZoomAndPan(chart, "default", { axis: "y" });
 			anim_a = new Shake(chart, "default", {
 				shiftX: 10,
 				shiftY: 10
