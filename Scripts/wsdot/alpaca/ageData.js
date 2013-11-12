@@ -138,7 +138,7 @@ define(["dojo/number"], function (number) {
 						text: label,
 						fill: color || null,
 						stroke: "black",
-						tooltip: total ? [label, ": ", number.format(total), " (~", getPercent(v, total), "%)"].join("") : [label, ": ", v].join("")
+						tooltip: total ? [label, ": ", number.format(v), " (~", getPercent(v, total), "%)"].join("") : [label, ": ", v].join("")
 					};
 
 					output.push(item);
