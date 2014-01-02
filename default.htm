@@ -40,8 +40,7 @@
 		// Setup Google Analytics, but not if user has specified that they don't want to be tracked.
 		var _gaq = _gaq || [];
 		(function (dnt) {
-			if (!dnt || (dnt !== "yes" && dnt !== "1")) {
-				var _gaq = _gaq || [];
+			if (dnt !== "yes" && dnt !== "1") {
 				_gaq.push(['_setAccount', 'UA-970887-21']);
 				_gaq.push(['_trackPageview']);
 
