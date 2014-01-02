@@ -23,8 +23,6 @@ require([
 	 * @constructor
 	 */
 	function Parameters(dataset) {
-		var propName;
-
 		this.extent = dataset.extent ? new Extent(JSON.parse(dataset.extent)) : null;
 		this.graphics = dataset.graphics ? JSON.parse(dataset.graphics) : null;
 		this.renderer = dataset.renderer ? new SimpleRenderer(JSON.parse(dataset.renderer)) : null;
