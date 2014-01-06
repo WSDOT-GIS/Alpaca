@@ -94,6 +94,11 @@ define([
 			self.label.htmlFor = self.radioButton.id;
 			self.label.textContent = opLayer.title;
 
+			// Add a hover description if a service description is provided.
+			if (opLayer.resourceInfo.serviceDescription) {
+				self.label.title = opLayer.resourceInfo.serviceDescription;
+			}
+
 			self.domNode.appendChild(self.label);
 
 
