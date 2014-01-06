@@ -3,7 +3,7 @@
 
 ## General ##
 
-* Code is decorated with [jsdoc]. This can be used to automatically generate comments. The process for generating the comments is not currently set up for this project, though.
+* Code is decorated with [jsdoc] comments. This can be used to automatically generate documentation. The process for generating the documentation is not currently set up for this project, though.
 
 ## default.js ##
 
