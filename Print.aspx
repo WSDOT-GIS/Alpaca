@@ -8,6 +8,23 @@
 	<title>Title VI</title>
 	<link rel="stylesheet" href="http://js.arcgis.com/3.6compact/js/esri/css/esri.css">
 	<link rel="stylesheet" href="Style/Print.css" />
+	<script type="text/javascript">
+		// Setup Google Analytics, but not if user has specified that they don't want to be tracked.
+		var _gaq = _gaq || [];
+		(function (dnt) {
+			if (dnt !== "yes" && dnt !== "1") {
+				_gaq.push(['_setAccount', 'UA-970887-21']);
+				_gaq.push(['_trackPageview']);
+
+				(function () {
+					var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+					ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+				})();
+			}
+		}(navigator.doNotTrack || navigator.msDoNotTrack || null));
+
+	</script>
 </head>
 <body>
 	<div id="map"></div>

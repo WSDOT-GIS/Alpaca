@@ -61,6 +61,9 @@
     <Content Include="Scripts\wsdot\CSV-Reader\main.js" />
     <Content Include="Scripts\wsdot\layerUtils\main.js" />
     <Content Include="Docs\Technical Info.md" />
+    <Content Include="Scripts\wsdot\alpaca\ageData.min.js.map">
+      <DependentUpon>ageData.js</DependentUpon>
+    </Content>
     <None Include="Scripts\_references.js" />
     <Content Include="Style\index.css" />
     <Content Include="Style\index.min.css">

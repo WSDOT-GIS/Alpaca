@@ -239,5 +239,14 @@ define(["dojo/number"], function (number) {
 		return output;
 	};
 
+	/** Creates an HTML table 
+	 * @returns {HTMLTableElement}
+	*/
+	AgeData.prototype.toHtmlTable = function () {
+		return toHtmlTable(this.combined);
+	}
+
+	AgeData.createLabelFromPropertyName = createLabelFromPropertyName;
+
 	return AgeData;
 });
