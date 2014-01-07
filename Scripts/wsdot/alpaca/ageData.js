@@ -239,5 +239,7 @@ define(["dojo/number"], function (number) {
 		return output;
 	};
 
+	AgeData.createLabelFromPropertyName = createLabelFromPropertyName;
+
 	return AgeData;
 });

@@ -7,16 +7,16 @@ define(["dojo/number"], function (number) {
 	 */
 	function PovertyData(queryResults) {
 		/** @member {number} */
-		this.totalPopulation = queryResults.Total_POV || 0;
+		this.totalPopulation = queryResults.totalPopulation || queryResults.Total_POV || 0;
 		/** @member {number} */
-		this.federalTotalInPoverty = queryResults.Poverty_Fed || 0;
+		this.federalTotalInPoverty = queryResults.federalTotalInPoverty || queryResults.Poverty_Fed || 0;
 		/////** @member {number} */
 		////this.stateTotalInPoverty = queryResults.Poverty_State || 0;
 
 		this.nonPoverty = (this.totalPopulation - this.federalTotalInPoverty) || 0;
 
 		/** @member {number} */
-		this.medianIncome = queryResults.Income || 0;
+		this.medianIncome = queryResults.medianIncome || queryResults.Income || 0;
 	}
 
 	/**
