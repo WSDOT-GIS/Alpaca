@@ -9,7 +9,7 @@ html, body {
 	overflow: hidden;
 }
 
-#borderContainer {
+#borderContainer, #outerBorderContainer {
 	width: 100%;
 	height: 100%;
 }
