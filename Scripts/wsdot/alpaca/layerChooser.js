@@ -100,6 +100,7 @@ define([
 				link = document.createElement("a");
 				link.href = "//wsdot.maps.arcgis.com/home/item.html?id=" + opLayer.itemId;
 				link.textContent = "?";
+				link.title = ['Click to get information about the "', opLayer.title, '" layer.'].join('');
 				link.target = "_blank";
 				link.classList.add("agol-link");
 				self.label.appendChild(link);
