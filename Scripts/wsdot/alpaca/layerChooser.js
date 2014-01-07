@@ -74,7 +74,7 @@ define([
 		@constructs
 		*/
 		constructor: function (options) {
-			var self = this, opLayer = options.operationalLayer, legendDiv, controlsDiv;
+			var self = this, opLayer = options.operationalLayer, legendDiv, controlsDiv, link;
 
 			self.domNode = document.createElement("li");
 
@@ -94,12 +94,20 @@ define([
 			self.label.htmlFor = self.radioButton.id;
 			self.label.textContent = opLayer.title;
 
-			// Add a hover description if a service description is provided.
-			if (opLayer.resourceInfo.serviceDescription) {
-				self.label.title = opLayer.resourceInfo.serviceDescription;
+			// Add a link to the ArcGIS Online page for the layer.
+			if (opLayer.itemId) {
+				self.label.textContent += " ";
+				link = document.createElement("a");
+				link.href = "//wsdot.maps.arcgis.com/home/item.html?id=" + opLayer.itemId;
+				link.textContent = "?";
+				link.target = "_blank";
+				link.classList.add("agol-link");
+				self.label.appendChild(link);
 			}
 
 			self.domNode.appendChild(self.label);
+
+
 
 
 
