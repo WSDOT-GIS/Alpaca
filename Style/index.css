@@ -14,6 +14,18 @@ html, body {
 	height: 100%;
 }
 
+#outerContentPane, #sidebarPane {
+	margin: 0;
+	padding: 0;
+}
+
+#headerPane h1 {
+	text-align: center;
+	font-family: Impact,  Haettenschweiler,  'Arial Narrow Bold',  sans-serif;
+	font-size: 1.5em;
+	margin: 0;
+}
+
 #mapPane {
 	margin: 0;
 	padding: 0;
