@@ -32,9 +32,19 @@ require([
 	 */
 
 	/** Converts an object into an HTML table.
+	 * @param {Object.<string, number>} o
+	 * @param {labelFunction} labelFunction - A function that converts a property name into a label.
+	 * @param {string} caption - The value that will be used for the table's caption.
+	 * @param {string} propertyHeader - This will be the header for the label column.
+	 * @returns {HTMLTableElement}
 	*/
-	function toHtmlTable(/**{Object.<string, number>}*/ o, /**{labelFunction}*/ labelFunction) {
-		var table = document.createElement("table"), total = getTotal(o);
+	function toHtmlTable(o, labelFunction, caption, propertyHeader) {
+		var table = document.createElement("table"), total = getTotal(o), thead, captionElement;
+
+		if (caption) {
+			captionElement = table.createCaption();
+			captionElement.textContent = caption;
+		}
 
 		function addRow(propertyName) {
 			var row, cell, v;
@@ -54,6 +64,10 @@ require([
 				addRow(propName);
 			}
 		}
+
+		thead = table.createTHead();
+		thead.innerHTML = ["<tr><th>", propertyHeader || caption || "", "</th><th>Count</th><th>%</th></tr>"].join("");
+		table.createTBody();
 
 		return table;
 	}
@@ -119,6 +133,6 @@ require([
 
 	dataDiv.appendChild(qsParameters.chart.language.toHtmlTable());
 	dataDiv.appendChild(qsParameters.chart.race.toHtmlTable());
-	dataDiv.appendChild(toHtmlTable(qsParameters.chart.age.combined, AgeData.createLabelFromPropertyName));
+	dataDiv.appendChild(toHtmlTable(qsParameters.chart.age.combined, AgeData.createLabelFromPropertyName, "Age", "Age"));
 });
 
