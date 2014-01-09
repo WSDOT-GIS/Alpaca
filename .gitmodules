@@ -1,3 +1,6 @@
 [submodule "Scripts/wsdot/CSV-Reader"]
 	path = Scripts/wsdot/CSV-Reader
 	url = https://github.com/WSDOT-GIS/CSV-Reader.git
+[submodule "GTFS.NET"]
+	path = GTFS.NET
+	url = https://github.com/WSDOT-GIS/GTFS.NET.git
