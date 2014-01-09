@@ -110,6 +110,16 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="GTFS.NET\Gtfs.Contract\Gtfs.Contract.csproj">
+      <Project>{87063403-b38c-446e-a517-9c4082d64e57}</Project>
+      <Name>Gtfs.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="GTFS.NET\Gtfs.IO\Gtfs.IO.csproj">
+      <Project>{d0f94838-10a7-4ba2-bbee-41b342641554}</Project>
+      <Name>Gtfs.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
