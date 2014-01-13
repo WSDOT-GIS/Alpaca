@@ -64,6 +64,8 @@
     <Content Include="Scripts\wsdot\alpaca\ageData.min.js.map">
       <DependentUpon>ageData.js</DependentUpon>
     </Content>
+    <Content Include="gtfs.ashx" />
+    <Content Include="packages.config" />
     <None Include="Scripts\_references.js" />
     <Content Include="Style\index.css" />
     <Content Include="Style\index.min.css">
@@ -72,6 +74,9 @@
     <Content Include="Style\Print.css" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="gtfs.ashx.cs">
+      <DependentUpon>gtfs.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Print.aspx.cs">
       <DependentUpon>Print.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -98,6 +103,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -107,6 +115,7 @@
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
