@@ -64,8 +64,6 @@ namespace Wsdot.Alpaca
 			try
 			{
 				response = (HttpWebResponse)zipRequest.GetResponse();
-				// TODO: Add Etag to response.
-
 				CopyHeaders(response, context.Response);
 
 				using (var stream = response.GetResponseStream())
@@ -77,6 +75,8 @@ namespace Wsdot.Alpaca
 			}
 			catch (WebException ex)
 			{
+				// If the server responds with a 304 (Not Modified) status, this exception occurs and we need to handle it.
+				// This allows the browser to cache responses to this handler.
 				response = (HttpWebResponse)ex.Response;
 				CopyHeaders(response, context.Response);
 
