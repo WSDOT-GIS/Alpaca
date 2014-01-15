@@ -106,48 +106,42 @@
 				<div id="mapPane" data-dojo-type="dijit/layout/ContentPane"
 					data-dojo-props="splitter:true, region:'center'">
 					<div id="map">
-						<div id="toolbar" class="toolbar">
+						<div id="toolbar" class="toolbar" data-dojo-type="dijit/Toolbar">
 							<div data-dojo-type="dijit/form/DropDownButton">
-								<span>Tools</span>
+								<span>Service Area</span>
 								<div data-dojo-type="dijit/DropDownMenu">
-									<div data-dojo-type="dijit/PopupMenuItem">
-										<span>Service Area</span>
-										<div data-dojo-type="dijit/DropDownMenu">
-											<div id="drawServiceAreaButton" data-alpaca-mode="service-area" data-dojo-type="dijit/MenuItem">Draw</div>
-											<div id="clearServiceAreaButton" data-layer-id="serviceArea" data-dojo-type="dijit/MenuItem"
-												data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
-											<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
-										</div>
-									</div>
-									<div data-dojo-type="dijit/PopupMenuItem">
-										<span>Selection</span>
-										<div data-dojo-type="dijit/DropDownMenu">
-											<div data-dojo-type="dijit/PopupMenuItem">
-												<span>Draw</span>
-												<div data-dojo-type="dijit/DropDownMenu">
-													<div id="drawPointsSelectionButton" data-alpaca-mode="selection" data-geometry-type="MULTI_POINT" data-dojo-type="dijit/MenuItem">Points</div>
-													<div id="drawLineSelectionButton" data-alpaca-mode="selection" data-geometry-type="POLYLINE" data-dojo-type="dijit/MenuItem">Lines</div>
-													<div id="drawPolylineSelectionButton" data-alpaca-mode="selection" data-geometry-type="POLYGON" data-dojo-type="dijit/MenuItem">Polygon</div>
-												</div>
-											</div>
-									
-											<div id="clearSelectionButton" data-layer-id="selection" 
-												data-dojo-type="dijit/MenuItem" 
-												data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
-											<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
-										</div>
-									</div>
-							
-									<div id="basemapButton" data-dojo-type="dijit/PopupMenuItem">
-										<span>Basemap</span>
-										<div data-dojo-type="dijit/TooltipDialog">
-											<div id="basemapGallery"></div>
-										</div>
-									</div>
-									<div id="printMenuItem" data-dojo-type="dijit/MenuItem" 
-										data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconPrint'">Print</div>
+									<div id="drawServiceAreaButton" data-alpaca-mode="service-area" data-dojo-type="dijit/MenuItem">Draw</div>
+									<div id="clearServiceAreaButton" data-layer-id="serviceArea" data-dojo-type="dijit/MenuItem"
+										data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
+									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
 								</div>
 							</div>
+							<div data-dojo-type="dijit/form/DropDownButton">
+								<span>Selection</span>
+								<div data-dojo-type="dijit/DropDownMenu">
+									<div data-dojo-type="dijit/PopupMenuItem">
+										<span>Draw</span>
+										<div data-dojo-type="dijit/DropDownMenu">
+											<div id="drawPointsSelectionButton" data-alpaca-mode="selection" data-geometry-type="MULTI_POINT" data-dojo-type="dijit/MenuItem">Points</div>
+											<div id="drawLineSelectionButton" data-alpaca-mode="selection" data-geometry-type="POLYLINE" data-dojo-type="dijit/MenuItem">Lines</div>
+											<div id="drawPolylineSelectionButton" data-alpaca-mode="selection" data-geometry-type="POLYGON" data-dojo-type="dijit/MenuItem">Polygon</div>
+										</div>
+									</div>
+									
+									<div id="clearSelectionButton" data-layer-id="selection" 
+										data-dojo-type="dijit/MenuItem" 
+										data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
+									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
+								</div>
+							</div>
+							
+							<div id="basemapButton" data-dojo-type="dijit/form/DropDownButton">
+								<span>Basemap</span>
+								<div data-dojo-type="dijit/TooltipDialog">
+									<div id="basemapGallery"></div>
+								</div>
+							</div>
+							<div id="printMenuItem" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconPrint'">Print</div>
 						</div>
 						<progress id="mapProgress">Loading data...</progress>
 					</div>

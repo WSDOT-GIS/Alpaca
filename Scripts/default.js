@@ -32,6 +32,7 @@ require([
 	"dojox/charting/axis2d/Default",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
+	"dijit/Toolbar",
 	"dijit/TooltipDialog",
 	"dijit/layout/AccordionContainer",
 	"dijit/layout/ContentPane",
