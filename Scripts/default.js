@@ -626,6 +626,17 @@ require([
 					}
 				});
 			}(registry.byId("addDataButton"), registry.byId("addCsvDialog"), document.getElementById("addCsvFileInput")));
+
+			// Setup help button.
+			(function (helpButton) {
+				helpButton.on("click", function () {
+					var url = this["data-url"];
+					if (url) {
+						window.open(url);
+					}
+				});
+			}(registry.byId("helpButton")));
+
 		}, function (err) {
 			if (console && console.error) {
 				console.error("map load error", err);
