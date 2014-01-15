@@ -40,6 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="default.htm" />
+    <Content Include="Images\WsdotBasemapThumbnail.jpg" />
     <Content Include="LICENSE.txt" />
     <Content Include="Print.aspx" />
     <Content Include="Scripts\default.js" />
