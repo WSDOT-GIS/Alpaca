@@ -31,11 +31,13 @@ namespace Wsdot.Alpaca
 |(Proxy-Connection)
 # Stuff we don't care about
 |(x-.+)
+|(Server)
 )$", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.IgnorePatternWhitespace);
 
 		public void ProcessRequest(HttpContext context)
 		{
 
+			// Get the requested agency.
 			string agencyId = context.Request.Params["agency"];
 
 			context.Response.ContentType = "application/json";
@@ -95,7 +97,13 @@ namespace Wsdot.Alpaca
 
 		}
 
-		private void CopyHeaders(HttpRequest httpRequest, HttpWebRequest zipRequest)
+		/// <summary>
+		/// Copies the request headers from this <see cref="IHttpHandler">handler</see> request to the request for the GTFS zip file. 
+		/// Copying the headers will allow the browser to cache the request to this <see cref="IHttpHandler">handler</see>.
+		/// </summary>
+		/// <param name="httpRequest">The request to this handler.</param>
+		/// <param name="gtfsZipRequest">The request for the GTFS ZIP file.</param>
+		private static void CopyHeaders(HttpRequest httpRequest, HttpWebRequest gtfsZipRequest)
 		{
 			foreach (string key in httpRequest.Headers.Keys)
 			{
@@ -103,13 +111,18 @@ namespace Wsdot.Alpaca
 				{
 					continue;
 				}
-				zipRequest.Headers.Add(key, httpRequest.Headers[key]);
+				gtfsZipRequest.Headers.Add(key, httpRequest.Headers[key]);
 			}
 		}
 
-		private void CopyHeaders(HttpWebResponse response, HttpResponse httpResponse)
+		/// <summary>
+		/// Copies the headers from the GTFS response to this handler's response.
+		/// </summary>
+		/// <param name="response">GTFS ZIP file response.</param>
+		/// <param name="gtfsZipResponse">This handler's response.</param>
+		private static void CopyHeaders(HttpWebResponse response, HttpResponse gtfsZipResponse)
 		{
-			httpResponse.StatusCode = (int)response.StatusCode;
+			gtfsZipResponse.StatusCode = (int)response.StatusCode;
 
 			foreach (string key in response.Headers.Keys)
 			{
@@ -117,7 +130,7 @@ namespace Wsdot.Alpaca
 				{
 					continue;
 				}
-				httpResponse.AppendHeader(key, response.Headers[key]);
+				gtfsZipResponse.AppendHeader(key, response.Headers[key]);
 			}
 		}
 
