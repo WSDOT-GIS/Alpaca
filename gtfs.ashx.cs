@@ -5,8 +5,9 @@ using System.Net;
 using System.Web;
 using Wsdot.Gtfs.Contract;
 using Wsdot.Gtfs.IO;
-using ServiceStack.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace Wsdot.Alpaca
 {
@@ -78,6 +79,9 @@ namespace Wsdot.Alpaca
 			
 			HttpWebResponse response = null;
 
+			context.Response.Buffer = false;
+			context.Response.BufferOutput = false;
+
 			try
 			{
 				response = (HttpWebResponse)zipRequest.GetResponse();
@@ -88,7 +92,12 @@ namespace Wsdot.Alpaca
 					gtfs = stream.ReadGtfs();
 				}
 				// Write the response to the output stream.
-				JsonSerializer.SerializeToStream<GtfsFeed>(gtfs, context.Response.OutputStream);
+				var jsonSerializer = JsonSerializer.Create();
+				using (var jsWriter = new StreamWriter(context.Response.OutputStream))
+				{
+					jsonSerializer.Serialize(jsWriter, gtfs);
+
+				}
 			}
 			catch (WebException ex)
 			{
