@@ -34,18 +34,33 @@ namespace Wsdot.Alpaca
 |(Server)
 )$", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.IgnorePatternWhitespace);
 
+		private void WriteError(HttpContext context, string message)
+		{
+			context.Response.StatusCode = 400;
+			context.Response.Write(string.Format("{{\"error\":\"{0}\"}}", message));
+		}
+
 		public void ProcessRequest(HttpContext context)
 		{
 
 			// Get the requested agency.
 			string agencyId = context.Request.Params["agency"];
+			string include = context.Request.Params["include"];
+			GtfsFileOptions includeOptions = GtfsFileOptions.All;
+			if (!string.IsNullOrWhiteSpace(include))
+			{
+				if (!Enum.TryParse<GtfsFileOptions>(include, true, out includeOptions))
+				{
+					WriteError(context, "Invalid \"include\" option");
+					return;
+				}
+			}
 
 			context.Response.ContentType = "application/json";
 
 			if (string.IsNullOrWhiteSpace(agencyId))
 			{
-				context.Response.StatusCode = 400;
-				context.Response.Write("{\"error\":\"No \\\"agency\\\" ID was provided\"}");
+				WriteError(context, "No \\\"agency\\\" ID was provided");
 				return;
 			}
 
