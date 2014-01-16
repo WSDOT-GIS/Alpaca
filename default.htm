@@ -110,17 +110,18 @@
 							<div data-dojo-type="dijit/form/DropDownButton">
 								<span>Service Area</span>
 								<div data-dojo-type="dijit/DropDownMenu">
-									<div id="drawServiceAreaButton" data-alpaca-mode="service-area" data-dojo-type="dijit/MenuItem">Draw</div>
+									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
+									<div id="drawServiceAreaButton" data-alpaca-mode="service-area" data-dojo-type="dijit/MenuItem">Draw custom</div>
 									<div id="clearServiceAreaButton" data-layer-id="serviceArea" data-dojo-type="dijit/MenuItem"
 										data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
-									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
 								</div>
 							</div>
 							<div data-dojo-type="dijit/form/DropDownButton">
-								<span>Selection</span>
+								<span>Area of Interest</span>
 								<div data-dojo-type="dijit/DropDownMenu">
+									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
 									<div data-dojo-type="dijit/PopupMenuItem">
-										<span>Draw</span>
+										<span>Draw custom</span>
 										<div data-dojo-type="dijit/DropDownMenu">
 											<div id="drawPointsSelectionButton" data-alpaca-mode="selection" data-geometry-type="MULTI_POINT" data-dojo-type="dijit/MenuItem">Points</div>
 											<div id="drawLineSelectionButton" data-alpaca-mode="selection" data-geometry-type="POLYLINE" data-dojo-type="dijit/MenuItem">Lines</div>
@@ -131,11 +132,10 @@
 									<div id="clearSelectionButton" data-layer-id="selection" 
 										data-dojo-type="dijit/MenuItem" 
 										data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
-									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
 								</div>
 							</div>
 							
-							<div id="basemapButton" data-dojo-type="dijit/form/DropDownButton">
+							<div id="basemapButton" data-dojo-type="dijit/form/DropDownButton" title="Change the basemap">
 								<span>Basemap</span>
 								<div data-dojo-type="dijit/TooltipDialog">
 									<div id="basemapGallery"></div>
