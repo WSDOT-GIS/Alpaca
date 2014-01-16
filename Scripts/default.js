@@ -9,6 +9,8 @@ require([
 	"esri/arcgis/utils",
 	"esri/domUtils",
 	"esri/dijit/BasemapGallery",
+	"esri/dijit/Basemap",
+	"esri/dijit/BasemapLayer",
 	"alpaca/layerChooser",
 	"alpaca/graphicsLayerList",
 	"alpaca/chartDataProvider",
@@ -30,6 +32,7 @@ require([
 	"dojox/charting/axis2d/Default",
 	"dojo/parser",
 	"dijit/form/DropDownButton",
+	"dijit/Toolbar",
 	"dijit/TooltipDialog",
 	"dijit/layout/AccordionContainer",
 	"dijit/layout/ContentPane",
@@ -37,7 +40,8 @@ require([
 	"dijit/layout/TabContainer",
 	"dijit/form/Button",
 	"dijit/DropDownMenu", "dijit/MenuItem"
-], function (ready, Color, connect, registry, Graphic, arcgisUtils, domUtils, BasemapGallery,
+], function (ready, Color, connect, registry, Graphic, arcgisUtils, domUtils,
+	BasemapGallery, Basemap, BasemapLayer,
 	LayerChooser, GraphicsLayerList, ChartDataProvider, Draw, GraphicsLayer,
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
@@ -323,7 +327,17 @@ require([
 
 			basemapGallery = new BasemapGallery({
 				map: map,
-				basemapIds: getBasemapLayerIds()
+				basemapIds: getBasemapLayerIds(),
+				basemaps: [
+					new Basemap({
+						id: "wsdot",
+						title: "WSDOT",
+						thumbnailUrl: "Images/WsdotBasemapThumbnail.jpg",
+						layers: [new BasemapLayer({
+							url: "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+						})]
+					})
+				],
 			}, "basemapGallery");
 
 			basemapGallery.startup();
@@ -612,6 +626,17 @@ require([
 					}
 				});
 			}(registry.byId("addDataButton"), registry.byId("addCsvDialog"), document.getElementById("addCsvFileInput")));
+
+			// Setup help button.
+			(function (helpButton) {
+				helpButton.on("click", function () {
+					var url = this["data-url"];
+					if (url) {
+						window.open(url);
+					}
+				});
+			}(registry.byId("helpButton")));
+
 		}, function (err) {
 			if (console && console.error) {
 				console.error("map load error", err);
