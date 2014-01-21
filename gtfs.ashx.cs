@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json;
+using System;
+using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using Wsdot.Gtfs.Contract;
 using Wsdot.Gtfs.IO;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-using System.IO;
 
 namespace Wsdot.Alpaca
 {
@@ -16,6 +14,8 @@ namespace Wsdot.Alpaca
 	/// </summary>
 	public class gtfs : IHttpHandler
 	{
+		const long responseSizeNoBufferThreshold = 0x4000L;
+
 		static readonly Regex restrictedHeaders = new Regex(@"^(
 # Restricted Headers
 (Accept)
@@ -79,12 +79,14 @@ namespace Wsdot.Alpaca
 			
 			HttpWebResponse response = null;
 
-			context.Response.Buffer = false;
-			context.Response.BufferOutput = false;
-
 			try
 			{
 				response = (HttpWebResponse)zipRequest.GetResponse();
+
+				// Set buffer output to prevent out-of-memory errors.
+				context.Response.BufferOutput = response.ContentLength < responseSizeNoBufferThreshold;
+
+
 				CopyHeaders(response, context.Response);
 
 				using (var stream = response.GetResponseStream())
@@ -92,7 +94,14 @@ namespace Wsdot.Alpaca
 					gtfs = stream.ReadGtfs();
 				}
 				// Write the response to the output stream.
-				var jsonSerializer = JsonSerializer.Create();
+				var jsonSettings = new JsonSerializerSettings
+				{
+					NullValueHandling = NullValueHandling.Ignore,
+					DateFormatHandling = DateFormatHandling.IsoDateFormat,
+					DateTimeZoneHandling = DateTimeZoneHandling.Local,
+					TypeNameHandling = TypeNameHandling.None
+				};
+				var jsonSerializer = JsonSerializer.Create(jsonSettings);
 				using (var jsWriter = new StreamWriter(context.Response.OutputStream))
 				{
 					jsonSerializer.Serialize(jsWriter, gtfs);
@@ -133,9 +142,15 @@ namespace Wsdot.Alpaca
 			{
 				if (restrictedHeaders.IsMatch(key))
 				{
-					continue;
+					if (key == "If-Modified-Since")
+					{
+						gtfsZipRequest.IfModifiedSince = DateTime.Parse(httpRequest.Headers[key]);
+					}
 				}
-				gtfsZipRequest.Headers.Add(key, httpRequest.Headers[key]);
+				else
+				{
+					gtfsZipRequest.Headers.Add(key, httpRequest.Headers[key]);
+				}
 			}
 		}
 
