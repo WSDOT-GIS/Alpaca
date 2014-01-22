@@ -175,6 +175,15 @@ require([
 			 */
 			function createServiceAreaLayer() {
 				var renderer, symbol, layer;
+
+				/** Disables the AOI button if there are no service area graphics,
+				 * enables it if there are S.A. graphics.
+				*/
+				function disableOrEnableAoiButton(/**{Graphic}*/ graphic) {
+					var aoiButton = registry.byId("aoiButton");
+					aoiButton.set("disabled", !layer.graphics.length);
+				}
+
 				// Create the symbol for the outline of the fill symbol.
 				symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([0, 0, 255]), 3);
 				symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0, 0, 0, 0]));
@@ -183,7 +192,10 @@ require([
 					id: "serviceArea"
 				});
 				layer.setRenderer(renderer);
+				layer.on("graphic-add", disableOrEnableAoiButton);
+				layer.on("graphic-remove", disableOrEnableAoiButton);
 				map.addLayer(layer);
+
 				return layer;
 			}
 			/** Creates the selection layer and adds it to the map.
