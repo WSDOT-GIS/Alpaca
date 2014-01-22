@@ -158,7 +158,7 @@ require([
 		}).then(function (response) {
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
 				serviceAreaLayer, selectionLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
-				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
+				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers, pdbaLayer;
 
 			/** Creates the service area layer and adds it to the map.
 			 * @returns {esri/layers/GraphicsLayer}
@@ -327,8 +327,10 @@ require([
 				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
 			});
 
-			var pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
-				id: "PTBA"
+			// Add the PDBA layer
+			pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
+				id: "PTBA",
+				visible: false
 			});
 
 			map.addLayer(pdbaLayer);
