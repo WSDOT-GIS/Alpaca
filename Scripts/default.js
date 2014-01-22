@@ -27,6 +27,7 @@ require([
 	"layerUtils",
 	"esri/config",
 	"alpaca/UserGraphicsLayers",
+	"esri/layers/FeatureLayer",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -46,7 +47,7 @@ require([
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
-	esriConfig, UserGraphicsLayers)
+	esriConfig, UserGraphicsLayers, FeatureLayer)
 {
 	"use strict";
 
@@ -325,6 +326,12 @@ require([
 			graphicsLayerList = new GraphicsLayerList(map, "graphicsLayerList", {
 				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
 			});
+
+			var pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
+				id: "PTBA"
+			});
+
+			map.addLayer(pdbaLayer);
 
 			basemapGallery = new BasemapGallery({
 				map: map,
