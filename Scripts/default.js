@@ -53,14 +53,6 @@ require([
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
 
-	////// Census .gov is down due to federal gov't shutdown.  Set a short timeout for these services.
-	////esriRequest.setRequestPreCallback(function (ioArgs) {
-	////	if (/census\.gov/.test(ioArgs.url)) {
-	////		ioArgs.timeout = 500;
-	////	}
-	////	return ioArgs;
-	////});
-
 	if (!window.console) {
 		window.console = {};
 	}
@@ -166,9 +158,6 @@ require([
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
 				serviceAreaLayer, selectionLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
 				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
-
-
-
 
 			/** Creates the service area layer and adds it to the map.
 			 * @returns {esri/layers/GraphicsLayer}
