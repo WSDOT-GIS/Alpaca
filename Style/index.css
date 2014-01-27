@@ -138,3 +138,17 @@ html, body {
 	display: table-cell;
 }
 
+/* Chart legends*/
+
+table.chart-legend td:first-child {
+	width: 2em;
+	border: 0.1em solid black;
+}
+
+table.language-chart-legend tr:first-child > td:first-child {
+	background-color: #ffbebe;
+}
+
+table.language-chart-legend tr:last-child > td:first-child {
+	background-color: #ff0000;
+}
