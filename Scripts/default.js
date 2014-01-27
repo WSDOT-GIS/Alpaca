@@ -170,7 +170,7 @@ require([
 				/** Disables the AOI button if there are no service area graphics,
 				 * enables it if there are S.A. graphics.
 				*/
-				function disableOrEnableAoiButton(/**{Graphic}*/ graphic) {
+				function disableOrEnableAoiButton(/**{Graphic} graphic*/) {
 					var aoiButton = registry.byId("aoiButton");
 					aoiButton.set("disabled", !layer.graphics.length);
 				}
