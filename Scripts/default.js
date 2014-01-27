@@ -27,6 +27,8 @@ require([
 	"layerUtils",
 	"esri/config",
 	"alpaca/UserGraphicsLayers",
+	"esri/layers/ArcGISDynamicMapServiceLayer",
+	"esri/layers/ImageParameters",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -46,7 +48,7 @@ require([
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
-	esriConfig, UserGraphicsLayers)
+	esriConfig, UserGraphicsLayers, ArcGISDynamicMapServiceLayer, ImageParameters)
 {
 	"use strict";
 
@@ -157,7 +159,7 @@ require([
 		}).then(function (response) {
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
 				serviceAreaLayer, selectionLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
-				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
+				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers, pdbaLayer;
 
 			/** Creates the service area layer and adds it to the map.
 			 * @returns {esri/layers/GraphicsLayer}
@@ -168,7 +170,7 @@ require([
 				/** Disables the AOI button if there are no service area graphics,
 				 * enables it if there are S.A. graphics.
 				*/
-				function disableOrEnableAoiButton(/**{Graphic}*/ graphic) {
+				function disableOrEnableAoiButton(/**{Graphic} graphic*/) {
 					var aoiButton = registry.byId("aoiButton");
 					aoiButton.set("disabled", !layer.graphics.length);
 				}
@@ -325,6 +327,19 @@ require([
 			graphicsLayerList = new GraphicsLayerList(map, "graphicsLayerList", {
 				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
 			});
+
+			var imageParameters = new ImageParameters();
+			imageParameters.layerIds = [2];
+			imageParameters.layerOption = ImageParameters.LAYER_OPTION_SHOW;
+
+			// Add the PDBA layer
+			pdbaLayer = new ArcGISDynamicMapServiceLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer", {
+				id: "PTBA",
+				imageParameters: imageParameters,
+				visible: false
+			});
+
+			map.addLayer(pdbaLayer);
 
 			basemapGallery = new BasemapGallery({
 				map: map,
