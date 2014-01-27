@@ -58,7 +58,7 @@ define([
 				shiftX: 10,
 				shiftY: 10
 			});
-			anim_b = new Highlight(chart, "default");
+			anim_b = new Highlight(chart, "default", { highlight: "yellow" });
 			anim_c = new Tooltip(chart, "default");
 			chart.setAxisWindow("y", languageData.getNotEnglishZoomScale(), 0);
 			chart.render();
