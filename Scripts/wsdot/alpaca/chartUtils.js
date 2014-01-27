@@ -20,7 +20,7 @@ define([
 		 * @returns {dojo/charting/Chart}
 		 */
 		createLanguageChart: function (languageData) {
-			var chart, anim_a, anim_b, anim_c, mouseZoomAndPan;
+			var chart, anim_a, anim_c, mouseZoomAndPan;
 			chart = new Chart("languageChart", {
 				title: "Language Proficiency",
 				titlePos: "top",
@@ -58,7 +58,6 @@ define([
 				shiftX: 10,
 				shiftY: 10
 			});
-			anim_b = new Highlight(chart, "default", { highlight: "yellow" });
 			anim_c = new Tooltip(chart, "default");
 			chart.setAxisWindow("y", languageData.getNotEnglishZoomScale(), 0);
 			chart.render();
@@ -69,7 +68,7 @@ define([
 		 * @returns {dojo/charting/Chart}
 		 */
 		createRaceChart: function (/**{RaceData}*/ raceData) {
-			var chart, anim_a, anim_b, anim_c;
+			var chart, anim_a, anim_c;
 			chart = new Chart("minorityChart", {
 				title: "Race",
 				titlePos: "top",
@@ -84,7 +83,6 @@ define([
 				radius: 100
 			}).addSeries("Race", raceData.toColumnChartSeries());
 			anim_a = new MoveSlice(chart, "default");
-			anim_b = new Highlight(chart, "default");
 			anim_c = new Tooltip(chart, "default");
 			chart.render();
 			return chart;
@@ -138,7 +136,7 @@ define([
 		 * @returns {dojo/charting/Chart}
 		 */
 		createVeteranChart: function (/**{VeteranData}*/ veteranData) {
-			var chart, anim_a, anim_b, anim_c;
+			var chart, anim_a, anim_c;
 			chart = new Chart("veteranChart", {
 				title: "Veterans",
 				titlePos: "top",
@@ -153,7 +151,6 @@ define([
 				radius: 100
 			}).addSeries("Veterans", veteranData.toColumnChartSeries());
 			anim_a = new MoveSlice(chart, "default");
-			anim_b = new Highlight(chart, "default");
 			anim_c = new Tooltip(chart, "default");
 			chart.render();
 			return chart;
@@ -163,7 +160,7 @@ define([
 		 * @returns {dojo/charting/Chart}
 		 */
 		createPovertyChart: function (/**{PovertyData}*/ povertyData) {
-			var chart, anim_a, anim_b, anim_c;
+			var chart, anim_a, anim_c;
 			chart = new Chart("povertyChart", {
 				title: "Poverty",
 				titlePos: "top",
@@ -178,7 +175,6 @@ define([
 				radius: 100
 			}).addSeries("Poverty", povertyData.toChartSeries());
 			anim_a = new MoveSlice(chart, "default");
-			anim_b = new Highlight(chart, "default");
 			anim_c = new Tooltip(chart, "default");
 			chart.render();
 			return chart;
