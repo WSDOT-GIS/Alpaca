@@ -28,6 +28,8 @@ require([
 	"esri/config",
 	"alpaca/UserGraphicsLayers",
 	"esri/layers/FeatureLayer",
+	"esri/layers/ArcGISTiledMapServiceLayer",
+	"esri/layers/ArcGISDynamicMapServiceLayer",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -47,7 +49,7 @@ require([
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
-	esriConfig, UserGraphicsLayers, FeatureLayer)
+	esriConfig, UserGraphicsLayers, FeatureLayer, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer)
 {
 	"use strict";
 
@@ -337,6 +339,24 @@ require([
 
 			map.addLayer(pdbaLayer);
 
+			var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
+				id: "City Limits",
+				visible: false
+			});
+			map.addLayer(cityLimitsLayer);
+
+			var mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
+				id: "MPO",
+				visible: false
+			});
+			map.addLayer(mpoLayer);
+
+			var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
+				id: "RTPO",
+				visible: false
+			});
+			map.addLayer(rtpoLayer);
+
 			basemapGallery = new BasemapGallery({
 				map: map,
 				basemapIds: getBasemapLayerIds(),
@@ -349,7 +369,7 @@ require([
 							url: "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
 						})]
 					})
-				],
+				]
 			}, "basemapGallery");
 
 			basemapGallery.startup();
