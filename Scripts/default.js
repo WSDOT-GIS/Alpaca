@@ -27,8 +27,7 @@ require([
 	"layerUtils",
 	"esri/config",
 	"alpaca/UserGraphicsLayers",
-	"esri/layers/ArcGISDynamicMapServiceLayer",
-	"esri/layers/ImageParameters",
+	"esri/layers/FeatureLayer",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -48,7 +47,7 @@ require([
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
-	esriConfig, UserGraphicsLayers, ArcGISDynamicMapServiceLayer, ImageParameters)
+	esriConfig, UserGraphicsLayers, FeatureLayer)
 {
 	"use strict";
 
@@ -328,15 +327,12 @@ require([
 				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
 			});
 
-			var imageParameters = new ImageParameters();
-			imageParameters.layerIds = [2];
-			imageParameters.layerOption = ImageParameters.LAYER_OPTION_SHOW;
-
-			// Add the PDBA layer
-			pdbaLayer = new ArcGISDynamicMapServiceLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer", {
+			// Add the PTBA layer
+			pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
 				id: "PTBA",
-				imageParameters: imageParameters,
-				visible: false
+				visible: false,
+				styling: false,
+				surfaceType: "SVG"
 			});
 
 			map.addLayer(pdbaLayer);
