@@ -330,6 +330,16 @@ require([
 			});
 
 			// Add the PTBA layer
+			 var rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
+				id: "RTA",
+				visible: false,
+				styling: false,
+				surfaceType: "SVG"
+			});
+
+			map.addLayer(rtaLayer);
+
+			// Add the PTBA layer
 			pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
 				id: "PTBA",
 				visible: false,
@@ -338,6 +348,8 @@ require([
 			});
 
 			map.addLayer(pdbaLayer);
+
+			
 
 			var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
 				id: "City Limits",

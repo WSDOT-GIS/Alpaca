@@ -158,5 +158,13 @@ table.language-chart-legend tr:last-child > td:first-child {
 	stroke-width: 1pt;
 	stroke-opacity: 1;
 	fill: yellow;
-	fill-opacity: 0.8;
+	fill-opacity: 0.5;
+}
+
+#RTA_layer path {
+	stroke: #791919;
+	stroke-width: 1pt;
+	stroke-opacity: 1;
+	fill: red;
+	fill-opacity: 0.5;
 }
