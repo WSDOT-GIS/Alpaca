@@ -27,8 +27,9 @@ require([
 	"layerUtils",
 	"esri/config",
 	"alpaca/UserGraphicsLayers",
+	"esri/layers/FeatureLayer",
+	"esri/layers/ArcGISTiledMapServiceLayer",
 	"esri/layers/ArcGISDynamicMapServiceLayer",
-	"esri/layers/ImageParameters",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -48,7 +49,7 @@ require([
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
-	esriConfig, UserGraphicsLayers, ArcGISDynamicMapServiceLayer, ImageParameters)
+	esriConfig, UserGraphicsLayers, FeatureLayer, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer)
 {
 	"use strict";
 
@@ -328,18 +329,45 @@ require([
 				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
 			});
 
-			var imageParameters = new ImageParameters();
-			imageParameters.layerIds = [2];
-			imageParameters.layerOption = ImageParameters.LAYER_OPTION_SHOW;
+			// Add the PTBA layer
+			 var rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
+				id: "RTA",
+				visible: false,
+				styling: false,
+				surfaceType: "SVG"
+			});
 
-			// Add the PDBA layer
-			pdbaLayer = new ArcGISDynamicMapServiceLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer", {
+			map.addLayer(rtaLayer);
+
+			// Add the PTBA layer
+			pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
 				id: "PTBA",
-				imageParameters: imageParameters,
-				visible: false
+				visible: false,
+				styling: false,
+				surfaceType: "SVG"
 			});
 
 			map.addLayer(pdbaLayer);
+
+			
+
+			var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
+				id: "City Limits",
+				visible: false
+			});
+			map.addLayer(cityLimitsLayer);
+
+			var mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
+				id: "MPO",
+				visible: false
+			});
+			map.addLayer(mpoLayer);
+
+			var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
+				id: "RTPO",
+				visible: false
+			});
+			map.addLayer(rtpoLayer);
 
 			basemapGallery = new BasemapGallery({
 				map: map,
@@ -353,7 +381,7 @@ require([
 							url: "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
 						})]
 					})
-				],
+				]
 			}, "basemapGallery");
 
 			basemapGallery.startup();
