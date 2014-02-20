@@ -208,44 +208,99 @@ require([
 				return layer;
 			}
 
+			/** Extracts the level (Statewide, Service Area, or AOI) from a chart's title.
+			 * @param {(Chart|string)} - Either a chart object or the title of a chart.
+			 * @returns {string} "Statewide", "Service Area", or "AOI".
+			 */
+			function getLevelFromChart(chart) {
+				var re, match, title = chart && chart.title ? chart.title : typeof chart === "string" ? chart : null;
+
+				if (!title) {
+					throw new TypeError("The chart parameter must be a chart or a chart title string.");
+				}
+
+				re = /\(([^)]+)\)/; // Matches (...) portion. Capture 1 is the level (e.g., "Statewide").
+
+				match = title.match(re);
+
+				return match ? match[1] : null;
+			}
+
+			function standardizeLevelForLabel(level) {
+				var output = level;
+				if (level && typeof level === "string") {
+					if (/Service\s?Area/i.test(level)) {
+						output = "Service Area";
+					} else if (/Statewide/i.test(level)) {
+						output = "Statewide";
+					} else if (/(?:(?:selection)|(?:Area\sof\sInterest))/i) {
+						output = "AOI";
+					}
+				}
+
+				return output;
+			}
+
+			/** Updates a chart's title and executes the correct rendering function afterword.
+			 * If the new title is different than the old one, chart.fullRender() is called,
+			 * otherwise chart.render() is called.
+			 * @param {Chart} chart
+			 * @param {string} labelRoot - E.g., "Language Proficiency"
+			 * @param {string} newLevel - E.g., "Service Area", "AOI", or "Statewide"
+			 */
+			function updateChartTitle(chart, labelRoot, newLevel) {
+				var previousLevel = getLevelFromChart(chart);
+				newLevel = standardizeLevelForLabel(newLevel);
+				if (newLevel !== previousLevel) {
+					chart.title = [labelRoot, " (", newLevel, ")"].join("");
+					chart.fullRender();
+				} else {
+					chart.render();
+				}
+			}
+
 			/** Updates the charts in the application
 			*/
-			function updateCharts(/** {ChartData} */ chartData) {
+			function updateCharts(/** {ChartData} */ chartData, /**{string}*/ level) {
+				var previousLevel;
+
 				if (!languageChart) {
-					languageChart = chartUtils.createLanguageChart(chartData.language);
+					languageChart = chartUtils.createLanguageChart(chartData.language, level);
 				} else {
+					previousLevel = getLevelFromChart(languageChart);
+
 					// Update the language chart with the response language data.
 					languageChart.updateSeries("Language Proficiency", chartData.language.toColumnChartSeries());
 					languageChart.setAxisWindow("y", chartData.language.getNotEnglishZoomScale(), 0);
-					languageChart.render();
+					updateChartTitle(languageChart, "Language Proficiency", level);
 				}
 				if (!raceChart) {
-					raceChart = chartUtils.createRaceChart(chartData.race);
+					raceChart = chartUtils.createRaceChart(chartData.race, level);
 				} else {
 					// Update the race chart with the response race data.
 					raceChart.updateSeries("Race", chartData.race.toColumnChartSeries());
-					raceChart.render();
+					updateChartTitle(raceChart, "Race", level);
 				}
 
 				if (!ageChart) {
-					ageChart = chartUtils.createAgeChart(chartData.age);
+					ageChart = chartUtils.createAgeChart(chartData.age, level);
 				} else {
 					ageChart.updateSeries("Age", chartData.age.toColumnChartSeries());
-					ageChart.render();
+					updateChartTitle(ageChart, "Age", level);
 				}
 
 				if (!veteranChart) {
-					veteranChart = chartUtils.createVeteranChart(chartData.veteran);
+					veteranChart = chartUtils.createVeteranChart(chartData.veteran, level);
 				} else {
 					veteranChart.updateSeries("Veterans", chartData.veteran.toColumnChartSeries());
-					veteranChart.render();
+					updateChartTitle(veteranChart, "Veterans", level);
 				}
 
 				if (!povertyChart) {
-					povertyChart = chartUtils.createPovertyChart(chartData.poverty);
+					povertyChart = chartUtils.createPovertyChart(chartData.poverty, level);
 				} else {
 					povertyChart.updateSeries("Poverty", chartData.poverty.toChartSeries());
-					povertyChart.render();
+					updateChartTitle(povertyChart, "Poverty", level);
 				}
 
 
@@ -286,7 +341,7 @@ require([
 				serviceAreaLayer.clear();
 				if (serviceArea && serviceArea.geometry) { // Is serviceArea a graphic?
 					serviceAreaLayer.add(serviceArea);
-					updateCharts(new ChartDataProvider.ChartData(serviceArea.attributes));
+					updateCharts(new ChartDataProvider.ChartData(serviceArea.attributes), "Service Area");
 				} else {
 					chartDataProvider.getSelectionGraphics(serviceArea, map.getScale(), true);
 				}
@@ -398,10 +453,12 @@ require([
 				try {
 					chartDataProvider = new ChartDataProvider(aggregateLayerUrl);
 
-					chartDataProvider.on("totals-determined", updateCharts);
+					//chartDataProvider.on("totals-determined", updateCharts);
 
 					chartDataProvider.on("query-complete", function (/** {ChartDataQueryResult} */ output) {
-						updateCharts(output.chartData);
+						updateCharts(output.chartData, output.type);
+
+						console.debug("query-complete output", output);
 
 						document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(output.chartData);
 
@@ -559,7 +616,7 @@ require([
 					saGeometry = getServiceAreaGraphic();
 
 					if (saGeometry) {
-						updateCharts(saGeometry.attributes);
+						updateCharts(saGeometry.attributes, "Service Area");
 					} else {
 						// TODO: Load stored statewide chart data from variable.
 						chartDataProvider.getSelectionGraphics();
