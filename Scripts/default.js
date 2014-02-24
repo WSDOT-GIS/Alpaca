@@ -427,6 +427,12 @@ require([
 			});
 			map.addLayer(rtpoLayer);
 
+			var tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
+				id: "Reservation and Trust Lands",
+				visible: false
+			});
+			map.addLayer(tribalLayer);
+
 			basemapGallery = new BasemapGallery({
 				map: map,
 				basemapIds: getBasemapLayerIds(),
