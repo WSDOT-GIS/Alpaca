@@ -11,6 +11,7 @@ html, body {
 
 #wsdotLogo {
 	vertical-align: central;
+	padding-right: 0.5em;
 }
 
 #borderContainer, #outerBorderContainer {
@@ -24,11 +25,10 @@ html, body {
 }
 
 #headerPane {
-	text-align: center;
+	text-align: left;
 	font-family: Impact,  Haettenschweiler,  'Arial Narrow Bold',  sans-serif;
 	font-size: 1.5em;
 	color: #017359;
-	font-variant:small-caps;
 	margin: 0;
 }
 
