@@ -132,8 +132,10 @@ define([
 				domClass.add(controlsDiv, "layer-chooser-layer-controls");
 				self.domNode.appendChild(controlsDiv);
 
-				// Add the opacity slider
+				// Change the default opacity to 60%.
+				opLayer.layerObject.setOpacity(0.6);
 
+				// Add the opacity slider
 				self.opacitySlider = new HorizontalSlider({
 					value: opLayer.layerObject.opacity,
 					minimum: 0,
