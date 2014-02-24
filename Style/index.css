@@ -126,15 +126,24 @@ html, body {
 	margin-left: 1em;
 }
 
-.graphics-layer-list {
+#userAddedDataSection span.dijitButton {
+	float: right;
+}
+
+ul.data-layer-list {
+	padding: 0;
+	padding-left: 0.4em;
+}
+
+.data-layer-list {
 	display: table;
 }
 
-.graphics-layer-list > li {
+.data-layer-list > li {
 	display: table-row;
 }
 
-.graphics-layer-list > li > * {
+.data-layer-list > li > * {
 	display: table-cell;
 }
 

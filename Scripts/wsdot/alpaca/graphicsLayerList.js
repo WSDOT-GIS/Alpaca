@@ -207,7 +207,7 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 			this.domNode = domNode;
 
 			if (this.domNode.classList) {
-				this.domNode.classList.add("graphics-layer-list");
+				this.domNode.classList.add("data-layer-list");
 			}
 
 			frag = document.createDocumentFragment();

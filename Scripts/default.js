@@ -160,7 +160,7 @@ require([
 		}).then(function (response) {
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
 				serviceAreaLayer, selectionLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
-				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers, pdbaLayer;
+				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
 
 			/** Creates the service area layer and adds it to the map.
 			 * @returns {esri/layers/GraphicsLayer}
@@ -387,51 +387,52 @@ require([
 				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
 			});
 
-			// Add the PTBA layer
-			 var rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
-				id: "RTA",
-				visible: false,
-				styling: false,
-				surfaceType: "SVG"
-			});
+			// Add data layers
+			(function () {
+				// Add the PTBA layer
+				var rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
+					id: "RTA",
+					visible: false,
+					styling: false,
+					surfaceType: "SVG"
+				});
 
-			map.addLayer(rtaLayer);
+				map.addLayer(rtaLayer);
 
-			// Add the PTBA layer
-			pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
-				id: "PTBA",
-				visible: false,
-				styling: false,
-				surfaceType: "SVG"
-			});
+				// Add the PTBA layer
+				var pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
+					id: "PTBA",
+					visible: false,
+					styling: false,
+					surfaceType: "SVG"
+				});
 
-			map.addLayer(pdbaLayer);
+				map.addLayer(pdbaLayer);
 
-			
+				var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
+					id: "City Limits",
+					visible: false
+				});
+				map.addLayer(cityLimitsLayer);
 
-			var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
-				id: "City Limits",
-				visible: false
-			});
-			map.addLayer(cityLimitsLayer);
+				var mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
+					id: "MPO",
+					visible: false
+				});
+				map.addLayer(mpoLayer);
 
-			var mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
-				id: "MPO",
-				visible: false
-			});
-			map.addLayer(mpoLayer);
+				var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
+					id: "RTPO",
+					visible: false
+				});
+				map.addLayer(rtpoLayer);
 
-			var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
-				id: "RTPO",
-				visible: false
-			});
-			map.addLayer(rtpoLayer);
-
-			var tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
-				id: "Reservation and Trust Lands",
-				visible: false
-			});
-			map.addLayer(tribalLayer);
+				var tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
+					id: "Reservation and Trust Lands",
+					visible: false
+				});
+				map.addLayer(tribalLayer);
+			}());
 
 			basemapGallery = new BasemapGallery({
 				map: map,
