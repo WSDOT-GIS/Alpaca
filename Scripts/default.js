@@ -411,25 +411,30 @@ require([
 
 				var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
 					id: "City Limits",
-					visible: false
+					visible: false,
+					opacity: 0.6
 				});
 				map.addLayer(cityLimitsLayer);
 
 				var mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
 					id: "MPO",
-					visible: false
+					visible: false,
+					opacity: 0.6
+
 				});
 				map.addLayer(mpoLayer);
 
 				var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
 					id: "RTPO",
-					visible: false
+					visible: false,
+					opacity: 0.6
 				});
 				map.addLayer(rtpoLayer);
 
 				var tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
 					id: "Reservation and Trust Lands",
-					visible: false
+					visible: false,
+					opacity: 0.6
 				});
 				map.addLayer(tribalLayer);
 			}());
