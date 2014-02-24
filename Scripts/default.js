@@ -226,7 +226,10 @@ require([
 				return match ? match[1] : null;
 			}
 
-			function standardizeLevelForLabel(level) {
+			/** Ensures standard terminolgy and casing for level label.
+			 * @returns {string} Returns "Statewide", "Service Area", "AOI" if level matches one of those. Returns the original string otherwise.
+			 */
+			function standardizeLevelForLabel(/**{string}*/ level) {
 				var output = level;
 				if (level && typeof level === "string") {
 					if (/Service\s?Area/i.test(level)) {
