@@ -25,6 +25,7 @@
 		}(navigator.doNotTrack || navigator.msDoNotTrack || null));
 
 	</script>
+	<meta name="description" content="Printer friendly version of the page." />
 </head>
 <body>
 	<div id="map"></div>

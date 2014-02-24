@@ -18,6 +18,10 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 
 	}
 
+	/** @typedef {ListItemOptions}
+	 * @property {boolean} omitRemoveButton - Set to true if the list item should not have a remove button.
+	 */
+
 	ListItem = declare(null, {
 		domNode: null,
 		layer: null,
@@ -25,7 +29,7 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 		label: null,
 		removeButton: null,
 		/** @constructs */
-		constructor: function (/** {!(string|esri/layers/GraphicsLayer)} */ layer) {
+		constructor: function (/** {!(string|esri/layers/GraphicsLayer)} */ layer, /**{ListItemOptions}*/ options) {
 			var id;
 			id = generateUniqueId();
 
@@ -50,14 +54,21 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 			this.label.textContent = layer.id;
 			this.domNode.appendChild(this.label);
 
-			this.removeButton = document.createElement("button");
-			this.removeButton.setAttribute("data-layer-id", layer.id);
-			this.removeButton.type = "button";
-			this.removeButton.textContent = "remove";
+			if (!options || !options.omitRemoveButton) {
+				this.removeButton = document.createElement("button");
+				this.removeButton.setAttribute("data-layer-id", layer.id);
+				this.removeButton.type = "button";
+				this.removeButton.textContent = "remove";
 
-			this.domNode.appendChild(this.removeButton);
+				this.domNode.appendChild(this.removeButton);
+			}
 		}
 	});
+
+	/** @typedef {GraphicsLayerListConstructorOptions}
+	 * @property {Regexp} [omittedLayers] - Determines which layers will be omitted from the layer list.
+	 * @proprety {Regexp} [unremovableLayers] - Determines which layers will not have a remove button.
+	 */
 
 	GraphicsLayerList = declare(null, {
 		/** @member {HTMLLIElement} */
@@ -79,17 +90,17 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 		/**
 		 * @param {esri/Map} map
 		 * @param {(HTMLUListElement|HTMLOListElement|string)} [domNode]
-		 * @param {Object} options
-		 * @param {Regexp} [options.omittedLayers] Determines which layers will be omitted from the layer list.
+		 * @param {GraphicsLayerListConstructorOptions} options
 		 * @constructs
 		 */
 		constructor: function (map, domNode, options) {
 			var self = this, i, l, id, layer, listItem, frag, removeLayerFromMap, setLayerVisibility;
 
 			/** Determines if a layer should be omitted from the layer list.
+			 * @param {(string|Layer)} layer - A layer ID or layer object.
 			 * @returns {boolean}
-			*/
-			function shouldOmit(/** {string} */ layer) {
+			 */
+			function shouldOmit(layer) {
 				var id, output;
 				if (!options || !options.omittedLayers) {
 					output = false;
@@ -105,6 +116,30 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 					}
 					output = options.omittedLayers.test(id);
 				}
+				return output;
+			}
+
+			/** Determines if a layer should be omitted from the layer list.
+			 * @param {(string|Layer)} layer - A layer ID or layer object.
+			 * @returns {boolean}
+			 */
+			function shouldHaveRemoveButton(layer) {
+				var id, output;
+				if (!options || !options.unremovableLayers) {
+					output = true;
+				} else {
+					if (!layer) {
+						throw new TypeError("Layer must be either a string or a layer object.");
+					} else if (typeof layer === "string") {
+						id = layer;
+					} else if (layer.id) {
+						id = layer.id;
+					} else {
+						throw new TypeError("Layer must be either a string or a layer object.");
+					}
+					output = options.unremovableLayers.test(id);
+				}
+
 				return output;
 			}
 
@@ -149,8 +184,12 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 			*/
 			function createListItem(/**{esri/layers/Layer}*/ layer) {
 				var listItem;
-				listItem = new ListItem(layer);
-				on(listItem.removeButton, "click", removeLayerFromMap);
+				listItem = new ListItem(layer, {
+					omitRemoveButton: shouldHaveRemoveButton(layer)
+				});
+				if (listItem.removeButton) {
+					on(listItem.removeButton, "click", removeLayerFromMap);
+				}
 				on(listItem.checkbox, "change", setLayerVisibility);
 
 				return listItem;
@@ -168,7 +207,7 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 			this.domNode = domNode;
 
 			if (this.domNode.classList) {
-				this.domNode.classList.add("graphics-layer-list");
+				this.domNode.classList.add("data-layer-list");
 			}
 
 			frag = document.createDocumentFragment();

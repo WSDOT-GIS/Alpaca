@@ -11,6 +11,7 @@ html, body {
 
 #wsdotLogo {
 	vertical-align: central;
+	padding-right: 0.5em;
 }
 
 #borderContainer, #outerBorderContainer {
@@ -24,11 +25,10 @@ html, body {
 }
 
 #headerPane {
-	text-align: center;
+	text-align: left;
 	font-family: Impact,  Haettenschweiler,  'Arial Narrow Bold',  sans-serif;
 	font-size: 1.5em;
 	color: #017359;
-	font-variant:small-caps;
 	margin: 0;
 }
 
@@ -126,15 +126,54 @@ html, body {
 	margin-left: 1em;
 }
 
-.graphics-layer-list {
+#userAddedDataSection span.dijitButton {
+	float: right;
+}
+
+ul.data-layer-list {
+	padding: 0;
+	padding-left: 0.4em;
+}
+
+.data-layer-list {
 	display: table;
 }
 
-.graphics-layer-list > li {
+.data-layer-list > li {
 	display: table-row;
 }
 
-.graphics-layer-list > li > * {
+.data-layer-list > li > * {
 	display: table-cell;
 }
 
+/* Chart legends*/
+
+table.chart-legend td:first-child {
+	width: 2em;
+	border: 0.1em solid black;
+}
+
+table.language-chart-legend tr:first-child > td:first-child {
+	background-color: #ffbebe;
+}
+
+table.language-chart-legend tr:last-child > td:first-child {
+	background-color: #ff0000;
+}
+
+#PTBA_layer path {
+	stroke: #a5a505;
+	stroke-width: 1pt;
+	stroke-opacity: 1;
+	fill: yellow;
+	fill-opacity: 0.5;
+}
+
+#RTA_layer path {
+	stroke: #791919;
+	stroke-width: 1pt;
+	stroke-opacity: 1;
+	fill: red;
+	fill-opacity: 0.5;
+}

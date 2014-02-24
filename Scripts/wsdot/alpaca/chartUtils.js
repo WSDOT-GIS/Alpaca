@@ -17,12 +17,14 @@ define([
 	return {
 		/** Creates the language chart
 		 * @param {LanguageData} languageData
+		 * @param {string} [chartLevel="Statewide"]
 		 * @returns {dojo/charting/Chart}
 		 */
-		createLanguageChart: function (languageData) {
-			var chart, anim_a, anim_b, anim_c, mouseZoomAndPan;
+		createLanguageChart: function (languageData, chartLevel) {
+			var chart, anim_a, anim_c, mouseZoomAndPan;
+			chartLevel = chartLevel || "Statewide";
 			chart = new Chart("languageChart", {
-				title: "Language Proficiency",
+				title: "Language Proficiency (" + chartLevel + ")",
 				titlePos: "top",
 				titleGap: 5
 			});
@@ -58,7 +60,6 @@ define([
 				shiftX: 10,
 				shiftY: 10
 			});
-			anim_b = new Highlight(chart, "default");
 			anim_c = new Tooltip(chart, "default");
 			chart.setAxisWindow("y", languageData.getNotEnglishZoomScale(), 0);
 			chart.render();
@@ -66,12 +67,14 @@ define([
 		},
 
 		/** Creates the race chart
+		 * @param {string} [chartLevel="Statewide"]
 		 * @returns {dojo/charting/Chart}
 		 */
-		createRaceChart: function (/**{RaceData}*/ raceData) {
-			var chart, anim_a, anim_b, anim_c;
+		createRaceChart: function (/**{RaceData}*/ raceData, chartLevel) {
+			var chart, anim_a, anim_c;
+			chartLevel = chartLevel || "Statewide";
 			chart = new Chart("minorityChart", {
-				title: "Race",
+				title: "Race (" + chartLevel + ")",
 				titlePos: "top",
 				titleGap: 5
 			});
@@ -84,21 +87,22 @@ define([
 				radius: 100
 			}).addSeries("Race", raceData.toColumnChartSeries());
 			anim_a = new MoveSlice(chart, "default");
-			anim_b = new Highlight(chart, "default");
 			anim_c = new Tooltip(chart, "default");
 			chart.render();
 			return chart;
 		},
 
 		/** Creates the age chart
+		 * @param {string} [chartLevel="Statewide"]
 		 * @returns {dojo/charting/Chart}
 		 */
-		createAgeChart: function (/**{AgeData}*/ ageData) {
+		createAgeChart: function (/**{AgeData}*/ ageData, chartLevel) {
 			var chart, anim_a, anim_b, anim_c, mouseZoomAndPan, labels = ageData.createLabels();
+			chartLevel = chartLevel || "Statewide";
 
 
 			chart = new Chart("ageChart", {
-				title: "Age",
+				title: "Age (" + chartLevel + ")",
 				titlePos: "top",
 				titleGap: 5
 			});
@@ -135,12 +139,14 @@ define([
 		},
 
 		/** Creates the veteran chart
+		 * @param {string} [chartLevel="Statewide"]
 		 * @returns {dojo/charting/Chart}
 		 */
-		createVeteranChart: function (/**{VeteranData}*/ veteranData) {
-			var chart, anim_a, anim_b, anim_c;
+		createVeteranChart: function (/**{VeteranData}*/ veteranData, chartLevel) {
+			var chart, anim_a, anim_c;
+			chartLevel = chartLevel || "Statewide";
 			chart = new Chart("veteranChart", {
-				title: "Veterans",
+				title: "Veterans (" + chartLevel + ")",
 				titlePos: "top",
 				titleGap: 5
 			});
@@ -153,19 +159,20 @@ define([
 				radius: 100
 			}).addSeries("Veterans", veteranData.toColumnChartSeries());
 			anim_a = new MoveSlice(chart, "default");
-			anim_b = new Highlight(chart, "default");
 			anim_c = new Tooltip(chart, "default");
 			chart.render();
 			return chart;
 		},
 
 		/** Creates the poverty chart
+		 * @param {string} [chartLevel="Statewide"]
 		 * @returns {dojo/charting/Chart}
 		 */
-		createPovertyChart: function (/**{PovertyData}*/ povertyData) {
-			var chart, anim_a, anim_b, anim_c;
+		createPovertyChart: function (/**{PovertyData}*/ povertyData, chartLevel) {
+			var chart, anim_a, anim_c;
+			chartLevel = chartLevel || "Statewide";
 			chart = new Chart("povertyChart", {
-				title: "Poverty",
+				title: "Poverty (" + chartLevel + ")",
 				titlePos: "top",
 				titleGap: 5
 			});
@@ -178,7 +185,6 @@ define([
 				radius: 100
 			}).addSeries("Poverty", povertyData.toChartSeries());
 			anim_a = new MoveSlice(chart, "default");
-			anim_b = new Highlight(chart, "default");
 			anim_c = new Tooltip(chart, "default");
 			chart.render();
 			return chart;

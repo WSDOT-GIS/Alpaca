@@ -27,6 +27,9 @@ require([
 	"layerUtils",
 	"esri/config",
 	"alpaca/UserGraphicsLayers",
+	"esri/layers/FeatureLayer",
+	"esri/layers/ArcGISTiledMapServiceLayer",
+	"esri/layers/ArcGISDynamicMapServiceLayer",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -46,20 +49,12 @@ require([
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
-	esriConfig, UserGraphicsLayers)
+	esriConfig, UserGraphicsLayers, FeatureLayer, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer)
 {
 	"use strict";
 
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
-
-	////// Census .gov is down due to federal gov't shutdown.  Set a short timeout for these services.
-	////esriRequest.setRequestPreCallback(function (ioArgs) {
-	////	if (/census\.gov/.test(ioArgs.url)) {
-	////		ioArgs.timeout = 500;
-	////	}
-	////	return ioArgs;
-	////});
 
 	if (!window.console) {
 		window.console = {};
@@ -167,14 +162,20 @@ require([
 				serviceAreaLayer, selectionLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
 				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
 
-
-
-
 			/** Creates the service area layer and adds it to the map.
 			 * @returns {esri/layers/GraphicsLayer}
 			 */
 			function createServiceAreaLayer() {
 				var renderer, symbol, layer;
+
+				/** Disables the AOI button if there are no service area graphics,
+				 * enables it if there are S.A. graphics.
+				*/
+				function disableOrEnableAoiButton(/**{Graphic} graphic*/) {
+					var aoiButton = registry.byId("aoiButton");
+					aoiButton.set("disabled", !layer.graphics.length);
+				}
+
 				// Create the symbol for the outline of the fill symbol.
 				symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASH, new Color([0, 0, 255]), 3);
 				symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0, 0, 0, 0]));
@@ -183,7 +184,10 @@ require([
 					id: "serviceArea"
 				});
 				layer.setRenderer(renderer);
+				layer.on("graphic-add", disableOrEnableAoiButton);
+				layer.on("graphic-remove", disableOrEnableAoiButton);
 				map.addLayer(layer);
+
 				return layer;
 			}
 			/** Creates the selection layer and adds it to the map.
@@ -204,44 +208,102 @@ require([
 				return layer;
 			}
 
+			/** Extracts the level (Statewide, Service Area, or AOI) from a chart's title.
+			 * @param {(Chart|string)} - Either a chart object or the title of a chart.
+			 * @returns {string} "Statewide", "Service Area", or "AOI".
+			 */
+			function getLevelFromChart(chart) {
+				var re, match, title = chart && chart.title ? chart.title : typeof chart === "string" ? chart : null;
+
+				if (!title) {
+					throw new TypeError("The chart parameter must be a chart or a chart title string.");
+				}
+
+				re = /\(([^)]+)\)/; // Matches (...) portion. Capture 1 is the level (e.g., "Statewide").
+
+				match = title.match(re);
+
+				return match ? match[1] : null;
+			}
+
+			/** Ensures standard terminolgy and casing for level label.
+			 * @returns {string} Returns "Statewide", "Service Area", "AOI" if level matches one of those. Returns the original string otherwise.
+			 */
+			function standardizeLevelForLabel(/**{string}*/ level) {
+				var output = level;
+				if (level && typeof level === "string") {
+					if (/Service\s?Area/i.test(level)) {
+						output = "Service Area";
+					} else if (/Statewide/i.test(level)) {
+						output = "Statewide";
+					} else if (/(?:(?:selection)|(?:Area\sof\sInterest))/i) {
+						output = "AOI";
+					}
+				}
+
+				return output;
+			}
+
+			/** Updates a chart's title and executes the correct rendering function afterword.
+			 * If the new title is different than the old one, chart.fullRender() is called,
+			 * otherwise chart.render() is called.
+			 * @param {Chart} chart
+			 * @param {string} labelRoot - E.g., "Language Proficiency"
+			 * @param {string} newLevel - E.g., "Service Area", "AOI", or "Statewide"
+			 */
+			function updateChartTitle(chart, labelRoot, newLevel) {
+				var previousLevel = getLevelFromChart(chart);
+				newLevel = standardizeLevelForLabel(newLevel);
+				if (newLevel !== previousLevel) {
+					chart.title = [labelRoot, " (", newLevel, ")"].join("");
+					chart.fullRender();
+				} else {
+					chart.render();
+				}
+			}
+
 			/** Updates the charts in the application
 			*/
-			function updateCharts(/** {ChartData} */ chartData) {
+			function updateCharts(/** {ChartData} */ chartData, /**{string}*/ level) {
+				var previousLevel;
+
 				if (!languageChart) {
-					languageChart = chartUtils.createLanguageChart(chartData.language);
+					languageChart = chartUtils.createLanguageChart(chartData.language, level);
 				} else {
+					previousLevel = getLevelFromChart(languageChart);
+
 					// Update the language chart with the response language data.
 					languageChart.updateSeries("Language Proficiency", chartData.language.toColumnChartSeries());
 					languageChart.setAxisWindow("y", chartData.language.getNotEnglishZoomScale(), 0);
-					languageChart.render();
+					updateChartTitle(languageChart, "Language Proficiency", level);
 				}
 				if (!raceChart) {
-					raceChart = chartUtils.createRaceChart(chartData.race);
+					raceChart = chartUtils.createRaceChart(chartData.race, level);
 				} else {
 					// Update the race chart with the response race data.
 					raceChart.updateSeries("Race", chartData.race.toColumnChartSeries());
-					raceChart.render();
+					updateChartTitle(raceChart, "Race", level);
 				}
 
 				if (!ageChart) {
-					ageChart = chartUtils.createAgeChart(chartData.age);
+					ageChart = chartUtils.createAgeChart(chartData.age, level);
 				} else {
 					ageChart.updateSeries("Age", chartData.age.toColumnChartSeries());
-					ageChart.render();
+					updateChartTitle(ageChart, "Age", level);
 				}
 
 				if (!veteranChart) {
-					veteranChart = chartUtils.createVeteranChart(chartData.veteran);
+					veteranChart = chartUtils.createVeteranChart(chartData.veteran, level);
 				} else {
 					veteranChart.updateSeries("Veterans", chartData.veteran.toColumnChartSeries());
-					veteranChart.render();
+					updateChartTitle(veteranChart, "Veterans", level);
 				}
 
 				if (!povertyChart) {
-					povertyChart = chartUtils.createPovertyChart(chartData.poverty);
+					povertyChart = chartUtils.createPovertyChart(chartData.poverty, level);
 				} else {
 					povertyChart.updateSeries("Poverty", chartData.poverty.toChartSeries());
-					povertyChart.render();
+					updateChartTitle(povertyChart, "Poverty", level);
 				}
 
 
@@ -282,7 +344,7 @@ require([
 				serviceAreaLayer.clear();
 				if (serviceArea && serviceArea.geometry) { // Is serviceArea a graphic?
 					serviceAreaLayer.add(serviceArea);
-					updateCharts(new ChartDataProvider.ChartData(serviceArea.attributes));
+					updateCharts(new ChartDataProvider.ChartData(serviceArea.attributes), "Service Area");
 				} else {
 					chartDataProvider.getSelectionGraphics(serviceArea, map.getScale(), true);
 				}
@@ -325,6 +387,58 @@ require([
 				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
 			});
 
+			// Add data layers
+			(function () {
+				// Add the PTBA layer
+				var rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
+					id: "RTA",
+					visible: false,
+					styling: false,
+					surfaceType: "SVG"
+				});
+
+				map.addLayer(rtaLayer);
+
+				// Add the PTBA layer
+				var pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
+					id: "PTBA",
+					visible: false,
+					styling: false,
+					surfaceType: "SVG"
+				});
+
+				map.addLayer(pdbaLayer);
+
+				var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
+					id: "City Limits",
+					visible: false,
+					opacity: 0.6
+				});
+				map.addLayer(cityLimitsLayer);
+
+				var mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
+					id: "MPO",
+					visible: false,
+					opacity: 0.6
+
+				});
+				map.addLayer(mpoLayer);
+
+				var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
+					id: "RTPO",
+					visible: false,
+					opacity: 0.6
+				});
+				map.addLayer(rtpoLayer);
+
+				var tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
+					id: "Reservation and Trust Lands",
+					visible: false,
+					opacity: 0.6
+				});
+				map.addLayer(tribalLayer);
+			}());
+
 			basemapGallery = new BasemapGallery({
 				map: map,
 				basemapIds: getBasemapLayerIds(),
@@ -337,7 +451,7 @@ require([
 							url: "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
 						})]
 					})
-				],
+				]
 			}, "basemapGallery");
 
 			basemapGallery.startup();
@@ -354,10 +468,12 @@ require([
 				try {
 					chartDataProvider = new ChartDataProvider(aggregateLayerUrl);
 
-					chartDataProvider.on("totals-determined", updateCharts);
+					//chartDataProvider.on("totals-determined", updateCharts);
 
 					chartDataProvider.on("query-complete", function (/** {ChartDataQueryResult} */ output) {
-						updateCharts(output.chartData);
+						updateCharts(output.chartData, output.type);
+
+						console.debug("query-complete output", output);
 
 						document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(output.chartData);
 
@@ -515,7 +631,7 @@ require([
 					saGeometry = getServiceAreaGraphic();
 
 					if (saGeometry) {
-						updateCharts(saGeometry.attributes);
+						updateCharts(saGeometry.attributes, "Service Area");
 					} else {
 						// TODO: Load stored statewide chart data from variable.
 						chartDataProvider.getSelectionGraphics();
