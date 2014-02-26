@@ -33,7 +33,6 @@ define(["dojo/number"], function (number) {
 		return (this.federalTotalInPoverty / this.totalPopulation) * 100;
 	};
 
-
 	/** 
 	 * @typedef ColumnChartSeriesItem
 	 * @property {number} y - The y value.
@@ -46,22 +45,27 @@ define(["dojo/number"], function (number) {
 	/** Creates objects used to populate a column chart.
 	 * @returns {ColumnChartSeriesItem[]}
 	 */
-	PovertyData.prototype.toChartSeries = function () {
+	PovertyData.prototype.toChartSeries = function (level, isBackground) {
 		var output, pctInPoverty;
 
 		pctInPoverty = Math.round(this.getPercentInPovertyForFederal());
+
+		var strokeColor = "black";
+		if (level === 'aoi') {
+			strokeColor = isBackground ? "blue" : "green";
+		}
 
 		output = [
 			{
 				y: this.federalTotalInPoverty,
 				text: "Poverty",
-				stroke: "black",
+				stroke: strokeColor,
 				fill: "RGB(87,145,101)",
 				tooltip: ["Poverty: ", number.format(this.federalInPoverty), "(~", pctInPoverty, "%)"].join("")
 			}, {
 				y: this.nonPoverty,
 				text: "Non-Poverty",
-				stroke: "black",
+				stroke: strokeColor,
 				fill: "RGB(220,245,233)",
 				tooltip: ["Non-Poverty: ", number.format(this.nonPoverty), "(~", 100 - pctInPoverty, "%)"].join("")
 			}

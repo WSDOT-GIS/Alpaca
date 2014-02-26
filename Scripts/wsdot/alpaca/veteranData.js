@@ -40,8 +40,6 @@ define(["dojo/number"], function (number) {
 	VeteranData.prototype.getTotalNonVet = function () {
 		return this.MNonVet + this.FNonVet;
 	};
-
-
 	
 	function getPercent(n, total) {
 		return Math.round((n / total) * 10000) / 100;
@@ -56,25 +54,25 @@ define(["dojo/number"], function (number) {
 	 * @property {stirng} tooltip - The string used for the tooltip.
 	 */
 
-
 	/** Creates objects used to populate a column chart.
 	 * @returns {ColumnChartSeriesItem[]}
 	 */
-	VeteranData.prototype.toColumnChartSeries = function () {
+	VeteranData.prototype.toColumnChartSeries = function (level, isBackground) {
 		var output = [], total, vet = this.getTotalVet(), nonVet = this.getTotalNonVet();
 		total = this.getTotal();
 
+		var strokeColor = level === "aoi" ? (isBackground ? "blue" : "green") : "black";
 
 		output.push({
 			y: vet,
 			text: "Veteran",
-			stroke: "black",
+			stroke: strokeColor,
 			fill: "RGB(133,90,150)",
 			tooltip: ["Veteran: ", number.format(vet), "(~", getPercent(vet, total), "%)"].join("")
 		}, {
 			y: nonVet,
 			text: "Civilian",
-			stroke: "black",
+			stroke: strokeColor,
 			fill: "RGB(229,213,242)",
 			tooltip: ["Civilian: ", number.format(nonVet), "(~", getPercent(nonVet, total), "%)"].join("")
 		});

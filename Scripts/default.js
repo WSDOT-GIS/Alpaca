@@ -132,7 +132,6 @@ require([
 	ready(function () {
 		var map;
 
-
 		/** Gets the layer ids of all basemap layers currently in the map.
 		@returns {Array} An array of layer ID strings.
 		*/
@@ -146,8 +145,6 @@ require([
 			}
 			return output;
 		}
-
-
 
 		arcgisUtils.createMap("6005be3ad4d64b50b0008078b2b04ffc", "map", {
 			mapOptions: {
@@ -200,7 +197,7 @@ require([
 				symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symbol, new Color([0, 0, 255, 0.2]));
 				renderer = new SimpleRenderer(symbol);
 				layer = new GraphicsLayer({
-					id: "selection"
+					id: "aoi"
 				});
 				layer.setRenderer(renderer);
 				map.addLayer(layer);
@@ -209,7 +206,7 @@ require([
 			}
 
 			/** Extracts the level (Statewide, Service Area, or AOI) from a chart's title.
-			 * @param {(Chart|string)} - Either a chart object or the title of a chart.
+			 * @param {(Chart|string)} chart - Either a chart object or the title of a chart.
 			 * @returns {string} "Statewide", "Service Area", or "AOI".
 			 */
 			function getLevelFromChart(chart) {
@@ -236,7 +233,7 @@ require([
 						output = "Service Area";
 					} else if (/Statewide/i.test(level)) {
 						output = "Statewide";
-					} else if (/(?:(?:selection)|(?:Area\sof\sInterest))/i) {
+					} else if (/(?:(?:selection)|(?:A(?:rea\s)?o(?:f\s)?I(?:nterest)?))/i) {
 						output = "AOI";
 					}
 				}
@@ -265,48 +262,73 @@ require([
 			/** Updates the charts in the application
 			*/
 			function updateCharts(/** {ChartData} */ chartData, /**{string}*/ level) {
-				var previousLevel;
+				var previousLevel, saChartData;
+
+				/** Either adds or removes a chart series based on the value of `level`.
+				 * @param {Chart} chart
+				 * @param {string} propertyName - The name of the property of saChartData that provides data for the chart.
+				 * @param {string} seriesLabel - The chart series label that will either be added or removed from the chart (depending on the level).
+				 */
+				function setSecondSeries(chart, propertyName, seriesLabel) {
+					var chartDataObj;
+					chartDataObj = saChartData ? saChartData[propertyName] : null;
+					if (saChartData) {
+						chart.addSeries(seriesLabel, (function () {
+							return chartDataObj.toColumnChartSeries ? chartDataObj.toColumnChartSeries(level, true) : chartDataObj.toChartSeries(level, true);
+						}()));
+					} else {
+						chart.removeSeries(seriesLabel);
+					}
+				}
 
 				if (!languageChart) {
 					languageChart = chartUtils.createLanguageChart(chartData.language, level);
 				} else {
 					previousLevel = getLevelFromChart(languageChart);
+					// If this is AOI level, both Service Area and AOI data needs to be displayed on the charts.
+					// Store the service area chart data in this case. Otherwise set to null.
+					saChartData = level === "aoi" ? serviceAreaLayer.graphics[0].attributes : null;
 
 					// Update the language chart with the response language data.
-					languageChart.updateSeries("Language Proficiency", chartData.language.toColumnChartSeries());
+					languageChart.updateSeries("Language Proficiency", chartData.language.toColumnChartSeries(level));
 					languageChart.setAxisWindow("y", chartData.language.getNotEnglishZoomScale(), 0);
+					// Add the second axis if necessary, remove if not
+					setSecondSeries(languageChart, "language", "SA Language Proficiency");
+					
 					updateChartTitle(languageChart, "Language Proficiency", level);
 				}
 				if (!raceChart) {
 					raceChart = chartUtils.createRaceChart(chartData.race, level);
 				} else {
 					// Update the race chart with the response race data.
-					raceChart.updateSeries("Race", chartData.race.toColumnChartSeries());
+					raceChart.updateSeries("Race", chartData.race.toColumnChartSeries(level));
+					setSecondSeries(raceChart, "race", "SA Race");
 					updateChartTitle(raceChart, "Race", level);
 				}
 
 				if (!ageChart) {
 					ageChart = chartUtils.createAgeChart(chartData.age, level);
 				} else {
-					ageChart.updateSeries("Age", chartData.age.toColumnChartSeries());
+					ageChart.updateSeries("Age", chartData.age.toColumnChartSeries(level));
+					setSecondSeries(ageChart, "age", "SA Age");
 					updateChartTitle(ageChart, "Age", level);
 				}
 
 				if (!veteranChart) {
 					veteranChart = chartUtils.createVeteranChart(chartData.veteran, level);
 				} else {
-					veteranChart.updateSeries("Veterans", chartData.veteran.toColumnChartSeries());
+					veteranChart.updateSeries("Veterans", chartData.veteran.toColumnChartSeries(level));
+					setSecondSeries(veteranChart, "veteran", "SA Veterans");
 					updateChartTitle(veteranChart, "Veterans", level);
 				}
 
 				if (!povertyChart) {
 					povertyChart = chartUtils.createPovertyChart(chartData.poverty, level);
 				} else {
-					povertyChart.updateSeries("Poverty", chartData.poverty.toChartSeries());
+					povertyChart.updateSeries("Poverty", chartData.poverty.toChartSeries(level));
+					setSecondSeries(povertyChart, "poverty", "SA Poverty");
 					updateChartTitle(povertyChart, "Poverty", level);
 				}
-
-
 
 				document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(chartData);
 			}
@@ -335,7 +357,7 @@ require([
 				return output;
 			}
 
-			/** Sets the service area to the selected geometry after clearing the selection and service area grahpics layers.
+			/** Sets the service area to the selected geometry after clearing the AOI and service area grahpics layers.
 			 * Also updates the charts.
 			 * @param {(esri/geometry/Geometry|esri/Graphic)} serviceArea
 			 */
@@ -350,7 +372,7 @@ require([
 				}
 			}
 
-			/** Sets the selection to the given geometry after clearing the selection graphics layer, then updates the charts.
+			/** Sets the selection to the given geometry after clearing the AOI graphics layer, then updates the charts.
 			 */
 			function setSelection(/**{esri/geometry/Geometry}*/ geometry) {
 				selectionLayer.clear();
@@ -361,10 +383,16 @@ require([
 			popupListener = response.clickEventListener;
 
 			map = response.map;
-			window.map = map;
 
 			serviceAreaLayer = createServiceAreaLayer();
 			selectionLayer = createSelectionLayer();
+
+			// Add to the global context for debugging purposes.
+			// TODO: Remove global mapLayers object.
+			window.mapLayers = {
+				serviceArea: serviceAreaLayer,
+				aoi: selectionLayer
+			};
 
 			aggregateLayerUrl = getAggregateLayer(map);
 
@@ -384,7 +412,7 @@ require([
 			});
 
 			graphicsLayerList = new GraphicsLayerList(map, "graphicsLayerList", {
-				omittedLayers: /(?:serviceArea)|(?:selection)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
+				omittedLayers: /(?:serviceArea)|(?:aoi)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
 			});
 
 			// Add data layers
@@ -497,21 +525,23 @@ require([
 
 					if (window.localStorage) {
 						if (localStorage.alpaca_serviceAreaGraphic) {
-							setServiceArea(new Graphic(JSON.parse(localStorage.alpaca_serviceAreaGraphic, function (k, v) {
-								var output;
-								if (k === "attributes") {
-									output = new ChartDataProvider.ChartData(v);
-								} else {
-									output = v;
+							(function () {
+								var saGraphic = JSON.parse(localStorage.alpaca_serviceAreaGraphic, function (k, v) {
+									var output;
+									if (k === "attributes") {
+										output = new ChartDataProvider.ChartData(v);
+									} else {
+										output = v;
+									}
+									return output;
+								});
+
+								saGraphic = new Graphic(saGraphic);
+								setServiceArea(saGraphic);
+								if (localStorage.alpaca_selectionGeometry) {
+									setSelection(parseGeometry(localStorage.alpaca_selectionGeometry));
 								}
-								return output;
-							})));
-							if (localStorage.alpaca_selectionGeometry) {
-								setSelection(parseGeometry(localStorage.alpaca_selectionGeometry));
-							}
-						}
-						else if (localStorage.alpaca_selectionGeometry) {
-							setSelection(parseGeometry(localStorage.alpaca_selectionGeometry));
+							}());
 						} else {
 							chartDataProvider.getSelectionGraphics();
 						}
@@ -569,20 +599,21 @@ require([
 						
 						
 					});
-
-
 				}
+
+				/** @typedef DrawResposne
+				 * @property {esri/geometry/Geometry} geometry
+				 */
 				
 
 				/**
-				 * @param drawResponse
-				 * @param {esri/geometry/Geometry} drawResponse.geometry
+				 * @param {DrawResponse} drawResponse
 				 */
 				drawToolbar.on("draw-complete", function (drawResponse) {
 					drawToolbar.deactivate();
 					if (drawToolbar.alpacaMode === "service-area") {
 						setServiceArea(drawResponse.geometry);
-					} else if (drawToolbar.alpacaMode === "selection") {
+					} else if (drawToolbar.alpacaMode === "aoi") {
 						setSelection(drawResponse.geometry);
 					}
 					drawToolbar.alpacaMode = null;
@@ -616,7 +647,7 @@ require([
 					layerId = this["data-layer-id"];
 					// Proceed if a data-layer-id is present.
 					if (layerId) {
-						if (layerId === "serviceArea" || layerId === "selection") {
+						if (layerId === "serviceArea" || layerId === "aoi") {
 							// The selection and user graphics need to be cleared even when the service area is cleared.
 							selectionLayer.clear();
 							userGraphicsLayers.clear();
@@ -645,7 +676,6 @@ require([
 				// Attach clear button click events.
 				clearSAButton.on("click", clearHandler);
 				clearSelButton.on("click", clearHandler);
-
 
 			}(registry.byId("drawServiceAreaButton"),
 			registry.byId("drawPolylineSelectionButton"),
