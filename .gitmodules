@@ -4,3 +4,6 @@
 [submodule "GTFS.NET"]
 	path = GTFS.NET
 	url = https://github.com/WSDOT-GIS/GTFS.NET.git
+[submodule "GTFS-Service"]
+	path = GTFS-Service
+	url = https://github.com/WSDOT-GIS/GTFS-Service.git
