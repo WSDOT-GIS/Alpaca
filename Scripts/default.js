@@ -473,8 +473,6 @@ require([
 					chartDataProvider.on("query-complete", function (/** {ChartDataQueryResult} */ output) {
 						updateCharts(output.chartData, output.type);
 
-						console.debug("query-complete output", output);
-
 						document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(output.chartData);
 
 						if (output.features && output.features.length) {
