@@ -7,7 +7,7 @@ define(["dojo/number"], function (number) {
 	/**
 	 * @constructor
 	 * @param {Object.<string,number>} queryResults
-	 * @param {string] [prefix] - If provided, valid values are "M" or "F".
+	 * @param {string} [prefix] - If provided, valid values are "M" or "F".
 	 * @member {number} ageUnder5 - Number of people in the age range Under5
 	 * @member {number} age5to9 - Number of people in the age range 5to9
 	 * @member {number} age10to14 - Number of people in the age range 10to14
@@ -178,10 +178,16 @@ define(["dojo/number"], function (number) {
 	 * @member {AgeGroupedData} male
 	 * @member {AgeGroupedData} female
 	 * @member {AgeGroupedData} combined - combined male and female age data.
+	 * @member {SubGroupedAgeData} combindedSubgrouped
 	 */
 	AgeData = function (queryResults) {
-		this.male = new AgeGroupedData(queryResults, "M");
-		this.female = new AgeGroupedData(queryResults, "F");
+		if (queryResults.male && queryResults.female) {
+			this.male = new AgeGroupedData(queryResults.male);
+			this.female = new AgeGroupedData(queryResults.female);
+		} else {
+			this.male = new AgeGroupedData(queryResults, "M");
+			this.female = new AgeGroupedData(queryResults, "F");
+		}
 
 		this.combined = {};
 
@@ -208,12 +214,20 @@ define(["dojo/number"], function (number) {
 	/** Creates objects used to populate a column chart.
 	 * @returns {Object[]}
 	 */
-	AgeData.prototype.toColumnChartSeries = function () {
+	AgeData.prototype.toColumnChartSeries = function (level, isBackground) {
 		var output, total;
 
 		total = this.getTotal();
 
-		output = this.combinedSubgrouped.toColumnChartSeries(total, "hsl(240,100%, 50%)"); // this.male.toColumnChartSeries(total, "blue").concat(this.female.toColumnChartSeries(total, "pink"));
+		var color = "hsl(240,100%, 50%)";
+
+		if (level) {
+			if (/aoi/i.test(level)) {
+				color = isBackground ? "blue" : "green";
+			}
+		}
+
+		output = this.combinedSubgrouped.toColumnChartSeries(total, color); // this.male.toColumnChartSeries(total, "blue").concat(this.female.toColumnChartSeries(total, "pink"));
 
 		return output;
 	};

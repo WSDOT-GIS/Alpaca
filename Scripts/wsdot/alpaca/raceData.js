@@ -21,7 +21,7 @@ define(["dojo/number"], function (number) {
 		/** @member {!number} */
 		this.asian = queryResults.SUM_AsianAlone || queryResults.asian || queryResults.AsianAlone || 0;
 		/** @member {!number} */
-		this.pacificIslander = queryResults.SUM_NativeHawaiian_PacificIsl || queryResults.pacificIslander || queryResults.NativeHawaiian_PasificIsl || 0;
+		this.pacificIslander = queryResults.SUM_NativeHawaiian_PacificIsl || queryResults.pacificIslander || queryResults.NativeHawaiian_PacificIsl || 0;
 		/** @member {!number} */
 		this.other = queryResults.SUM_SomeOtherRace || queryResults.other || queryResults.SomeOtherRace || 0;
 		/** @member {!number} */
@@ -76,10 +76,15 @@ define(["dojo/number"], function (number) {
 	/** Creates objects used to populate a column chart.
 	 * @returns {Object[]}
 	 */
-	RaceData.prototype.toColumnChartSeries = function () {
+	RaceData.prototype.toColumnChartSeries = function (level, isBackground) {
 		var race, item, output = [], total, label;
 
 		total = this.getTotal();
+
+		var strokeColor = "black";
+		if (level === "aoi") {
+			strokeColor = isBackground ? "blue" : "green";
+		}
 
 		for (race in RaceData.labels) {
 			if (RaceData.labels.hasOwnProperty(race)) {
@@ -88,8 +93,8 @@ define(["dojo/number"], function (number) {
 					y: this[race],
 					text: label,
 					fill: race === "white" ? "RGB(255,235,204)" : "RGB(240,118,5)",
-					stroke: "black",
-					tooltip: [label, ": (~", Math.round((this[race] / total) * 10000) / 100, "%)"].join("")
+					stroke: strokeColor,
+					tooltip: [label, ": ", number.format(this[race]), " (~", Math.round((this[race] / total) * 10000) / 100, "%)"].join("")
 				};
 				output.push(item);
 			}
@@ -148,8 +153,6 @@ define(["dojo/number"], function (number) {
 
 		return table;
 	};
-
-
 
 	return RaceData;
 });

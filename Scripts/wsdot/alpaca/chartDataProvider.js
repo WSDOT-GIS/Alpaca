@@ -35,7 +35,6 @@ define([
 	raceFieldRe = /^(?:(?:(?:Not)?White)|(?:AfricanAmerican_Black)|(?:AmericanIndian_AlaskaNative)|(?:AsianAlone)|(?:NativeHawaiian_PacificIsl)|(?:SomeOtherRace)|(?:TwoOrMoreRaces))$/i;
 	numberTypesRe = /(?:Integer)|(?:Double})/i;
 
-
 	/** Represents a field.
 	 * @constructor
 	 */
@@ -73,7 +72,6 @@ define([
 		}
 		return output;
 	}
-
 
 	/** This object, upon creation, sorts fields into categories.
 	 * @constructor
@@ -114,7 +112,6 @@ define([
 			}
 		}
 	}
-
 
 	/** Creates an array of statistic definitions.
 	 * @returns {StatisticDefinition[]}
@@ -174,18 +171,18 @@ define([
 
 		this.age = queryResults.age ? new AgeData(queryResults.age) : new AgeData(queryResults);
 
-		this.veteran = queryResults.veteran ? new VeteranData(queryResults.age) : new VeteranData(queryResults);
+		this.veteran = queryResults.veteran ? new VeteranData(queryResults.veteran) : new VeteranData(queryResults);
 
 		this.poverty = queryResults.poverty ? new PovertyData(queryResults.poverty) : new PovertyData(queryResults);
 	}
 
 	/** 
-	 * @param {string} type - Choices are "statewide", "service area" or "selection"
+	 * @param {string} type - Choices are "statewide", "service area" or "aoi"
 	 * @param {esri/Graphic[]} features - An array of graphics.
 	 * @param {(ChartData|Object.<string, number>)} chartData - Either a {@link ChartData} or the parameter to be passed to the {@link ChartData} constructor.
 	 * @param {Geometry} [originalGeometry=null]
-
-	 * @member {string} type - Will have one of the following values: "statewide", "service area" or "selection"
+	 *
+	 * @member {string} type - Will have one of the following values: "statewide", "service area" or "aoi"
 	 * @member {esri/Graphic[]} features - An array of graphics.
 	 * @member {ChartData} chartData
 	 * @member {Geometry} originalGeometry
@@ -300,9 +297,6 @@ define([
 				queryTask.execute(query, function (/** {FeatureSet}*/ featureSet) {
 					var totals, geometries = [], i, l, graphic, attrName, output;
 
-
-
-
 					// Initiate count totals.
 					totals = {};
 
@@ -327,7 +321,6 @@ define([
 					totals = new ChartData(totals);
 
 					if (union) {
-
 
 						self.emit("totals-determined", totals);
 
@@ -359,9 +352,7 @@ define([
 			}
 
 			// Determine the type of selection query.
-			type = !drawnGeometry ? "statewide" : union ? "service area" : "selection";
-
-
+			type = !drawnGeometry ? "statewide" : union ? "service area" : "aoi";
 
 			if (!drawnGeometry) {
 				// If the user has not drawn a geometry, perform the statewide query.
@@ -383,8 +374,6 @@ define([
 				} else {
 					performQuery(drawnGeometry);
 				}
-
-
 			}
 
 			/**

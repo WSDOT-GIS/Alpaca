@@ -49,8 +49,14 @@
     <Content Include="Scripts\default.js" />
     <Content Include="Scripts\Print.js" />
     <Content Include="Scripts\wsdot\alpaca\ageData.js" />
+    <Content Include="Scripts\wsdot\alpaca\ageData.min.js">
+      <DependentUpon>ageData.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\wsdot\alpaca\aggregate_fields.txt" />
     <Content Include="Scripts\wsdot\alpaca\chartDataProvider.js" />
+    <Content Include="Scripts\wsdot\alpaca\chartDataProvider.min.js">
+      <DependentUpon>chartDataProvider.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\wsdot\alpaca\chartUtils.js" />
     <Content Include="Scripts\wsdot\alpaca\graphicsLayerList.js" />
     <Content Include="Scripts\wsdot\alpaca\languageData.js" />
@@ -66,7 +72,10 @@
     <Content Include="Scripts\wsdot\layerUtils\main.js" />
     <Content Include="Docs\Technical Info.md" />
     <Content Include="Scripts\wsdot\alpaca\ageData.min.js.map">
-      <DependentUpon>ageData.js</DependentUpon>
+      <DependentUpon>ageData.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\wsdot\alpaca\chartDataProvider.min.js.map">
+      <DependentUpon>chartDataProvider.min.js</DependentUpon>
     </Content>
     <Content Include="packages.config" />
     <None Include="Scripts\_references.js" />

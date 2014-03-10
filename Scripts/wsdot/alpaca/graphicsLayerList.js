@@ -143,8 +143,6 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 				return output;
 			}
 
-
-
 			/** Removes the layer from the map that corresponds to the button that was clicked.
 			 * @this {HTMLButtonElement}
 			 */

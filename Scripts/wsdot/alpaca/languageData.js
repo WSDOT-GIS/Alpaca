@@ -66,11 +66,24 @@ define(["dojo/number"], function (number) {
 		return thresholdMet;
 	};
 
-	/** Creates objects used to populate a column chart.
-	 * @returns {Array}
+	/** @typedef ChartSeries
+	 * @param {number} y - The value represented in the chart.
+	 * @param {string} text - The label of the chart series.
+	 * @param {string} stroke - The stroke color.
+	 * @param {string} fill - The fill color.
+	 * @param {string} tooltip - The text that will appear when the mouse cursor hovers over a bar in the chart.
 	 */
-	LanguageData.prototype.toColumnChartSeries = function () {
-		var language, output = [], item, label, percent, total, speakerCount;
+
+	/** Creates objects used to populate a column chart.
+	 * @param {string} level - "statewide", "service area", or "aoi". Used to determine bar chart outline color.
+	 * @param {bool} background - Set to true if the chart series will be behind another chart, false otherwise. If true the chart fill color will be less saturated than it would be otherwise.
+	 * @returns {ChartSeries[]}
+	 */
+	LanguageData.prototype.toColumnChartSeries = function (level, background) {
+		var language, output = [], item, label, percent, total, speakerCount, aoiRe = /aoi/i, normalFill, thresholdFill;
+		thresholdFill = "#FF0000";
+		normalFill = "#FFBEBE";
+		
 		total = this.getTotal();
 		for (language in LanguageData.labels) {
 			if (LanguageData.labels.hasOwnProperty(language)) {
@@ -80,8 +93,12 @@ define(["dojo/number"], function (number) {
 				item = {
 					y: speakerCount,
 					text: label,
-					stroke: "black",
-					fill: this.thresholdMet(language) ? "#FF0000" : "#FFBEBE",
+					// If the level is "AOI", set stroke color to blue if background is true, green if false.
+					// If level is not "AOI", set stroke color to black.
+					stroke: aoiRe.test(level) ? (background ? "blue" : "green") : "black",
+					// Set the fill depending if the threshold has been met and if background is true.
+					fill: this.thresholdMet(language) ? thresholdFill : normalFill,
+					// Set the tooltip to display the language, number of speakers, and the percentage of those speakers vs. total.
 					tooltip: [label, ": ", number.format(speakerCount), "(~", percent, "%)"].join("")
 				};
 				output.push(item);
