@@ -43,6 +43,9 @@
   <ItemGroup>
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
+    <Content Include="GTFS-Service\GtfsService\Scripts\arcgis\gtfs-layer-manager.js" />
+    <Content Include="GTFS-Service\GtfsService\Scripts\gtfs-agency-select.js" />
+    <Content Include="GTFS-Service\GtfsService\Scripts\gtfs.js" />
     <Content Include="Images\WsdotBasemapThumbnail.jpg" />
     <Content Include="LICENSE.txt" />
     <Content Include="Print.aspx" />
@@ -163,9 +166,7 @@
       <Name>Gtfs.IO</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GTFS\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

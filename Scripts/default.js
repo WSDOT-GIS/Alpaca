@@ -30,6 +30,8 @@ require([
 	"esri/layers/FeatureLayer",
 	"esri/layers/ArcGISTiledMapServiceLayer",
 	"esri/layers/ArcGISDynamicMapServiceLayer",
+	"GtfsService/gtfs-agency-select",
+	"GtfsService/arcgis/gtfs-layer-manager",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -49,7 +51,8 @@ require([
 	SimpleRenderer, SimpleLineSymbol, SimpleFillSymbol,
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
-	esriConfig, UserGraphicsLayers, FeatureLayer, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer)
+	esriConfig, UserGraphicsLayers, FeatureLayer, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
+	GtfsAgencySelect, GtfsLayerManager)
 {
 	"use strict";
 
@@ -754,6 +757,18 @@ require([
 					}
 				}
 
+				var agencySelect = GtfsAgencySelect.createGtfsAgencySelect(document.getElementById("gtfsAgencySelect"));
+				var gtfsLayerManager = new GtfsLayerManager();
+
+				agencySelect.addEventListener("gtfsreturned", function (e) {
+					var layers = gtfsLayerManager.getGtfsLayers(e.detail.agencyId, e.detail.gtfs);
+					map.addLayer(layers.shapesLayer);
+					map.addLayer(layers.stopsLayer);
+				});
+
+				agencySelect.addEventListener("gtfserror", function (e) {
+					alert(e.detail.error);
+				});
 				if (input.addEventListener) {
 
 					input.addEventListener("change", handleFileSelect, false);

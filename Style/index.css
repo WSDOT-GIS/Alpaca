@@ -178,3 +178,17 @@ table.language-chart-legend tr:last-child > td:first-child {
 	fill: red;
 	fill-opacity: 0.5;
 }
+
+.gtfs-shapes path {
+	stroke: blue;
+	stroke-width: 3pt;
+	stroke-opacity: 0.9;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+.gtfs-stops path {
+	stroke: red;
+	stroke-width: 0.3pt;
+	fill: yellow;
+	fill-opacity: 0.8;
+}

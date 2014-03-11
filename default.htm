@@ -17,7 +17,8 @@
 				async: true,
 				parseOnLoad: true,
 				paths: {
-					"alpaca": url + "Scripts/wsdot/alpaca"
+					"alpaca": url + "Scripts/wsdot/alpaca",
+					"GtfsService": url + "GTFS-Service/GtfsService/Scripts"
 				},
 				packages: [
 					{
@@ -35,6 +36,8 @@
 		}());
 	</script>
 	<script src="//js.arcgis.com/3.8/"></script>
+	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.2/terraformer.min.js"></script>
+	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.1/terraformer-arcgis-parser.min.js"></script>
 	<script src="Scripts/default.js"></script>
 	<script type="text/javascript">
 		// Setup Google Analytics, but not if user has specified that they don't want to be tracked.
@@ -161,8 +164,15 @@
 		<input name="renderer" type="hidden" />
 	</form>
 
-	<div id="addCsvDialog" data-dojo-type="dijit/Dialog" data-dojo-props='title:"Add CSV to Map"'>
-		<input id="addCsvFileInput" type="file" />
+	<div id="addCsvDialog" data-dojo-type="dijit/Dialog" data-dojo-props='title:"Add data to map"'>
+		<section>
+			<h1>GTFS</h1>
+			<select id="gtfsAgencySelect"></select>
+		</section>
+		<section>
+			<h1>CSV</h1>
+			<input id="addCsvFileInput" type="file" />
+		</section>
 	</div>
 </body>
 </html>
