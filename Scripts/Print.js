@@ -37,7 +37,7 @@ require([
 	 * @param {labelFunction} labelFunction - A function that converts a property name into a label.
 	 * @param {string} caption - The value that will be used for the table's caption.
 	 * @param {string} propertyHeader - This will be the header for the label column.
-	 * @param {Regexp} propertiesToInclue
+	 * @param {Regexp} propertiesToInclude - A regular expression specifying which properties to include.
 	 * @returns {HTMLTableElement}
 	*/
 	function toHtmlTable(o, labelFunction, caption, propertyHeader, propertiesToInclude) {
@@ -75,7 +75,7 @@ require([
 	}
 
 	/** Reads information from the data tags of an HTML element.
-	 * @param {HTMLElement} An HTML element with the following "data-" tags: extent, graphics, renderer, chart.
+	 * @param {HTMLElement} dataset An HTML element with the following "data-" tags: extent, graphics, renderer, chart.
 	 * @member {esri/geometry/Extent} extent
 	 * @member {esri/Graphic[]} graphics
 	 * @member {esri/renderer/SimpleRenderer} renderer
@@ -155,4 +155,3 @@ require([
 
 	}, "Veteran Status", "Group"));
 });
-
