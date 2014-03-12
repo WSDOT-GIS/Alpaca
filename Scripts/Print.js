@@ -5,6 +5,8 @@ require([
 	"esri/map",
 	"esri/geometry/Extent",
 	"esri/graphic",
+	"esri/layers/ArcGISDynamicMapServiceLayer",
+	"esri/layers/ImageParameters",
 	"esri/layers/GraphicsLayer",
 	"esri/renderers/SimpleRenderer",
 	"alpaca/ageData",
@@ -12,7 +14,7 @@ require([
 	"alpaca/povertyData",
 	"alpaca/raceData",
 	"alpaca/veteranData"
-], function (number, Map, Extent, Graphic, GraphicsLayer, SimpleRenderer, AgeData, LanguageData, PovertyData, RaceData, VeteranData) {
+], function (number, Map, Extent, Graphic, ArcGISDynamicMapServiceLayer, ImageParameters, GraphicsLayer, SimpleRenderer, AgeData, LanguageData, PovertyData, RaceData, VeteranData) {
 	"use strict";
 	var map, qsParameters, dataDiv;
 
@@ -61,11 +63,14 @@ require([
 			cell.textContent = [number.format((v / total) * 100, { places: 2 }), "%"].join("");
 		}
 
-		for (var propName in o) {
-			if (o.hasOwnProperty(propName) && (propertiesToInclude ? propertiesToInclude.test(propName) : true)) {
-				addRow(propName);
+		(function () {
+			var propName;
+			for (propName in o) {
+				if (o.hasOwnProperty(propName) && (propertiesToInclude ? propertiesToInclude.test(propName) : true)) {
+					addRow(propName);
+				}
 			}
-		}
+		}());
 
 		thead = table.createTHead();
 		thead.innerHTML = ["<tr><th>", propertyHeader || caption || "", "</th><th>Count</th><th>%</th></tr>"].join("");
@@ -74,41 +79,55 @@ require([
 		return table;
 	}
 
+	/** Used by JSON.parse() to create chart data objects instead of generic objects.
+	 * @param {string} k - The name of the current property.
+	 * @param {*} v - The current value.
+	 * @returns {*}
+	 */
+	function chartReviver(k, v) {
+		var output = v;
+		if (k === "age") {
+			output = new AgeData(v);
+		} else if (k === "language") {
+			output = new LanguageData(v);
+		} else if (k === "poverty") {
+			output = new PovertyData(v);
+		} else if (k === "veteran") {
+			output = new VeteranData(v);
+		} else if (k === "race") {
+			output = new RaceData(v);
+		}
+		return output;
+	}
+
 	/** Reads information from the data tags of an HTML element.
 	 * @param {HTMLElement} dataset An HTML element with the following "data-" tags: extent, graphics, renderer, chart.
 	 * @member {esri/geometry/Extent} extent
 	 * @member {esri/Graphic[]} graphics
 	 * @member {esri/renderer/SimpleRenderer} renderer
-	 * @member {Object} chart
+	 * @member {Object.<string, Object>} chart
+	 * @member {AgeData} chart.age
 	 * @member {LanguageData} chart.language
+	 * @member {PovertyData} chart.poverty
+	 * @member {VeteranData} chart.veteran
 	 * @member {RaceData} chart.race
+	 * @member {ArcGISDynamicMapServiceLaeyr} censusLayer
 	 * @constructor
 	 */
 	function Parameters(dataset) {
 		this.extent = dataset.extent ? new Extent(JSON.parse(dataset.extent)) : null;
-		this.graphics = dataset.graphics ? JSON.parse(dataset.graphics) : null;
-		this.renderer = dataset.renderer ? new SimpleRenderer(JSON.parse(dataset.renderer)) : null;
-
-		this.chart = dataset.chart ? JSON.parse(dataset.chart) : null;
-
-		if (this.chart) {
-			//if (this.chart.age) {
-			//	this.chart.age = new AgeData(this.chart.age);
-			//}
-			if (this.chart.language) {
-				this.chart.language = new LanguageData(this.chart.language);
-			}
-			if (this.chart.poverty) {
-				this.chart.poverty = new PovertyData(this.chart.poverty);
-			}
-			if (this.chart.veteran) {
-				this.chart.veteran = new VeteranData(this.chart.veteran);
-			}
-			if (this.chart.race) {
-				this.chart.race = new RaceData(this.chart.race);
-			}
-			// age, language, poverty, race, veteran
-		}
+		this.aoiGraphics = dataset.aoiGraphics ? JSON.parse(dataset.aoiGraphics) : null;
+		this.aoiRenderer = dataset.aoiRenderer ? new SimpleRenderer(JSON.parse(dataset.aoiRenderer)) : null;
+		this.saGraphics = dataset.saGraphics ? JSON.parse(dataset.saGraphics) : null;
+		this.saRenderer = dataset.saRenderer ? new SimpleRenderer(JSON.parse(dataset.saRenderer)) : null;
+		this.chart = dataset.chart ? JSON.parse(dataset.chart, chartReviver) : null;
+		var layerInfo = dataset.censusLayer ? (JSON.parse(dataset.censusLayer)) : null;
+		var imageParameters = new ImageParameters();
+		imageParameters.layerIds = layerInfo.visibleLayers;
+		imageParameters.layerOption = ImageParameters.LAYER_OPTION_SHOW;
+		this.censusLayer = layerInfo ? new ArcGISDynamicMapServiceLayer(layerInfo.url, {
+			imageParameters: imageParameters
+		}) : null;
 	}
 
 	qsParameters = new Parameters(document.getElementById("data").dataset);
@@ -119,16 +138,19 @@ require([
 	});
 
 	map.on("load", function () {
-		var layer, g, i, l;
-
-		layer = new GraphicsLayer();
-		layer.setRenderer(qsParameters.renderer);
-		map.addLayer(layer);
-
-		for (i = 0, l = qsParameters.graphics.length; i < l; i += 1) {
-			g = new Graphic(qsParameters.graphics[i]);
-			layer.add(g);
+		function createAndAddGraphicsLayer(renderer, graphics) {
+			var layer = new GraphicsLayer();
+			layer.setRenderer(renderer);
+			graphics.forEach(function (graphic) {
+				var g = new Graphic(graphic);
+				layer.add(g);
+			});
+			map.addLayer(layer);
 		}
+
+		map.addLayer(qsParameters.censusLayer);
+		createAndAddGraphicsLayer(qsParameters.saRenderer, qsParameters.saGraphics);
+		createAndAddGraphicsLayer(qsParameters.aoiRenderer, qsParameters.aoiGraphics);
 	});
 
 	dataDiv = document.getElementById("data");

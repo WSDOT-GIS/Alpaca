@@ -31,10 +31,12 @@
 	<div id="map"></div>
 	<div id="data" 
 		data-chart='<%= this.Request.Params["chartdata"] %>' 
-		data-graphics='<%= this.Request.Params["graphics"] %>'
 		data-extent='<%= this.Request.Params["extent"] %>'
-		data-renderer='<%= this.Request.Params["renderer"] %>'>
-
+		data-sa-graphics='<%= this.Request.Params["sagraphics"] %>'
+		data-sa-renderer='<%= this.Request.Params["sarenderer"] %>'
+		data-aoi-graphics='<%= this.Request.Params["aoigraphics"] %>'
+		data-aoi-renderer='<%= this.Request.Params["aoirenderer"] %>'
+		data-census-layer='<%= this.Request.Params["censuslayer"] %>'>
 	</div>
 	<script>
 		(function () {

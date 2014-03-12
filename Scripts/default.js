@@ -159,7 +159,7 @@ require([
 			}
 		}).then(function (response) {
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
-				serviceAreaLayer, selectionLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
+				serviceAreaLayer, aoiLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
 				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
 
 			/** Creates the service area layer and adds it to the map.
@@ -365,7 +365,7 @@ require([
 			 * @param {(esri/geometry/Geometry|esri/Graphic)} serviceArea
 			 */
 			function setServiceArea(serviceArea) {
-				selectionLayer.clear();
+				aoiLayer.clear();
 				serviceAreaLayer.clear();
 				if (serviceArea && serviceArea.geometry) { // Is serviceArea a graphic?
 					serviceAreaLayer.add(serviceArea);
@@ -378,7 +378,7 @@ require([
 			/** Sets the selection to the given geometry after clearing the AOI graphics layer, then updates the charts.
 			 */
 			function setSelection(/**{esri/geometry/Geometry}*/ geometry) {
-				selectionLayer.clear();
+				aoiLayer.clear();
 				chartDataProvider.getSelectionGraphics(geometry, map.getScale(), false, getServiceAreaGeometry());
 			}
 
@@ -388,14 +388,11 @@ require([
 			map = response.map;
 
 			serviceAreaLayer = createServiceAreaLayer();
-			selectionLayer = createSelectionLayer();
+			aoiLayer = createSelectionLayer();
 
 			// Add to the global context for debugging purposes.
 			// TODO: Remove global mapLayers object.
-			window.mapLayers = {
-				serviceArea: serviceAreaLayer,
-				aoi: selectionLayer
-			};
+			window.theMap = map;
 
 			aggregateLayerUrl = getAggregateLayer(map);
 
@@ -508,7 +505,7 @@ require([
 
 						if (output.features && output.features.length) {
 							(function () {
-								var i, l, layer = output.type === "service area" ? serviceAreaLayer : selectionLayer;
+								var i, l, layer = output.type === "service area" ? serviceAreaLayer : aoiLayer;
 								for (i = 0, l = output.features.length; i < l; i += 1) {
 									layer.add(output.features[i]);
 								}
@@ -634,7 +631,7 @@ require([
 					// Get the alpaca-mode string from the button that was clicked.
 					mode = this["data-alpaca-mode"];
 					drawToolbar.alpacaMode = mode;
-					fillSymbol = mode === "service-area" ? serviceAreaLayer.renderer.symbol : selectionLayer.renderer.symbol;
+					fillSymbol = mode === "service-area" ? serviceAreaLayer.renderer.symbol : aoiLayer.renderer.symbol;
 					drawToolbar.setFillSymbol(fillSymbol);
 					drawToolbar.activate(Draw[this["data-geometry-type"] || "POLYGON"]);
 					// Deactivate the maps default on-click behavior: displaying popups.
@@ -652,7 +649,7 @@ require([
 					if (layerId) {
 						if (layerId === "serviceArea" || layerId === "aoi") {
 							// The selection and user graphics need to be cleared even when the service area is cleared.
-							selectionLayer.clear();
+							aoiLayer.clear();
 							userGraphicsLayers.clear();
 							if (layerId === "serviceArea") {
 								serviceAreaLayer.clear();
@@ -687,26 +684,62 @@ require([
 			registry.byId("clearServiceAreaButton"),
 			registry.byId("clearSelectionButton")));
 
+			// Setup print feature
 			registry.byId("printMenuItem").on("click", function () {
 				var form;
 
-				function getSelectionGraphics() {
-					var gfx, i, l, output = [];
-					gfx = selectionLayer.graphics;
-
-					for (i = 0, l = gfx.length; i < l; i += 1) {
-						output.push(gfx[i].toJson());
-					}
-
-					return output;
+				/** Returns the census layer that is currently visible in the map.
+				 * @returns {Layer}
+				 */
+				function getCensusLayer() {
+					var censusUrlRe = /\bDemographic\b/;
+					// Get the currently visible layers in the map that are census layers.
+					var layers = map.layerIds.map(function (v) {
+						return map.getLayer(v);
+					}).filter(function (v) {
+						return v.visible && censusUrlRe.test(v.url);
+					}).map(function (v) {
+						return v;
+					});
+					return layers.length ? layers[0] : null;
 				}
 
-				// Get the print form.
+				/** 
+				 * @typedef {Object.<string, (string|number[])>} LayerInfo
+				 * @property {string} url
+				 * @property {number[]} visibleLayers - sublayer IDs of visible layers.
+				 * @property {string} declaredClass - The layer type (e.g., "esri.layers.ArcGISDynamicMapServiceLayer")
+				 */
+
+				/** Gets info about a layer that can be used to recreate it on the print page.
+				 * @param {Layer} layer
+				 * @returns {LayerInfo}
+				 */
+				function getLayerData(layer) {
+					return {
+						url: layer.url,
+						visibleLayers: layer.visibleLayers,
+						declaredClass: layer.declaredClass
+					};
+				}
+
+				/** Converts a graphic to JSON. For use with Array.map().
+				 * @param {Graphic} graphic
+				 * @returns {Object}
+				 */
+				function graphicToJson(graphic) {
+					return graphic.toJson();
+				}
+
 				form = document.forms.printForm;
+				// Get the print form.
 				// set the values on the print form.
-				form.querySelector("[name=extent]").value = JSON.stringify(map.extent.toJson());
-				form.querySelector("[name=graphics]").value = JSON.stringify(getSelectionGraphics());
-				form.querySelector("[name=renderer]").value = JSON.stringify(selectionLayer.renderer.toJson());
+				form.elements.extent.value = JSON.stringify(map.extent.toJson());
+				form.elements.aoigraphics.value = JSON.stringify(aoiLayer.graphics.map(graphicToJson));
+				form.elements.aoirenderer.value = JSON.stringify(aoiLayer.renderer.toJson());
+				form.elements.sagraphics.value = JSON.stringify(serviceAreaLayer.graphics.map(graphicToJson));
+				form.elements.sarenderer.value = JSON.stringify(serviceAreaLayer.renderer.toJson());
+				form.elements.censuslayer.value = JSON.stringify(getLayerData(getCensusLayer()));
 				form.submit();
 			});
 

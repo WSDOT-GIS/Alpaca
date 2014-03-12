@@ -157,11 +157,14 @@
 			</div>
 		</div> 
 	</div>
-	<form id="printForm" hidden="hidden" action="Print.aspx" target="_blank" method="post">
+	<form id="printForm" hidden="hidden" action="Print.aspx" target="alpaca_print" method="post">
 		<input name="extent" type="hidden" />
 		<input name="chartdata" type="hidden" />
-		<input name="graphics" type="hidden" />
-		<input name="renderer" type="hidden" />
+		<input name="aoigraphics" type="hidden" />
+		<input name="aoirenderer" type="hidden" />
+		<input name="sagraphics" type="hidden" />
+		<input name="sarenderer" type="hidden" />
+		<input name="censuslayer" type="hidden" />
 	</form>
 
 	<div id="addCsvDialog" data-dojo-type="dijit/Dialog" data-dojo-props='title:"Add data to map"'>
