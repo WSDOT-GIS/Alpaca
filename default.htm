@@ -62,69 +62,89 @@
 		<div id="headerPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
 			<img id="wsdotLogo" src="//www.wsdot.wa.gov/media/images/back/greenlogo.png" alt="WSDOT" height="39" width="240" />
 			<h1>
-				
+
 				<!--<abbr title="Washington State Department of Transportation">WSDOT</abbr>-->
 				<abbr title="Application for Local Planning and Community Accessibility">ALPACA</abbr>
 			</h1>
 		</div>
 		<div id="outerContentPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
 			<div id="borderContainer"
-				data-dojo-type="dijit/layout/BorderContainer"
-				data-dojo-props="design:'headline', gutters:false, liveSplitters:true">
+				 data-dojo-type="dijit/layout/BorderContainer"
+				 data-dojo-props="design:'headline', gutters:false, liveSplitters:true">
 				<div id="sidebarPane" data-dojo-type="dijit/layout/ContentPane"
-					data-dojo-props="splitter:true, region:'leading'">
+					 data-dojo-props="splitter:true, region:'leading'">
 
-							<div data-dojo-type="dijit/layout/AccordionContainer">
-								<div data-dojo-type="dijit/layout/ContentPane" title="View">
-									<div id="layerToggle"></div>
-									<div id="userAddedDataSection">
-										<button type="button" id="addDataButton" data-dojo-type="dijit/form/Button">Add</button>
-										<h1>Data Layers</h1>
-										<ul id="graphicsLayerList"></ul>
-									</div>
-								</div>
-								<div data-dojo-type="dijit/layout/ContentPane" title="Title VI charts">
-									<div>
-										<div id="languageChart" style="width: 300px; height: 300px;"></div>
-										<table class="chart-legend language-chart-legend">
-											<tr><td></td><td>Below Title VI Threshold</td></tr>
-											<tr><td></td><td>Meets or exceeds Title VI Threshold</td></tr>
-										</table>
-									</div>
-									<div>
-										<div id="minorityChart" style="width: 300px; height: 300px;"></div>
-									</div>
-								</div>
-								<div data-dojo-type="dijit/layout/ContentPane" title="Env. Justice charts">
-									<div>
-										<div id="povertyChart" style="width: 300px; height: 300px;"></div>
-									</div>
-								</div>
-								<div data-dojo-type="dijit/layout/ContentPane" title="Population charts">
-									<div>
-										<div id="ageChart" style="width: 300px; height: 300px;"></div>
-										<div id="veteranChart" style="width: 300px; height: 300px;"></div>
-									</div>
-								</div>
+					<div data-dojo-type="dijit/layout/AccordionContainer">
+						<div data-dojo-type="dijit/layout/ContentPane" title="View">
+							<div id="layerToggle"></div>
+							<div id="userAddedDataSection">
+								<button type="button" id="addDataButton" data-dojo-type="dijit/form/Button">Add</button>
+								<h1>Data Layers</h1>
+								<ul id="graphicsLayerList"></ul>
 							</div>
+						</div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="Title VI charts">
+							<div>
+								<div id="languageChart" style="width: 300px; height: 300px;"></div>
+								<table class="chart-legend language-chart-legend">
+									<tr><td></td><td>Below Title VI Threshold</td></tr>
+									<tr><td></td><td>Meets or exceeds Title VI Threshold</td></tr>
+								</table>
+							</div>
+							<div>
+								<div id="minorityChart" style="width: 300px; height: 300px;"></div>
+							</div>
+						</div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="Env. Justice charts">
+							<div>
+								<div id="povertyChart" style="width: 300px; height: 300px;"></div>
+							</div>
+						</div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="Population charts">
+							<div>
+								<div id="ageChart" style="width: 300px; height: 300px;"></div>
+								<div id="veteranChart" style="width: 300px; height: 300px;"></div>
+							</div>
+						</div>
+					</div>
 
 				</div>
 				<div id="mapPane" data-dojo-type="dijit/layout/ContentPane"
-					data-dojo-props="splitter:true, region:'center'">
+					 data-dojo-props="splitter:true, region:'center'">
 					<div id="map">
 						<div id="toolbar" class="toolbar" data-dojo-type="dijit/Toolbar">
 							<div data-dojo-type="dijit/form/DropDownButton">
 								<span>Service Area</span>
 								<div data-dojo-type="dijit/DropDownMenu">
+									<div data-dojo-type="dijit/PopupMenuItem" data-dojo-props="disabled: false">
+										<span>By County</span>
+										<div data-dojo-type="dijit/TooltipDialog">
+											<div>
+												<select id="countyServiceAreaSelect">
+													<option disabled="disabled">Select a county...</option>
+												</select>
+											</div>
+										</div>
+									</div>
 									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
 									<div id="drawServiceAreaButton" data-alpaca-mode="service-area" data-dojo-type="dijit/MenuItem">Draw custom</div>
 									<div id="clearServiceAreaButton" data-layer-id="serviceArea" data-dojo-type="dijit/MenuItem"
-										data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
+										 data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
 								</div>
 							</div>
 							<div id="aoiButton" data-dojo-type="dijit/form/DropDownButton" data-dojo-props="disabled: true">
 								<span>Area of Interest</span>
 								<div data-dojo-type="dijit/DropDownMenu">
+									<div data-dojo-type="dijit/PopupMenuItem" data-dojo-props="disabled: false">
+										<span>By County</span>
+										<div data-dojo-type="dijit/TooltipDialog">
+											<div>
+												<select id="countyAOISelect">
+													<option disabled="disabled">Select a county...</option>
+												</select>
+											</div>
+										</div>
+									</div>
 									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
 									<div data-dojo-type="dijit/PopupMenuItem">
 										<span>Draw custom</span>
@@ -140,7 +160,7 @@
 										 data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
 								</div>
 							</div>
-							
+
 							<div id="basemapButton" data-dojo-type="dijit/form/DropDownButton" title="Change the basemap">
 								<span>Basemap</span>
 								<div data-dojo-type="dijit/TooltipDialog">
@@ -155,7 +175,7 @@
 
 				</div>
 			</div>
-		</div> 
+		</div>
 	</div>
 	<form id="printForm" hidden="hidden" action="Print.aspx" target="alpaca_print" method="post">
 		<input name="extent" type="hidden" />

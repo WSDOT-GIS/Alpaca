@@ -61,6 +61,7 @@
       <DependentUpon>chartDataProvider.js</DependentUpon>
     </Content>
     <Content Include="Scripts\wsdot\alpaca\chartUtils.js" />
+    <Content Include="Scripts\wsdot\alpaca\countySelect.js" />
     <Content Include="Scripts\wsdot\alpaca\graphicsLayerList.js" />
     <Content Include="Scripts\wsdot\alpaca\languageData.js" />
     <Content Include="Scripts\wsdot\alpaca\layerChooser.js" />

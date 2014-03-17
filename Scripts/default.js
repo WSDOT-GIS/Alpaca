@@ -830,6 +830,33 @@ require([
 				});
 			}(registry.byId("helpButton")));
 
+			// Setup county select boxes...
+			require(["alpaca/countySelect"], function(countySelect) {
+				var saSelect, aoiSelect;
+				saSelect = document.getElementById("countyServiceAreaSelect");
+				aoiSelect = document.getElementById("countyAOISelect");
+				
+				// Populate the select boxes with county data.
+				countySelect.createCountySelect(saSelect);
+				countySelect.createCountySelect(aoiSelect);
+
+				// Attach events.
+				saSelect.addEventListener("change", function (e) {
+					var select = e.target;
+					var fips = Number(select.value);
+					chartDataProvider.getCountyGraphic(fips, "service area").then(function (graphic) {
+						console.log(graphic);
+					});
+				});
+				aoiSelect.addEventListener("change", function (e) {
+					var select = e.target;
+					var fips = Number(select.value);
+					chartDataProvider.getCountyGraphic(fips, getServiceAreaGeometry(), map.getScale()).then(function (graphic) {
+						console.log(graphic);
+					});
+				});
+			});
+
 		}, function (err) {
 			if (console && console.error) {
 				console.error("map load error", err);

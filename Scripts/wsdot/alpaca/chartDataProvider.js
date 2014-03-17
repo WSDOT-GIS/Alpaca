@@ -228,6 +228,41 @@ define([
 			return qt;
 		},
 
+		/** Get a service area graphic using its FIPS code.
+		 * @param {number} fipsCode - County's FIPS code. Known as GEOID in the aggregate layer, JURFIPSDSG in the county layer.
+		 * @param {Geometry} [serviceAreaGeometry] - If this function is being used to select an AOI, use this parameter to specifiy the service area.
+		 * @param {Number} [scale] The scale of the map. Used to determine which query task is used (County, Tract, or Block Group). Not required for statewide.
+		 * @returns {dojo/Deferred} The "resolve" function contains a single esri/Graphic parameter if the FIPS code is valid.
+		 */
+		getCountyGraphic: function (fipsCode, serviceAreaGeometry, scale) {
+			var self = this, queryTask, query, deferred = new Deferred();
+			queryTask = this.queryTasks.county;
+			query = new Query();
+			query.where = "GEOID = " + fipsCode;
+			query.outFields = fields.getOutFields();
+			query.returnGeometry = true;
+			queryTask.execute(query, function (/**{FeatureSet}*/ featureSet) {
+				var countyGraphic = featureSet.features[0];
+				var queryResult;
+				if (!serviceAreaGeometry) {
+					queryResult = new ChartDataQueryResult("service area", featureSet.features, countyGraphic.attributes);
+					self.emit("totals-determined", queryResult.chartData);
+					self.emit("query-complete", queryResult);
+					deferred.resolve(queryResult);
+				} else {
+					self.getSelectionGraphics(countyGraphic.geometry, scale, false, serviceAreaGeometry).then(function (queryResult) {
+						self.emit("totals-determined", queryResult.chartData);
+						self.emit("query-complete", queryResult);
+						deferred.resolve(queryResult);
+					});
+				}
+			}, function (error) {
+				deferred.reject(error);
+				self.emit("error", error);
+			});
+			return deferred;
+		},
+
 		/** Determines a service area based on a given geometry and scale.
 		 * @param {esri/Geometry} [drawnGeometry] The geometry used to determine the service area or selection. Not required for statewide.
 		 * @param {Number} [scale] The scale of the map. Used to determine which query task is used (County, Tract, or Block Group). Not required for statewide.
