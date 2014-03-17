@@ -797,6 +797,7 @@ require([
 					var layers = gtfsLayerManager.getGtfsLayers(e.detail.agencyId, e.detail.gtfs);
 					map.addLayer(layers.shapesLayer);
 					map.addLayer(layers.stopsLayer);
+					dialog.hide();
 				});
 
 				agencySelect.addEventListener("gtfserror", function (e) {
