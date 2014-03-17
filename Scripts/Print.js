@@ -122,12 +122,16 @@ require([
 		this.saRenderer = dataset.saRenderer ? new SimpleRenderer(JSON.parse(dataset.saRenderer)) : null;
 		this.chart = dataset.chart ? JSON.parse(dataset.chart, chartReviver) : null;
 		var layerInfo = dataset.censusLayer ? (JSON.parse(dataset.censusLayer)) : null;
-		var imageParameters = new ImageParameters();
-		imageParameters.layerIds = layerInfo.visibleLayers;
-		imageParameters.layerOption = ImageParameters.LAYER_OPTION_SHOW;
-		this.censusLayer = layerInfo ? new ArcGISDynamicMapServiceLayer(layerInfo.url, {
-			imageParameters: imageParameters
-		}) : null;
+		if (layerInfo) {
+			var imageParameters = new ImageParameters();
+			imageParameters.layerIds = layerInfo.visibleLayers;
+			imageParameters.layerOption = ImageParameters.LAYER_OPTION_SHOW;
+			this.censusLayer = new ArcGISDynamicMapServiceLayer(layerInfo.url, {
+				imageParameters: imageParameters
+			});
+		} else {
+			this.censusLayer = null;
+		}
 	}
 
 	qsParameters = new Parameters(document.getElementById("data").dataset);
