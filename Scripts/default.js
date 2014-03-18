@@ -844,15 +844,15 @@ require([
 				saSelect.addEventListener("change", function (e) {
 					var select = e.target;
 					var fips = Number(select.value);
+					serviceAreaLayer.clear();
 					chartDataProvider.getCountyGraphic(fips).then(function (graphic) {
-						console.log(graphic);
 					});
 				});
 				aoiSelect.addEventListener("change", function (e) {
 					var select = e.target;
 					var fips = Number(select.value);
+					aoiLayer.clear();
 					chartDataProvider.getCountyGraphic(fips, getServiceAreaGeometry(), map.getScale()).then(function (graphic) {
-						console.log(graphic);
 					});
 				});
 			});
