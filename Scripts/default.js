@@ -419,7 +419,7 @@ require([
 			(function () {
 				// Add the PTBA layer
 				var rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
-					id: "RTA",
+					id: "Regional Transportation Authority (RTA)",
 					visible: false,
 					styling: false,
 					surfaceType: "SVG"
@@ -429,7 +429,7 @@ require([
 
 				// Add the PTBA layer
 				var pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
-					id: "PTBA",
+					id: "Public Transportation Benifit Areas (PTBA)",
 					visible: false,
 					styling: false,
 					surfaceType: "SVG"
@@ -445,7 +445,7 @@ require([
 				map.addLayer(cityLimitsLayer);
 
 				var mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
-					id: "MPO",
+					id: "Metro Planning Organization (MPO)",
 					visible: false,
 					opacity: 0.6
 
@@ -453,7 +453,7 @@ require([
 				map.addLayer(mpoLayer);
 
 				var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
-					id: "RTPO",
+					id: "Regional Transportation Planning Organization (RTPO)",
 					visible: false,
 					opacity: 0.6
 				});
