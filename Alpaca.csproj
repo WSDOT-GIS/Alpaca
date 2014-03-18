@@ -65,6 +65,7 @@
     <Content Include="Scripts\wsdot\alpaca\graphicsLayerList.js" />
     <Content Include="Scripts\wsdot\alpaca\languageData.js" />
     <Content Include="Scripts\wsdot\alpaca\layerChooser.js" />
+    <Content Include="Scripts\wsdot\alpaca\layerSelect.js" />
     <Content Include="Scripts\wsdot\alpaca\povertyData.js" />
     <Content Include="Scripts\wsdot\alpaca\raceData.js" />
     <Content Include="Scripts\wsdot\alpaca\UserGraphicsLayers.js" />
