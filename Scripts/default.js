@@ -834,27 +834,34 @@ require([
 			require(["alpaca/countySelect"], function(countySelect) {
 				var saSelect, aoiSelect;
 				saSelect = document.getElementById("countyServiceAreaSelect");
+				saSelect.dataset.selectType = "service area";
 				aoiSelect = document.getElementById("countyAOISelect");
+				aoiSelect.dataset.selectType = "aoi";
 				
 				// Populate the select boxes with county data.
 				countySelect.createCountySelect(saSelect);
 				countySelect.createCountySelect(aoiSelect);
 
+				/**
+				 * Adds a graphic to either the graphics layer corresponding to the changed select.
+				 * @param {Event} e
+				 */
+				function selectCountyOnMap(e) {
+					var select = e.target;
+					var type = select.dataset.selectType;
+					var fips = Number(select.value);
+					if (type === "service area") {
+						serviceAreaLayer.clear();
+						chartDataProvider.getCountyGraphic(fips);
+					} else if (type === "aoi") {
+						aoiLayer.clear();
+						chartDataProvider.getCountyGraphic(fips, getServiceAreaGeometry(), map.getScale());
+					}
+				}
+
 				// Attach events.
-				saSelect.addEventListener("change", function (e) {
-					var select = e.target;
-					var fips = Number(select.value);
-					serviceAreaLayer.clear();
-					chartDataProvider.getCountyGraphic(fips).then(function (graphic) {
-					});
-				});
-				aoiSelect.addEventListener("change", function (e) {
-					var select = e.target;
-					var fips = Number(select.value);
-					aoiLayer.clear();
-					chartDataProvider.getCountyGraphic(fips, getServiceAreaGeometry(), map.getScale()).then(function (graphic) {
-					});
-				});
+				saSelect.addEventListener("change", selectCountyOnMap);
+				aoiSelect.addEventListener("change", selectCountyOnMap);
 			});
 
 		}, function (err) {
