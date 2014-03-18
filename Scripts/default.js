@@ -844,7 +844,7 @@ require([
 				saSelect.addEventListener("change", function (e) {
 					var select = e.target;
 					var fips = Number(select.value);
-					chartDataProvider.getCountyGraphic(fips, "service area").then(function (graphic) {
+					chartDataProvider.getCountyGraphic(fips).then(function (graphic) {
 						console.log(graphic);
 					});
 				});
