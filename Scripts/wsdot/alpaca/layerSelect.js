@@ -4,8 +4,9 @@ define([
 	"dojo/Evented",
 	"dojo/Deferred",
 	"esri/request",
-	"esri/tasks/QueryTask"
-], function (declare, Evented, Deferred, request, QueryTask) {
+	"esri/tasks/QueryTask",
+	"esri/tasks/Query"
+], function (declare, Evented, Deferred, request, QueryTask, Query) {
 
 	/**
 	 * @typedef {Object} LayerInfo
@@ -44,8 +45,9 @@ define([
 	 */
 	function breakObjectIdsIntoGroups(objectIds, maxRecordCount) {
 		var output = [], currentGroup;
-
+		/*jshint eqnull:true*/
 		if (maxRecordCount == null) {
+		/*jshint eqnull:false*/
 			output.push(objectIds);
 		} else {
 			for (var i = 0, l = objectIds.length; i < l; i += 1) {
@@ -61,6 +63,23 @@ define([
 	}
 
 	/**
+	 * @param {(QueryTask|FeatureLayer)} queryTaskOrLayer
+	 * @param {number[]} oids
+	 * @param {string} displayField
+	 * @returns {dojo/Deferred}
+	 */
+	function queryForFeaturesWithMatchingOids(queryTaskOrLayer, oids, displayField) {
+		var query = new Query();
+		query.objectIds = oids;
+		query.outFields = [displayField];
+		query.returnGeometry = true;
+		return queryTaskOrLayer.execute ?
+			queryTaskOrLayer.execute(query)
+			: queryTaskOrLayer.queryFeatures ? queryTaskOrLayer.queryFeatures(query)
+			: null;
+	}
+
+	/**
 	 * @property {(LayerInfo|FeatureLayer)} layerInfo
 	 * @property {QueryTask} [queryTask=undefined] - This property is only necessary if layerInfo is not a FeatureLayer.
 	 * @returns {dojo/Deferred}
@@ -73,6 +92,10 @@ define([
 			deferred.reject(err);
 		}
 
+		var outFeatureSet = null;
+		var deferredCompleteCount = 0; // Count of completed deferrred (errors count here, too).
+		var errors = null;
+
 		deferred = new Deferred();
 		query = new Query();
 		query.where = "1=1"; // Return all features.
@@ -83,8 +106,55 @@ define([
 		idsDeferred.then(function (objectIds) {
 			deferred.progress("retrieved object ids");
 			var oidGroups = breakObjectIdsIntoGroups(objectIds, layerInfo.maxRecordCount);
-			// TODO: query each set of OID groups for features.
+
+			function resolveIfCompleted() {
+				if (deferredCompleteCount === oidGroups.length) {
+					deferred.resolve({
+						featureSet: outFeatureSet,
+						errors: errors
+					});
+				}
+			}
+
+			function updateProgress(featureSet, error) {
+				deferredCompleteCount += 1;
+				deferred.progress({
+					queriesCompleted: deferredCompleteCount,
+					totalQueries: oidGroups.length,
+					featureSet: featureSet || null,
+					error: error || null
+				});
+			}
+
+			function onFeatureQueryComplete(featureSet) {
+				updateProgress(featureSet, null);
+				if (!outFeatureSet) {
+					outFeatureSet = featureSet;
+				} else {
+					featureSet.features.forEach(function (v) {
+						outFeatureSet.features.push(v);
+					});
+				}
+				resolveIfCompleted();
+			}
+
+			function onFeatureQueryError(err) {
+				updateProgress(null, err);
+				if (!errors) {
+					errors = [err];
+				} else {
+					errors.push(err);
+				}
+				resolveIfCompleted();
+			}
+
+			// query each set of OID groups for features.
+			oidGroups.forEach(function (oids) {
+				queryForFeaturesWithMatchingOids(queryTask || layerInfo, oids, layerInfo.displayField).then(onFeatureQueryComplete, onFeatureQueryError);
+			});
 		},handleError);
+
+		return deferred;
 	}
 
 	return declare([Evented], {
@@ -126,7 +196,20 @@ define([
 			}
 
 			getLayerInfo(this.queryTask ? this.queryTask.url : this.layer).then(function (layerInfo) {
-				// TODO: Query all features.
+				function populateSelect(result) {
+					var featureSet = result.featureSet;
+					var frag = document.createDocumentFragment();
+					featureSet.features.forEach(function (feature) {
+						var option = document.createElement("option");
+						option.textContent = feature.attributes[layerInfo.displayField];
+						option.value = JSON.stringify(feature.geometry.toJson());
+						frag.appendChild(option);
+					});
+					self.select.appendChild(frag);
+				}
+
+				// Query all features. Populate the select element with corresponding options.
+				getAllFeaturesForLayer(layerInfo, self.queryTask).then(populateSelect);
 			});
 		}
 	});
