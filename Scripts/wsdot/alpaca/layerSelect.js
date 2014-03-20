@@ -79,6 +79,18 @@ define([
 			: null;
 	}
 
+	/** @typedef {Object.<string, (FeatureSet|Error[])>} QueryAllFeaturesResult
+	 * @property {FeatureSet} featureSet
+	 * @property {Error[]} errors
+	 */
+
+	/** @typedef {Object.<string, (number|FeatureSet|Error[])>} QueryAllFeaturesProgress
+	 * @property {number} queriesCompleted - The number of queries that have been completed (either successfully or unsuccessfully) so far.
+	 * @property {number} totalQueries - The total number of queries that will be run. (totalQueries - queriesCompleted = queries remaining)
+	 * @property {(FeatureSet|null)} featureSet - If the query was successful, this value will be the resulting FeatureSet. Otherwise it will be null.
+	 * @property {(Error|null)} error - If an error occurred this value will be the error. It will be null otherwise.
+	 */
+
 	/**
 	 * @property {(LayerInfo|FeatureLayer)} layerInfo
 	 * @property {QueryTask} [queryTask=undefined] - This property is only necessary if layerInfo is not a FeatureLayer.
@@ -86,11 +98,6 @@ define([
 	 */
 	function getAllFeaturesForLayer(layerInfo, queryTask) {
 		var query, deferred, idsDeferred;
-
-		/** Reject the output deferred object. */
-		function handleError(err) {
-			deferred.reject(err);
-		}
 
 		var outFeatureSet = null;
 		var deferredCompleteCount = 0; // Count of completed deferrred (errors count here, too).
@@ -104,9 +111,11 @@ define([
 			throw new TypeError("Invalid parameters");
 		}
 		idsDeferred.then(function (objectIds) {
+			// Update deferred's progress.
 			deferred.progress("retrieved object ids");
 			var oidGroups = breakObjectIdsIntoGroups(objectIds, layerInfo.maxRecordCount);
 
+			/** Resolves the Deferred if all of the queries have been completed. */
 			function resolveIfCompleted() {
 				if (deferredCompleteCount === oidGroups.length) {
 					deferred.resolve({
@@ -116,6 +125,7 @@ define([
 				}
 			}
 
+			/** Updates the Deferred's progress. */
 			function updateProgress(featureSet, error) {
 				deferredCompleteCount += 1;
 				deferred.progress({
@@ -126,6 +136,10 @@ define([
 				});
 			}
 
+			/** Adds the features from a FeatureSet from a single query to the overall output feature set.
+			 * Updates the progress of the Deferred and resolves it if appropriate.
+			 * @param {FeatureSet} featureSet
+			 */
 			function onFeatureQueryComplete(featureSet) {
 				updateProgress(featureSet, null);
 				if (!outFeatureSet) {
@@ -138,6 +152,9 @@ define([
 				resolveIfCompleted();
 			}
 
+			/** Handles query errors. Updates progress of Deferred and resolves it if appropriate.
+			 * @param {Error} err
+			 */
 			function onFeatureQueryError(err) {
 				updateProgress(null, err);
 				if (!errors) {
@@ -152,7 +169,10 @@ define([
 			oidGroups.forEach(function (oids) {
 				queryForFeaturesWithMatchingOids(queryTask || layerInfo, oids, layerInfo.displayField).then(onFeatureQueryComplete, onFeatureQueryError);
 			});
-		},handleError);
+		}, function (err) {
+			// Call Deferred.Reject if an error has occured getting object IDs.
+			deferred.reject(err);
+		});
 
 		return deferred;
 	}
@@ -196,6 +216,10 @@ define([
 			}
 
 			getLayerInfo(this.queryTask ? this.queryTask.url : this.layer).then(function (layerInfo) {
+
+				/**
+				 * Populates the select element with options corresponding to the result feature set.
+				 */
 				function populateSelect(result) {
 					var featureSet = result.featureSet;
 					var frag = document.createDocumentFragment();
@@ -206,6 +230,20 @@ define([
 						frag.appendChild(option);
 					});
 					self.select.appendChild(frag);
+
+					var event;
+
+					// Fire custom (standard HTML element) event for the select element.
+					if (window.CustomEvent) {
+						event = new CustomEvent("featuresloaded", {
+							detail: {
+								result: result
+							}
+						});
+						self.select.dispatchEvent(event);
+					}
+					// Fire the dojo/Evented event.
+					self.emit("featuresloaded", result);
 				}
 
 				// Query all features. Populate the select element with corresponding options.

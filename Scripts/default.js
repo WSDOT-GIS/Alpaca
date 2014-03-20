@@ -58,6 +58,7 @@ require([
 
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
+	esriConfig.defaults.io.corsEnabledServers.push("wsdot.wa.gov/geoservices");
 
 	if (!window.console) {
 		window.console = {};
