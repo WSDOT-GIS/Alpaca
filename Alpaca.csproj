@@ -84,6 +84,7 @@
     </Content>
     <Content Include="packages.config" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\wsdot\queryUtils\main.js" />
     <Content Include="Style\index.css" />
     <Content Include="Style\index.min.css">
       <DependentUpon>index.css</DependentUpon>

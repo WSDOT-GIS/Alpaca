@@ -21,3 +21,4 @@
 /// <reference path="wsdot/csv-reader/main.js" />
 /// <reference path="wsdot/alpaca/countyselect.js" />
 /// <reference path="wsdot/alpaca/layerselect.js" />
+/// <reference path="wsdot/queryutils/main.js" />
