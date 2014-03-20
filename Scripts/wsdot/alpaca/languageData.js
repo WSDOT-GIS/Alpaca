@@ -46,7 +46,12 @@ define(["dojo/number"], function (number) {
 	 * @returns {number}
 	 */
 	LanguageData.prototype.getNotEnglishZoomScale = function () {
-		return this.getTotal() / this.getMaxNotEnglish() - 10;
+		var output;
+		output = this.getTotal() / this.getMaxNotEnglish() - 10;
+		if (output < 0) {
+			output = 0;
+		}
+		return output;
 	};
 
 	/** Determines if the threshold has been met for a particular language.
