@@ -4,7 +4,7 @@ define([
 	"dojo/Deferred",
 	"esri/request",
 	"esri/tasks/QueryTask",
-	"esri/tasks/Query"
+	"esri/tasks/query"
 ], function (declare, Deferred, request, QueryTask, Query) {
 
 	/**
@@ -105,18 +105,24 @@ define([
 	/**
 	 * @param {("esri/tasks/QueryTask"|"esri/layers/FeatureLayer")} queryTaskOrLayer
 	 * @param {number[]} oids
-	 * @param {string} displayField
+	 * @param {string} displayFieldName
 	 * @returns {"dojo/Deferred"}
 	 */
-	function queryForFeaturesWithMatchingOids(queryTaskOrLayer, oids, displayField) {
+	function queryForFeaturesWithMatchingOids(queryTaskOrLayer, oids, displayFieldName) {
 		var query = new Query();
 		query.objectIds = oids;
-		query.outFields = [displayField];
+		query.outFields = [displayFieldName];
 		query.returnGeometry = true;
-		return queryTaskOrLayer.execute ?
-			queryTaskOrLayer.execute(query)
-			: queryTaskOrLayer.queryFeatures ? queryTaskOrLayer.queryFeatures(query)
-			: null;
+		var output = null;
+		if (queryTaskOrLayer.execute) {
+			output = queryTaskOrLayer.execute(query);
+		} else if (queryTaskOrLayer.queryFeatures) {
+			output = queryTaskOrLayer.queryFeatures(query);
+		} else {
+			throw new TypeError('The "queryTaskOrLayer" parameter is neither.');
+		}
+
+		return output;
 	}
 
 	/** @typedef {Object.<string, (FeatureSet|Error[])>} QueryAllFeaturesResult
@@ -207,7 +213,7 @@ define([
 
 			// query each set of OID groups for features.
 			oidGroups.forEach(function (oids) {
-				queryForFeaturesWithMatchingOids(queryTask || layerInfo, oids, layerInfo.displayField).then(onFeatureQueryComplete, onFeatureQueryError);
+				queryForFeaturesWithMatchingOids(queryTask || layerInfo, oids, layerInfo.displayFieldName || layerInfo.displayField).then(onFeatureQueryComplete, onFeatureQueryError);
 			});
 		}, function (err) {
 			// Call Deferred.Reject if an error has occured getting object IDs.

@@ -5,7 +5,7 @@ define([
 	"dojo/Deferred",
 	"esri/request",
 	"esri/tasks/QueryTask",
-	"esri/tasks/Query",
+	"esri/tasks/query",
 	"../queryUtils"
 ], function (declare, Evented, Deferred, request, QueryTask, Query, queryUtils) {
 	
@@ -60,7 +60,7 @@ define([
 					var frag = document.createDocumentFragment();
 					featureSet.features.forEach(function (feature) {
 						var option = document.createElement("option");
-						option.textContent = feature.attributes[layerInfo.displayField];
+						option.textContent = feature.attributes[layerInfo.displayFieldName || layerInfo.displayField];
 						option.value = JSON.stringify(feature.geometry.toJson());
 						frag.appendChild(option);
 					});

@@ -119,6 +119,8 @@
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
+    <Content Include="Tests\layerSelect.html" />
+    <Content Include="Tests\layerSelect.js" />
     <Content Include="web.config" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
