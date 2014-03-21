@@ -15,8 +15,8 @@ define([
 		layer: null,
 		/**
 		 * @param {(HTMLSelectElement|string)} domNode - Either an HTMLSelectElement or the "id" attribute of a select element.
-		 * @param {"esri/layers/Layer"} layer
-		 * @param {?number} [layerId]
+		 * @param {("esri/layers/FeatureLayer"|"esri/layers/ArcGISDynamicMapServiceLayer"|"esri/layers/ArcGISTiledMapServiceLayer")} layer
+		 * @param {?number} [layerId] - Sub-layer ID. This is only required if layer is NOT a FeatureLayer.
 		 * @constructs
 		 * @throws {TypeError} Thrown if domNode is an invalid type.
 		 */
@@ -50,6 +50,28 @@ define([
 
 			queryUtils.getLayerInfo(this.queryTask ? this.queryTask.url : this.layer).then(function (layerInfo) {
 
+				function getName(attributes, displayFieldName) {
+					var name = attributes[displayFieldName];
+					// If for some reason the display name doesn't actually have a corresponding attribute, try a case insensitive search.
+					var displayNameRe, firstString;
+					if (!name) {
+						displayNameRe = new RegExp(displayFieldName, "i");
+						for (var fieldName in attributes) {
+							if (displayNameRe.test(fieldName)) {
+								name = attributes[fieldName];
+								break;
+							} else if (!firstString && typeof attributes[fieldName] === "string") {
+								firstString = attributes[fieldName];
+							}
+						}
+					}
+					// If the case insensitive search also failed, use the first string property as the name.
+					if (!name && firstString) {
+						name = firstString;
+					}
+					return name;
+				}
+
 				/**
 				 * Populates the select element with options corresponding to the result feature set.
 				 * @param {Object.<string, ("esri/tasks/FeatureSet"|Error)>} result
@@ -59,10 +81,19 @@ define([
 				function populateSelect(result) {
 					var featureSet = result.featureSet;
 					var frag = document.createDocumentFragment();
-					featureSet.features.forEach(function (feature) {
+					var options = featureSet.features.map(function (feature) {
 						var option = document.createElement("option");
-						option.textContent = feature.attributes[layerInfo.displayFieldName || layerInfo.displayField];
+						var displayFieldName = layerInfo.displayFieldName || layerInfo.displayField;
+						var name = getName(feature.attributes, displayFieldName);
+
+						option.textContent = name;
 						option.value = JSON.stringify(feature.geometry.toJson());
+						return option;
+					});
+					options.sort(function (a, b) {
+						return a.textContent > b.textContent ? 1 : a.textContent < b.textContent ? -1 : 0;
+					});
+					options.forEach(function (option) {
 						frag.appendChild(option);
 					});
 					self.select.appendChild(frag);

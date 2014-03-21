@@ -68,7 +68,6 @@ require([
 		var ls = new layerSelect(selectElement, layer);
 		ls.on("featuresloaded", function (result) {
 			selectElement.disabled = false;
-			console.log("Features loaded for " + layer.id, result);
 		}, function (error) {
 			console.error("error loading features for " + layer.id, error);
 		});

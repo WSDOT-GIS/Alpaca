@@ -112,6 +112,7 @@ define([
 		var query = new Query();
 		query.objectIds = oids;
 		query.outFields = [displayFieldName];
+		query.orderByFields = [displayFieldName];
 		query.returnGeometry = true;
 		var output = null;
 		if (queryTaskOrLayer.execute) {
