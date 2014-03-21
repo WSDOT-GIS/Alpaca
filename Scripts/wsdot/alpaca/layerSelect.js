@@ -13,6 +13,24 @@ define([
 		select: null,
 		queryTask: null,
 		layer: null,
+		featureSet: null,
+		/** Gets the feature from the featureSet.features array at the specified position.
+		 * @param {number} id
+		 * @returns {"esri/Graphic"}
+		 */
+		getFeatureById: function(id) {
+			return this.featureSet.features[id];
+		},
+		/**
+		 * Returns the graphic corresponding to the currently selected option.
+		 * @returns {"esri/Graphic"}
+		 */
+		getSelectedFeature: function() {
+			var selectedIndex = this.select.selectedIndex;
+			var option = this.select.options[selectedIndex];
+			var id = option.value;
+			return this.getFeatureById(id);
+		},
 		/**
 		 * @param {(HTMLSelectElement|string)} domNode - Either an HTMLSelectElement or the "id" attribute of a select element.
 		 * @param {("esri/layers/FeatureLayer"|"esri/layers/ArcGISDynamicMapServiceLayer"|"esri/layers/ArcGISTiledMapServiceLayer")} layer
@@ -79,21 +97,20 @@ define([
 				 * @param {Error[]} result.errors
 				 */
 				function populateSelect(result) {
-					var featureSet = result.featureSet;
+					self.featureSet = result.featureSet;
 					var frag = document.createDocumentFragment();
-					var options = featureSet.features.map(function (feature) {
+					// Sort features by name.
+					self.featureSet.features.sort(function (featureA, featureB) {
+						var nameA = getName(featureA.attributes), nameB = getName(featureB.attributes);
+						return nameA > nameB ? 1 : nameB > nameA ? -1 : 0;
+					});
+					self.featureSet.features.forEach(function (feature, i) {
 						var option = document.createElement("option");
-						var displayFieldName = layerInfo.displayFieldName || layerInfo.displayField;
+						var displayFieldName = result.featureSet.displayFieldName;
 						var name = getName(feature.attributes, displayFieldName);
 
 						option.textContent = name;
-						option.value = JSON.stringify(feature.geometry.toJson());
-						return option;
-					});
-					options.sort(function (a, b) {
-						return a.textContent > b.textContent ? 1 : a.textContent < b.textContent ? -1 : 0;
-					});
-					options.forEach(function (option) {
+						option.value = i; // JSON.stringify(feature.geometry.toJson());
 						frag.appendChild(option);
 					});
 					self.select.appendChild(frag);
