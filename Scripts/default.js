@@ -268,6 +268,10 @@ require([
 			function updateCharts(/** {ChartData} */ chartData, /**{string}*/ level) {
 				var previousLevel, saChartData;
 
+				if (!(chartData instanceof ChartDataProvider.ChartData)) {
+					chartData = new ChartDataProvider.ChartData(chartData);
+				}
+
 				/** Either adds or removes a chart series based on the value of `level`.
 				 * @param {Chart} chart
 				 * @param {string} propertyName - The name of the property of saChartData that provides data for the chart.
@@ -292,6 +296,9 @@ require([
 					// If this is AOI level, both Service Area and AOI data needs to be displayed on the charts.
 					// Store the service area chart data in this case. Otherwise set to null.
 					saChartData = level === "aoi" ? serviceAreaLayer.graphics[0].attributes : null;
+					if (saChartData && !(saChartData instanceof ChartDataProvider.ChartData)) {
+						saChartData = new ChartDataProvider.ChartData(saChartData);
+					}
 
 					// Update the language chart with the response language data.
 					languageChart.updateSeries("Language Proficiency", chartData.language.toColumnChartSeries(level));
@@ -418,8 +425,9 @@ require([
 
 			// Add data layers
 			(function () {
+				var rtaLayer, pdbaLayer, cityLimitsLayer, mpoLayer, rtpoLayer, tribalLayer;
 				// Add the PTBA layer
-				var rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
+				rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
 					id: "Regional Transportation Authority (RTA)",
 					visible: false,
 					styling: false,
@@ -429,7 +437,7 @@ require([
 				map.addLayer(rtaLayer);
 
 				// Add the PTBA layer
-				var pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
+				pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
 					id: "Public Transportation Benifit Areas (PTBA)",
 					visible: false,
 					styling: false,
@@ -438,14 +446,14 @@ require([
 
 				map.addLayer(pdbaLayer);
 
-				var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
+				cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
 					id: "City Limits",
 					visible: false,
 					opacity: 0.6
 				});
 				map.addLayer(cityLimitsLayer);
 
-				var mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
+				mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
 					id: "Metro Planning Organization (MPO)",
 					visible: false,
 					opacity: 0.6
@@ -453,14 +461,14 @@ require([
 				});
 				map.addLayer(mpoLayer);
 
-				var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
+				rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
 					id: "Regional Transportation Planning Organization (RTPO)",
 					visible: false,
 					opacity: 0.6
 				});
 				map.addLayer(rtpoLayer);
 
-				var tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
+				tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
 					id: "Reservation and Trust Lands",
 					visible: false,
 					opacity: 0.6
@@ -849,14 +857,18 @@ require([
 				 */
 				function selectCountyOnMap(e) {
 					var select = e.target;
-					var type = select.dataset.selectType;
-					var fips = Number(select.value);
-					if (type === "service area") {
-						serviceAreaLayer.clear();
-						chartDataProvider.getCountyGraphic(fips);
-					} else if (type === "aoi") {
-						aoiLayer.clear();
-						chartDataProvider.getCountyGraphic(fips, getServiceAreaGeometry(), map.getScale());
+					if (!select.selectedOptions[0].disabled) {
+						var type = select.dataset.selectType;
+						var fips = Number(select.value);
+						if (type === "service area") {
+							serviceAreaLayer.clear();
+							chartDataProvider.getCountyGraphic(fips);
+						} else if (type === "aoi") {
+							aoiLayer.clear();
+							chartDataProvider.getCountyGraphic(fips, getServiceAreaGeometry(), map.getScale());
+						}
+						saSelect.selectedIndex = 0;
+						aoiSelect.selectedIndex = 0;
 					}
 				}
 
