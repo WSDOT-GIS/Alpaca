@@ -152,7 +152,14 @@ define([
 		deferred = new Deferred();
 		query = new Query();
 		query.where = "1=1"; // Return all features.
-		idsDeferred = layerInfo.queryIds ? layerInfo.queryIds(query) : (queryTask && queryTask.executeForIds) ? queryTask.executeForIds(query) : null;
+		if (layerInfo.queryIds) {
+			idsDeferred = layerInfo.queryIds(query);
+		} else if (queryTask) {
+			idsDeferred = queryTask.executeForIds(query);
+		} else {
+			throw new TypeError("Invalid parameters");
+		}
+		
 		if (!idsDeferred) {
 			throw new TypeError("Invalid parameters");
 		}

@@ -2,10 +2,14 @@
 require([
 	"queryUtils",
 	"layerSelect",
+	"esri/config",
 	"esri/layers/FeatureLayer",
 	"esri/layers/ArcGISDynamicMapServiceLayer",
 	"esri/layers/ArcGISTiledMapServiceLayer"
-], function (queryUtils, layerSelect, FeatureLayer, ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer) {
+], function (queryUtils, layerSelect, esriConfig, FeatureLayer, ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer) {
+
+	esriConfig.defaults.io.proxyUrl = "../proxy.ashx";
+
 	// Add the PTBA layer
 	var rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
 		id: "Regional Transportation Authority (RTA)",

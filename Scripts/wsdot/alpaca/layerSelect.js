@@ -16,10 +16,11 @@ define([
 		/**
 		 * @param {(HTMLSelectElement|string)} domNode - Either an HTMLSelectElement or the "id" attribute of a select element.
 		 * @param {"esri/layers/Layer"} layer
+		 * @param {?number} [layerId]
 		 * @constructs
 		 * @throws {TypeError} Thrown if domNode is an invalid type.
 		 */
-		constructor: function (domNode, layer) {
+		constructor: function (domNode, layer, layerId) {
 			var self = this;
 			// Setup the this.select property.
 			if (domNode) {
@@ -40,11 +41,11 @@ define([
 				// Feature layer. No query task needs to be created.
 				this.layer = layer;
 				this.queryTask = null;
-			} else if (layer.capabilities && layer.url && layer.capabilities.contains("Query")){
+			} else if (layer.url) { // layer.capabilities && layer.url && layer.capabilities.contains("Query")){
 				// Store layer (may not actually be necessary for this layer type).
 				this.layer = layer;
 				// Create a query task for the first child layer.
-				this.queryTask = new QueryTask([layer.url.trimRight("/"), "0"].join("/"));
+				this.queryTask = new QueryTask([layer.url.trimRight("/"), layerId || "0"].join("/"));
 			}
 
 			queryUtils.getLayerInfo(this.queryTask ? this.queryTask.url : this.layer).then(function (layerInfo) {
@@ -83,6 +84,7 @@ define([
 
 				// Query all features. Populate the select element with corresponding options.
 				queryUtils.getAllFeaturesForLayer(layerInfo, self.queryTask).then(populateSelect);
+
 			});
 		}
 	});
