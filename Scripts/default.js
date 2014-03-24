@@ -911,6 +911,12 @@ require([
 					select.selectedIndex = 0;
 				}
 
+				function setToFirstElement() {
+					/*jshint validthis:true*/
+					this.select.selectedIndex = 0;
+					/*jshint validthis:false*/
+				}
+
 				/**
 				 * @typedef LayerAddResponse
 				 * @property {Layer} layer
@@ -934,7 +940,7 @@ require([
 							select.appendChild(option);
 							div.appendChild(select);
 							var layerSelect = new LayerSelect(select, layer);
-							////layerSelect.on("features-loaded", setupSelectionEvents);
+							layerSelect.on("features-loaded", setToFirstElement);
 							layerSelect.on("feature-select", selectFeatures);
 						});
 					}
