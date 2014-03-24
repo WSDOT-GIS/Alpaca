@@ -885,6 +885,9 @@ require([
 				var saContainer = document.getElementById("saLayerSelectContainer"), aoiContainer = document.getElementById("aoiLayerSelectContainer");
 
 				var validLayersRe = /^(?:(?:Regional Transportation Authority \(RTA\))|(?:Public Transportation Benifit Areas \(PTBA\))|(?:City Limits)|(?:Metro Planning Organization \(MPO\))|(?:Regional Transportation Planning Organization \(RTPO\))|(?:Reservation and Trust Lands))$/i;
+				var sublayerIds = {
+					"City Limits": 2
+				}
 
 				/**
 				 * @this {LayerSelect}
@@ -939,7 +942,7 @@ require([
 							option.textContent = layer.id;
 							select.appendChild(option);
 							div.appendChild(select);
-							var layerSelect = new LayerSelect(select, layer);
+							var layerSelect = new LayerSelect(select, layer, sublayerIds[layer.id] || 0);
 							layerSelect.on("features-loaded", setToFirstElement);
 							layerSelect.on("feature-select", selectFeatures);
 						});
