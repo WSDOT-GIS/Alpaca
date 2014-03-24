@@ -62,17 +62,22 @@ define(["dojo/number"], function (number) {
 		total = this.getTotal();
 
 		var strokeColor = level === "aoi" ? (isBackground ? "blue" : "green") : "black";
+		var strokeWidth = level === "aoi" ? 4 : 1;
+		var stroke = {
+			color: strokeColor,
+			width: strokeWidth
+		};
 
 		output.push({
 			y: vet,
 			text: "Veteran",
-			stroke: strokeColor,
+			stroke: stroke,
 			fill: "RGB(133,90,150)",
 			tooltip: ["Veteran: ", number.format(vet), "(~", getPercent(vet, total), "%)"].join("")
 		}, {
 			y: nonVet,
 			text: "Civilian",
-			stroke: strokeColor,
+			stroke: stroke,
 			fill: "RGB(229,213,242)",
 			tooltip: ["Civilian: ", number.format(nonVet), "(~", getPercent(nonVet, total), "%)"].join("")
 		});

@@ -82,8 +82,10 @@ define(["dojo/number"], function (number) {
 		total = this.getTotal();
 
 		var strokeColor = "black";
+		var strokeWidth = 1;
 		if (level === "aoi") {
 			strokeColor = isBackground ? "blue" : "green";
+			strokeWidth = 3;
 		}
 
 		for (race in RaceData.labels) {
@@ -93,7 +95,10 @@ define(["dojo/number"], function (number) {
 					y: this[race],
 					text: label,
 					fill: race === "white" ? "RGB(255,235,204)" : "RGB(240,118,5)",
-					stroke: strokeColor,
+					stroke: {
+						color: strokeColor,
+						width: strokeWidth
+					},
 					tooltip: [label, ": ", number.format(this[race]), " (~", Math.round((this[race] / total) * 10000) / 100, "%)"].join("")
 				};
 				output.push(item);

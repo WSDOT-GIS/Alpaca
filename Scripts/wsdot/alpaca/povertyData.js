@@ -50,22 +50,26 @@ define(["dojo/number"], function (number) {
 
 		pctInPoverty = Math.round(this.getPercentInPovertyForFederal());
 
-		var strokeColor = "black";
+		var stroke = {
+			color: "black",
+			width: 1
+		};
 		if (level === 'aoi') {
-			strokeColor = isBackground ? "blue" : "green";
+			stroke.color = isBackground ? "blue" : "green";
+			stroke.width = 3;
 		}
 
 		output = [
 			{
 				y: this.federalTotalInPoverty,
 				text: "Poverty",
-				stroke: strokeColor,
+				stroke: stroke,
 				fill: "RGB(87,145,101)",
 				tooltip: ["Poverty: ", number.format(this.federalInPoverty), "(~", pctInPoverty, "%)"].join("")
 			}, {
 				y: this.nonPoverty,
 				text: "Non-Poverty",
-				stroke: strokeColor,
+				stroke: stroke,
 				fill: "RGB(220,245,233)",
 				tooltip: ["Non-Poverty: ", number.format(this.nonPoverty), "(~", 100 - pctInPoverty, "%)"].join("")
 			}

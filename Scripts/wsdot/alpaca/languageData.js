@@ -100,7 +100,10 @@ define(["dojo/number"], function (number) {
 					text: label,
 					// If the level is "AOI", set stroke color to blue if background is true, green if false.
 					// If level is not "AOI", set stroke color to black.
-					stroke: aoiRe.test(level) ? (background ? "blue" : "green") : "black",
+					stroke: {
+						color: aoiRe.test(level) ? (background ? "blue" : "green") : "black",
+						width: aoiRe.test(level) ? 3 : 1
+					},
 					// Set the fill depending if the threshold has been met and if background is true.
 					fill: this.thresholdMet(language) ? thresholdFill : normalFill,
 					// Set the tooltip to display the language, number of speakers, and the percentage of those speakers vs. total.
