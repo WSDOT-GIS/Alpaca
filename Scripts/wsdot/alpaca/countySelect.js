@@ -32,6 +32,8 @@ define(["esri/tasks/QueryTask", "esri/tasks/query", "dojo/Deferred"], function (
 
 		// Add the options to the select.
 		select.appendChild(docFrag);
+
+		select.selectedIndex = 0;
 	}
 
 	/**

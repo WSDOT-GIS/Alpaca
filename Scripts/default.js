@@ -887,7 +887,7 @@ require([
 				var validLayersRe = /^(?:(?:Regional Transportation Authority \(RTA\))|(?:Public Transportation Benifit Areas \(PTBA\))|(?:City Limits)|(?:Metro Planning Organization \(MPO\))|(?:Regional Transportation Planning Organization \(RTPO\))|(?:Reservation and Trust Lands))$/i;
 				var sublayerIds = {
 					"City Limits": 2
-				}
+				};
 
 				/**
 				 * @this {LayerSelect}
@@ -917,6 +917,7 @@ require([
 				function setToFirstElement() {
 					/*jshint validthis:true*/
 					this.select.selectedIndex = 0;
+					this.select.disabled = false;
 					/*jshint validthis:false*/
 				}
 
@@ -935,11 +936,12 @@ require([
 					if (layer && layer.id && validLayersRe.test(layer.id)) { //layer && layer.url) {
 						[saContainer, aoiContainer].forEach(function (div) {
 							var select = document.createElement("select");
+							select.disabled = true;
 							select.classList.add("layer-select");
 							select.dataset.selectType = div === saContainer ? "service area" : "aoi";
 							var option = document.createElement("option");
 							option.disabled = true;
-							option.textContent = layer.id;
+							option.textContent = [layer.id, "…"].join("");
 							select.appendChild(option);
 							div.appendChild(select);
 							var layerSelect = new LayerSelect(select, layer, sublayerIds[layer.id] || 0);
