@@ -366,20 +366,28 @@ define([
 						});
 
 						geometryService = getGeometryService();
-						// TODO: Skip the union operation if "geometries" only contains one geometry.
-						geometryService.union(geometries, function (geometry) {
+						// Skip the union operation if "geometries" only contains one geometry.
+						if (geometries.length > 1) {
+							geometryService.union(geometries, function (geometry) {
+								graphic = new Graphic(geometry, null, totals);
+								output = new ChartDataQueryResult(type, [graphic], totals, null);
+								self.emit("query-complete", output);
+								deferred.resolve(output);
+							}, function (error) {
+								error.totals = totals;
+								deferred.reject(error);
+							});
+						} else {
 							graphic = new Graphic(geometry, null, totals);
 							output = new ChartDataQueryResult(type, [graphic], totals, null);
 							self.emit("query-complete", output);
 							deferred.resolve(output);
-						}, function (error) {
-							error.totals = totals;
-							deferred.reject(error);
-						});
+						}
 					} else {
 						output = new ChartDataQueryResult(type, featureSet.features, totals, drawnGeometry);
 						deferred.resolve(output);
 						self.emit("query-complete", output);
+						deferred.resolve(output);
 					}
 				}, function (error) {
 					self.emit("error", error);
