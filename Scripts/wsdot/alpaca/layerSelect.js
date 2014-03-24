@@ -29,17 +29,40 @@ define([
 			var selectedIndex = this.select.selectedIndex;
 			var option = this.select.options[selectedIndex];
 			var id = option.value;
-			return this.getFeatureById(id);
+			var output = null;
+			/*jshint eqnull:true*/
+			if (id != null) {
+				output = this.getFeatureById(id);
+			}
+			/*jshint eqnull:false*/
+			return output;
+
 		},
 		/**
 		 * @param {(HTMLSelectElement|string)} domNode - Either an HTMLSelectElement or the "id" attribute of a select element.
-		 * @param {("esri/layers/FeatureLayer"|"esri/layers/ArcGISDynamicMapServiceLayer"|"esri/layers/ArcGISTiledMapServiceLayer")} layer
+		 * @param {(string|"esri/layers/FeatureLayer"|"esri/layers/ArcGISDynamicMapServiceLayer"|"esri/layers/ArcGISTiledMapServiceLayer")} layer - Either a layer object or the URL of a feature layer.
 		 * @param {?number} [layerId] - Sub-layer ID. This is only required if layer is NOT a FeatureLayer.
 		 * @constructs
 		 * @throws {TypeError} Thrown if domNode is an invalid type.
 		 */
 		constructor: function (domNode, layer, layerId) {
 			var self = this;
+
+			function emitChangeEvent() {
+				var feature, event;
+				feature = self.getSelectedFeature();
+
+				self.emit("feature-select", feature);
+				event = new CustomEvent("featureselect", {
+					detail: {
+						feature: feature
+					}
+				});
+
+				self.select.dispatchEvent(event);
+			}
+
+			var featureLayerUrlRe = /https?\:\/\/.+\/MapServer\/\d+\/?/i;
 			// Setup the this.select property.
 			if (domNode) {
 				if (typeof domNode === "string") {
@@ -64,6 +87,12 @@ define([
 				this.layer = layer;
 				// Create a query task for the first child layer.
 				this.queryTask = new QueryTask([layer.url.trimRight("/"), layerId || "0"].join("/"));
+			} else if (typeof layer === "string") {
+				if (featureLayerUrlRe.test(layer)) {
+					this.queryTask = new QueryTask(layer);
+				} else {
+					throw new TypeError("If the \"layer\" parameter is a string then it must be a valid URL for a map service layer or a feature service");
+				}
 			}
 
 			queryUtils.getLayerInfo(this.queryTask ? this.queryTask.url : this.layer).then(function (layerInfo) {
@@ -127,7 +156,9 @@ define([
 						self.select.dispatchEvent(event);
 					}
 					// Fire the dojo/Evented event.
-					self.emit("featuresloaded", result);
+					self.emit("features-loaded", result);
+
+					self.select.addEventListener("change", emitChangeEvent);
 				}
 
 				// Query all features. Populate the select element with corresponding options.

@@ -192,3 +192,7 @@ table.language-chart-legend tr:last-child > td:first-child {
 	fill: yellow;
 	fill-opacity: 0.8;
 }
+
+.layer-select {
+	display: block;
+}

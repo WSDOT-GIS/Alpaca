@@ -32,6 +32,7 @@ require([
 	"esri/layers/ArcGISDynamicMapServiceLayer",
 	"GtfsService/gtfs-agency-select",
 	"GtfsService/arcgis/gtfs-layer-manager",
+	"alpaca/layerSelect",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -52,7 +53,7 @@ require([
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
 	esriConfig, UserGraphicsLayers, FeatureLayer, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
-	GtfsAgencySelect, GtfsLayerManager)
+	GtfsAgencySelect, GtfsLayerManager, LayerSelect)
 {
 	"use strict";
 
@@ -268,6 +269,7 @@ require([
 			function updateCharts(/** {ChartData} */ chartData, /**{string}*/ level) {
 				var previousLevel, saChartData;
 
+				// Ensure that the chartData object is the correct type instead of a regular Object.
 				if (!(chartData instanceof ChartDataProvider.ChartData)) {
 					chartData = new ChartDataProvider.ChartData(chartData);
 				}
@@ -429,6 +431,7 @@ require([
 				// Add the PTBA layer
 				rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
 					id: "Regional Transportation Authority (RTA)",
+					outFields: ["RTA_NAME"],
 					visible: false,
 					styling: false,
 					surfaceType: "SVG"
@@ -439,6 +442,7 @@ require([
 				// Add the PTBA layer
 				pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
 					id: "Public Transportation Benifit Areas (PTBA)",
+					outFields: ["PTBA_NAME"],
 					visible: false,
 					styling: false,
 					surfaceType: "SVG"
@@ -876,6 +880,68 @@ require([
 				saSelect.addEventListener("change", selectCountyOnMap);
 				aoiSelect.addEventListener("change", selectCountyOnMap);
 			});
+
+			(function () {
+				var saContainer = document.getElementById("saLayerSelectContainer"), aoiContainer = document.getElementById("aoiLayerSelectContainer");
+
+				var validLayersRe = /^(?:(?:Regional Transportation Authority \(RTA\))|(?:Public Transportation Benifit Areas \(PTBA\))|(?:City Limits)|(?:Metro Planning Organization \(MPO\))|(?:Regional Transportation Planning Organization \(RTPO\))|(?:Reservation and Trust Lands))$/i;
+
+				/**
+				 * @this {LayerSelect}
+				 */
+				function selectFeatures(/**{Graphic}*/ feature) {
+					var select, selectType;
+					/*jshint validthis:true*/
+					select = this.select;
+					/*jshint validthis:false*/
+
+					selectType = select.dataset.selectType;
+					/*jshint eqnull:true*/
+					if (feature != null) {
+						console.log("selected feature", feature);
+						if (selectType === "service area") {
+							serviceAreaLayer.clear();
+							chartDataProvider.getSelectionGraphics(feature.geometry, map.getScale(), true);
+						} else if (selectType === "aoi") {
+							aoiLayer.clear();
+							chartDataProvider.getSelectionGraphics(feature.geometry, map.getScale(), false, getServiceAreaGeometry());
+						}
+					}
+					/*jshint eqnull:false*/
+					select.selectedIndex = 0;
+				}
+
+				/**
+				 * @typedef LayerAddResponse
+				 * @property {Layer} layer
+				 * @property {Map} target
+				 */
+
+				/**
+				 * Adds layer select boxes (one for service area and one for AOI) for the added layer.
+				 * @property {LayerAddResponse} response
+				 */
+				function addSelectsForLayer(response) {
+					var layer = response.layer;
+					if (layer && layer.id && validLayersRe.test(layer.id)) { //layer && layer.url) {
+						[saContainer, aoiContainer].forEach(function (div) {
+							var select = document.createElement("select");
+							select.classList.add("layer-select");
+							select.dataset.selectType = div === saContainer ? "service area" : "aoi";
+							var option = document.createElement("option");
+							option.disabled = true;
+							option.textContent = layer.id;
+							select.appendChild(option);
+							div.appendChild(select);
+							var layerSelect = new LayerSelect(select, layer);
+							////layerSelect.on("features-loaded", setupSelectionEvents);
+							layerSelect.on("feature-select", selectFeatures);
+						});
+					}
+				}
+
+				map.on("layer-add", addSelectsForLayer);
+			}());
 
 		}, function (err) {
 			if (console && console.error) {

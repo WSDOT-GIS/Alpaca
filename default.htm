@@ -28,6 +28,10 @@
 					{
 						name: "layerUtils",
 						location: url + "Scripts/wsdot/layerUtils"
+					},
+					{
+						name: "queryUtils",
+						location: url + "Scripts/wsdot/queryUtils"
 					}
 				]
 			};
@@ -119,7 +123,7 @@
 									<div data-dojo-type="dijit/PopupMenuItem" data-dojo-props="disabled: false">
 										<span>By Layer</span>
 										<div data-dojo-type="dijit/TooltipDialog">
-											<div>
+											<div id="saLayerSelectContainer">
 												<select id="countyServiceAreaSelect">
 													<option disabled="disabled">Select a county...</option>
 												</select>
@@ -137,7 +141,7 @@
 									<div data-dojo-type="dijit/PopupMenuItem" data-dojo-props="disabled: false">
 										<span>By Layer</span>
 										<div data-dojo-type="dijit/TooltipDialog">
-											<div>
+											<div id="aoiLayerSelectContainer">
 												<select id="countyAOISelect">
 													<option disabled="disabled">Select a county...</option>
 												</select>
