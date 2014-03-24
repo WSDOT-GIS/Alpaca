@@ -65,7 +65,7 @@ define(["dojo/number"], function (number) {
 				text: "Poverty",
 				stroke: stroke,
 				fill: "RGB(87,145,101)",
-				tooltip: ["Poverty: ", number.format(this.federalInPoverty), "(~", pctInPoverty, "%)"].join("")
+				tooltip: ["Poverty: ", number.format(this.federalTotalInPoverty), "(~", pctInPoverty, "%)"].join("")
 			}, {
 				y: this.nonPoverty,
 				text: "Non-Poverty",

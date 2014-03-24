@@ -286,6 +286,7 @@ require([
 						chart.addSeries(seriesLabel, (function () {
 							return chartDataObj.toColumnChartSeries ? chartDataObj.toColumnChartSeries(level, true) : chartDataObj.toChartSeries(level, true);
 						}()));
+						chart.moveSeriesToFront(seriesLabel);
 					} else {
 						chart.removeSeries(seriesLabel);
 					}

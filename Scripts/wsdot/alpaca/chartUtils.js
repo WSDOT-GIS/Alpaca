@@ -229,6 +229,7 @@ define([
 				vertical: true,
 				includeZero: true
 			});
+			new Tooltip(chart, "default");
 			chart.render();
 			return chart;
 		}
