@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Layer Select test</title>
+</head>
+<body>
+	<script>
+		(function () {
+			"use strict";
+			var url, re = /\/[^\/]+$/;
+
+			url = re.test(location.href) ? location.href.replace(re, "/") : location.href;
+
+			var dojoConfig = {
+				async: true,
+				packages: [
+					{
+						name: "queryUtils",
+						location: url + "../Scripts/wsdot/queryUtils"
+					},
+					{
+						name: "layerSelect",
+						location: url + "../Scripts/wsdot/alpaca",
+						main: "layerSelect"
+					}
+				]
+			};
+
+			window.dojoConfig = dojoConfig;
+		}());
+	</script>
+	<form id="theForm">
+
+	</form>
+	<script src="//js.arcgis.com/3.8compact/"></script>
+	<script src="layerSelect.js"></script>
+</body>
+</html>

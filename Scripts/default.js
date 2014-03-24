@@ -32,6 +32,7 @@ require([
 	"esri/layers/ArcGISDynamicMapServiceLayer",
 	"GtfsService/gtfs-agency-select",
 	"GtfsService/arcgis/gtfs-layer-manager",
+	"alpaca/layerSelect",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -52,12 +53,13 @@ require([
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
 	esriConfig, UserGraphicsLayers, FeatureLayer, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
-	GtfsAgencySelect, GtfsLayerManager)
+	GtfsAgencySelect, GtfsLayerManager, LayerSelect)
 {
 	"use strict";
 
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
+	esriConfig.defaults.io.corsEnabledServers.push("wsdot.wa.gov/geoservices");
 
 	if (!window.console) {
 		window.console = {};
@@ -267,6 +269,11 @@ require([
 			function updateCharts(/** {ChartData} */ chartData, /**{string}*/ level) {
 				var previousLevel, saChartData;
 
+				// Ensure that the chartData object is the correct type instead of a regular Object.
+				if (!(chartData instanceof ChartDataProvider.ChartData)) {
+					chartData = new ChartDataProvider.ChartData(chartData);
+				}
+
 				/** Either adds or removes a chart series based on the value of `level`.
 				 * @param {Chart} chart
 				 * @param {string} propertyName - The name of the property of saChartData that provides data for the chart.
@@ -291,6 +298,9 @@ require([
 					// If this is AOI level, both Service Area and AOI data needs to be displayed on the charts.
 					// Store the service area chart data in this case. Otherwise set to null.
 					saChartData = level === "aoi" ? serviceAreaLayer.graphics[0].attributes : null;
+					if (saChartData && !(saChartData instanceof ChartDataProvider.ChartData)) {
+						saChartData = new ChartDataProvider.ChartData(saChartData);
+					}
 
 					// Update the language chart with the response language data.
 					languageChart.updateSeries("Language Proficiency", chartData.language.toColumnChartSeries(level));
@@ -417,9 +427,11 @@ require([
 
 			// Add data layers
 			(function () {
+				var rtaLayer, pdbaLayer, cityLimitsLayer, mpoLayer, rtpoLayer, tribalLayer;
 				// Add the PTBA layer
-				var rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
-					id: "RTA",
+				rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
+					id: "Regional Transportation Authority (RTA)",
+					outFields: ["RTA_NAME"],
 					visible: false,
 					styling: false,
 					surfaceType: "SVG"
@@ -428,8 +440,9 @@ require([
 				map.addLayer(rtaLayer);
 
 				// Add the PTBA layer
-				var pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
-					id: "PTBA",
+				pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
+					id: "Public Transportation Benifit Areas (PTBA)",
+					outFields: ["PTBA_NAME"],
 					visible: false,
 					styling: false,
 					surfaceType: "SVG"
@@ -437,29 +450,29 @@ require([
 
 				map.addLayer(pdbaLayer);
 
-				var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
+				cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
 					id: "City Limits",
 					visible: false,
 					opacity: 0.6
 				});
 				map.addLayer(cityLimitsLayer);
 
-				var mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
-					id: "MPO",
+				mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
+					id: "Metro Planning Organization (MPO)",
 					visible: false,
 					opacity: 0.6
 
 				});
 				map.addLayer(mpoLayer);
 
-				var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
-					id: "RTPO",
+				rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
+					id: "Regional Transportation Planning Organization (RTPO)",
 					visible: false,
 					opacity: 0.6
 				});
 				map.addLayer(rtpoLayer);
 
-				var tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
+				tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
 					id: "Reservation and Trust Lands",
 					visible: false,
 					opacity: 0.6
@@ -848,14 +861,18 @@ require([
 				 */
 				function selectCountyOnMap(e) {
 					var select = e.target;
-					var type = select.dataset.selectType;
-					var fips = Number(select.value);
-					if (type === "service area") {
-						serviceAreaLayer.clear();
-						chartDataProvider.getCountyGraphic(fips);
-					} else if (type === "aoi") {
-						aoiLayer.clear();
-						chartDataProvider.getCountyGraphic(fips, getServiceAreaGeometry(), map.getScale());
+					if (!select.selectedOptions[0].disabled) {
+						var type = select.dataset.selectType;
+						var fips = Number(select.value);
+						if (type === "service area") {
+							serviceAreaLayer.clear();
+							chartDataProvider.getCountyGraphic(fips);
+						} else if (type === "aoi") {
+							aoiLayer.clear();
+							chartDataProvider.getCountyGraphic(fips, getServiceAreaGeometry(), map.getScale());
+						}
+						saSelect.selectedIndex = 0;
+						aoiSelect.selectedIndex = 0;
 					}
 				}
 
@@ -863,6 +880,68 @@ require([
 				saSelect.addEventListener("change", selectCountyOnMap);
 				aoiSelect.addEventListener("change", selectCountyOnMap);
 			});
+
+			(function () {
+				var saContainer = document.getElementById("saLayerSelectContainer"), aoiContainer = document.getElementById("aoiLayerSelectContainer");
+
+				var validLayersRe = /^(?:(?:Regional Transportation Authority \(RTA\))|(?:Public Transportation Benifit Areas \(PTBA\))|(?:City Limits)|(?:Metro Planning Organization \(MPO\))|(?:Regional Transportation Planning Organization \(RTPO\))|(?:Reservation and Trust Lands))$/i;
+
+				/**
+				 * @this {LayerSelect}
+				 */
+				function selectFeatures(/**{Graphic}*/ feature) {
+					var select, selectType;
+					/*jshint validthis:true*/
+					select = this.select;
+					/*jshint validthis:false*/
+
+					selectType = select.dataset.selectType;
+					/*jshint eqnull:true*/
+					if (feature != null) {
+						console.log("selected feature", feature);
+						if (selectType === "service area") {
+							serviceAreaLayer.clear();
+							chartDataProvider.getSelectionGraphics(feature.geometry, map.getScale(), true);
+						} else if (selectType === "aoi") {
+							aoiLayer.clear();
+							chartDataProvider.getSelectionGraphics(feature.geometry, map.getScale(), false, getServiceAreaGeometry());
+						}
+					}
+					/*jshint eqnull:false*/
+					select.selectedIndex = 0;
+				}
+
+				/**
+				 * @typedef LayerAddResponse
+				 * @property {Layer} layer
+				 * @property {Map} target
+				 */
+
+				/**
+				 * Adds layer select boxes (one for service area and one for AOI) for the added layer.
+				 * @property {LayerAddResponse} response
+				 */
+				function addSelectsForLayer(response) {
+					var layer = response.layer;
+					if (layer && layer.id && validLayersRe.test(layer.id)) { //layer && layer.url) {
+						[saContainer, aoiContainer].forEach(function (div) {
+							var select = document.createElement("select");
+							select.classList.add("layer-select");
+							select.dataset.selectType = div === saContainer ? "service area" : "aoi";
+							var option = document.createElement("option");
+							option.disabled = true;
+							option.textContent = layer.id;
+							select.appendChild(option);
+							div.appendChild(select);
+							var layerSelect = new LayerSelect(select, layer);
+							////layerSelect.on("features-loaded", setupSelectionEvents);
+							layerSelect.on("feature-select", selectFeatures);
+						});
+					}
+				}
+
+				map.on("layer-add", addSelectsForLayer);
+			}());
 
 		}, function (err) {
 			if (console && console.error) {

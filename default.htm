@@ -28,6 +28,10 @@
 					{
 						name: "layerUtils",
 						location: url + "Scripts/wsdot/layerUtils"
+					},
+					{
+						name: "queryUtils",
+						location: url + "Scripts/wsdot/queryUtils"
 					}
 				]
 			};
@@ -117,16 +121,15 @@
 								<span>Service Area</span>
 								<div data-dojo-type="dijit/DropDownMenu">
 									<div data-dojo-type="dijit/PopupMenuItem" data-dojo-props="disabled: false">
-										<span>By County</span>
+										<span>By Layer</span>
 										<div data-dojo-type="dijit/TooltipDialog">
-											<div>
+											<div id="saLayerSelectContainer">
 												<select id="countyServiceAreaSelect">
 													<option disabled="disabled">Select a county...</option>
 												</select>
 											</div>
 										</div>
 									</div>
-									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
 									<div id="drawServiceAreaButton" data-alpaca-mode="service-area" data-dojo-type="dijit/MenuItem">Draw custom</div>
 									<div id="clearServiceAreaButton" data-layer-id="serviceArea" data-dojo-type="dijit/MenuItem"
 										 data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
@@ -136,16 +139,15 @@
 								<span>Area of Interest</span>
 								<div data-dojo-type="dijit/DropDownMenu">
 									<div data-dojo-type="dijit/PopupMenuItem" data-dojo-props="disabled: false">
-										<span>By County</span>
+										<span>By Layer</span>
 										<div data-dojo-type="dijit/TooltipDialog">
-											<div>
+											<div id="aoiLayerSelectContainer">
 												<select id="countyAOISelect">
 													<option disabled="disabled">Select a county...</option>
 												</select>
 											</div>
 										</div>
 									</div>
-									<div data-dojo-type="dijit/MenuItem" data-dojo-props="disabled: true">By Layer</div>
 									<div data-dojo-type="dijit/PopupMenuItem">
 										<span>Draw custom</span>
 										<div data-dojo-type="dijit/DropDownMenu">

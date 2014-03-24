@@ -108,10 +108,6 @@ define([
 
 			self.domNode.appendChild(self.label);
 
-
-
-
-
 			// If the layer has errors, disable the radio button
 			if (opLayer.errors && opLayer.errors.length) {
 				self.radioButton.disabled = true;
@@ -200,7 +196,7 @@ define([
 		},
 		list: null,
 		/**
-		 * @param mapInfo The response of the arcgisUtils/createMap operation. See https://developers.arcgis.com/en/javascript/jshelp/intro_webmap.html
+		 * @param {Object} mapInfo The response of the arcgisUtils/createMap operation. See https://developers.arcgis.com/en/javascript/jshelp/intro_webmap.html
 		 * @param {esri/Map} mapInfo.map
 		 * @param {Object} mapInfo.itemInfo
 		 * @param {Object} mapInfo.itemInfo.itemData

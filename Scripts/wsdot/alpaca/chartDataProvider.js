@@ -366,6 +366,7 @@ define([
 						});
 
 						geometryService = getGeometryService();
+						// TODO: Skip the union operation if "geometries" only contains one geometry.
 						geometryService.union(geometries, function (geometry) {
 							graphic = new Graphic(geometry, null, totals);
 							output = new ChartDataQueryResult(type, [graphic], totals, null);

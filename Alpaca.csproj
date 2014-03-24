@@ -65,6 +65,7 @@
     <Content Include="Scripts\wsdot\alpaca\graphicsLayerList.js" />
     <Content Include="Scripts\wsdot\alpaca\languageData.js" />
     <Content Include="Scripts\wsdot\alpaca\layerChooser.js" />
+    <Content Include="Scripts\wsdot\alpaca\layerSelect.js" />
     <Content Include="Scripts\wsdot\alpaca\povertyData.js" />
     <Content Include="Scripts\wsdot\alpaca\raceData.js" />
     <Content Include="Scripts\wsdot\alpaca\UserGraphicsLayers.js" />
@@ -83,6 +84,7 @@
     </Content>
     <Content Include="packages.config" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\wsdot\queryUtils\main.js" />
     <Content Include="Style\index.css" />
     <Content Include="Style\index.min.css">
       <DependentUpon>index.css</DependentUpon>
@@ -117,6 +119,8 @@
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="proxy.ashx" />
     <Content Include="proxy.config" />
+    <Content Include="Tests\layerSelect.html" />
+    <Content Include="Tests\layerSelect.js" />
     <Content Include="web.config" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
