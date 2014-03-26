@@ -432,6 +432,7 @@ require([
 				// Add the PTBA layer
 				rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
 					id: "Regional Transportation Authority (RTA)",
+					className: "rta",
 					outFields: ["RTA_NAME"],
 					visible: false,
 					styling: false,
@@ -443,6 +444,7 @@ require([
 				// Add the PTBA layer
 				pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
 					id: "Public Transportation Benifit Areas (PTBA)",
+					className: "ptba",
 					outFields: ["PTBA_NAME"],
 					visible: false,
 					styling: false,

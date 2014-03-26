@@ -163,7 +163,7 @@ table.language-chart-legend tr:last-child > td:first-child {
 	background-color: #ff0000;
 }
 
-#PTBA_layer path {
+.ptba path {
 	stroke: #a5a505;
 	stroke-width: 1pt;
 	stroke-opacity: 1;
@@ -171,7 +171,7 @@ table.language-chart-legend tr:last-child > td:first-child {
 	fill-opacity: 0.5;
 }
 
-#RTA_layer path {
+.rta path {
 	stroke: #791919;
 	stroke-width: 1pt;
 	stroke-opacity: 1;
