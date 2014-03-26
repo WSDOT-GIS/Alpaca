@@ -880,6 +880,19 @@ require([
 				countySelect.createCountySelect(aoiSelect);
 
 				/**
+				 * Zooms to result.features[0].graphic.geometry.getExtent()
+				 * @param {ChartDataQueryResult} result
+				 */
+				function zoomToResult(result) {
+					if (result && result.features) {
+						var graphic = result.features[0];
+						if (graphic && graphic.geometry && graphic.geometry.getExtent) {
+							map.setExtent(graphic.geometry.getExtent());
+						}
+					}
+				}
+
+				/**
 				 * Adds a graphic to either the graphics layer corresponding to the changed select.
 				 * @param {Event} e
 				 */
@@ -890,10 +903,10 @@ require([
 						var fips = Number(select.value);
 						if (type === "service area") {
 							serviceAreaLayer.clear();
-							chartDataProvider.getCountyGraphic(fips);
+							chartDataProvider.getCountyGraphic(fips).then(zoomToResult);
 						} else if (type === "aoi") {
 							aoiLayer.clear();
-							chartDataProvider.getCountyGraphic(fips, getServiceAreaGeometry(), map.getScale());
+							chartDataProvider.getCountyGraphic(fips, getServiceAreaGeometry(), map.getScale()).then(zoomToResult);
 						}
 						saSelect.selectedIndex = 0;
 						aoiSelect.selectedIndex = 0;
@@ -925,7 +938,9 @@ require([
 					selectType = select.dataset.selectType;
 					/*jshint eqnull:true*/
 					if (feature != null) {
-						console.log("selected feature", feature);
+					/*jshint eqnull:false*/
+						map.setExtent(feature.geometry.getExtent());
+						
 						if (selectType === "service area") {
 							serviceAreaLayer.clear();
 							chartDataProvider.getSelectionGraphics(feature.geometry, map.getScale(), true);
@@ -934,7 +949,6 @@ require([
 							chartDataProvider.getSelectionGraphics(feature.geometry, map.getScale(), false, getServiceAreaGeometry());
 						}
 					}
-					/*jshint eqnull:false*/
 					select.selectedIndex = 0;
 				}
 
