@@ -57,10 +57,13 @@ require([
 {
 	"use strict";
 
+	// Setup configuration defaults.
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
+	// Inform the ArcGIS API about servers that we know support CORS so that it doesn't have to check each time it sends a request.
 	esriConfig.defaults.io.corsEnabledServers.push("wsdot.wa.gov/geoservices");
 
+	// Setup dummy console.* functions for browsers that lack them to prevent exceptions from occurring.
 	if (!window.console) {
 		window.console = {};
 	}
@@ -100,29 +103,32 @@ require([
 	}
 
 	/** Gets the aggregate layer from the map, removes it, and then returns that layer's URL.
-	 * @returns {string}
+	 * @param {Map} map
+	 * @returns {string} The URL of the aggregate layer (or null if no match was found).
 	 */
-	function getAggregateLayer(/**{Map}*/ map) {
+	function getAggregateLayer(map) {
 		var aggregateRe = /Aggregate/i, i, l, layerId, layer, url = null;
 
+		// Loop through all of the map layer IDs, stopping when a match is found.
 		for (i = 0, l = map.layerIds.length; i < l; i += 1) {
 			if (aggregateRe.test(map.layerIds[i])) {
 				layerId = map.layerIds[i];
 				break;
 			}
 		}
-
+		// If a match was found, store its URL and remove the layer from the map.
 		if (layerId) {
 			layer = map.getLayer(layerId);
 			url = layer.url;
 			map.removeLayer(layer);
 		}
 
+		// Return the aggregate layer URL.
 		return url;
 	}
 
 	/** Converts a string into a geometry object.
-	 * @returns {esri/geometry/Geometry}
+	 * @returns {"esri/geometry/Geometry"}
 	 */
 	function parseGeometry(/**{string}*/ s) {
 		var json;
@@ -134,12 +140,14 @@ require([
 		return jsonUtils.fromJson(json);
 	}
 
+	// When the dojo framework code is ready...
 	ready(function () {
 		var map;
 
-		/** Gets the layer ids of all basemap layers currently in the map.
-		@returns {Array} An array of layer ID strings.
-		*/
+		/** 
+		 * Gets the layer ids of all basemap layers currently in the map.
+		 * @returns {Array} An array of layer ID strings.
+		 */
 		function getBasemapLayerIds() {
 			var layerId, i, l, output = [];
 			for (i = 0, l = map.layerIds.length; i < l; i += 1) {
@@ -151,28 +159,30 @@ require([
 			return output;
 		}
 
+		// Create a map using an ArcGIS Online map ID. The map's center and zoom extent are set based on values stored in 
+		// localStorage if available; otherwise default values are used.
 		arcgisUtils.createMap("6005be3ad4d64b50b0008078b2b04ffc", "map", {
 			mapOptions: {
-				//basemap: "gray",
 				center: window.JSON && window.localStorage && window.localStorage.alpaca_mapCenter ? JSON.parse(window.localStorage.alpaca_mapCenter) : [-120.80566406246835, 47.41322033015946],
 				zoom: window.localStorage && window.localStorage.alpaca_mapZoom ? Number(window.localStorage.alpaca_mapZoom) : 7,
 				showAttribution: true,
 				logo: false
 			}
-		}).then(function (response) {
+		}).then(function (response) { // Once the map has loaded...
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
 				serviceAreaLayer, aoiLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
 				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
 
-			/** Creates the service area layer and adds it to the map.
-			 * @returns {esri/layers/GraphicsLayer}
+			/** Creates the service area graphics layer and adds it to the map.
+			 * @returns {"esri/layers/GraphicsLayer"}
 			 */
 			function createServiceAreaLayer() {
 				var renderer, symbol, layer;
 
-				/** Disables the AOI button if there are no service area graphics,
+				/** 
+				 * Disables the AOI button if there are no service area graphics,
 				 * enables it if there are S.A. graphics.
-				*/
+				 */
 				function disableOrEnableAoiButton(/**{Graphic} graphic*/) {
 					var aoiButton = registry.byId("aoiButton");
 					aoiButton.set("disabled", !layer.graphics.length);
@@ -192,8 +202,10 @@ require([
 
 				return layer;
 			}
-			/** Creates the selection layer and adds it to the map.
-			 * @returns {esri/layers/GraphicsLayer}
+
+			/** 
+			 * Creates the selection layer and adds it to the map.
+			 * @returns {"esri/layers/GraphicsLayer"}
 			 */
 			function createSelectionLayer() {
 				var renderer, symbol, layer;
@@ -221,7 +233,7 @@ require([
 					throw new TypeError("The chart parameter must be a chart or a chart title string.");
 				}
 
-				re = /\(([^)]+)\)/; // Matches (...) portion. Capture 1 is the level (e.g., "Statewide").
+				re = /\(([^)]+)\)/; // Matches "(…)" portion. Capture 1 is the level (e.g., "Statewide").
 
 				match = title.match(re);
 
@@ -246,7 +258,8 @@ require([
 				return output;
 			}
 
-			/** Updates a chart's title and executes the correct rendering function afterword.
+			/** 
+			 * Updates a chart's title and executes the correct rendering function afterword.
 			 * If the new title is different than the old one, chart.fullRender() is called,
 			 * otherwise chart.render() is called.
 			 * @param {Chart} chart
@@ -264,9 +277,12 @@ require([
 				}
 			}
 
-			/** Updates the charts in the application
-			*/
-			function updateCharts(/** {ChartData} */ chartData, /**{string}*/ level) {
+			/** 
+			 * Updates the charts in the application
+			 * @param {ChartData} chartData
+			 * @param {string} level
+			 */
+			function updateCharts(chartData, level) {
 				var previousLevel, saChartData;
 
 				// Ensure that the chartData object is the correct type instead of a regular Object.
@@ -344,11 +360,12 @@ require([
 					updateChartTitle(povertyChart, "Poverty", level);
 				}
 
+				// Add the chart data JSON string to the chart data hidden input on the print form.
 				document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(chartData);
 			}
 
 			/** Gets the geometry from the first graphic in the service area layer.
-			 * @returns {esri/geometry/Geometry|null} Returns a geometry if possible, null otherwise.
+			 * @returns {?"esri/geometry/Geometry"} Returns a geometry if possible, null otherwise.
 			 */
 			function getServiceAreaGraphic() {
 				var output = null;
@@ -361,7 +378,7 @@ require([
 			}
 
 			/** Gets the geometry from the first graphic in the service area layer.
-			 * @returns {esri/geometry/Geometry|null} Returns a geometry if possible, null otherwise.
+			 * @returns {?"esri/geometry/Geometry"} Returns a geometry if possible, null otherwise.
 			 */
 			function getServiceAreaGeometry() {
 				var output = getServiceAreaGraphic();
@@ -373,7 +390,7 @@ require([
 
 			/** Sets the service area to the selected geometry after clearing the AOI and service area grahpics layers.
 			 * Also updates the charts.
-			 * @param {(esri/geometry/Geometry|esri/Graphic)} serviceArea
+			 * @param {("esri/geometry/Geometry"|"esri/Graphic")} serviceArea
 			 */
 			function setServiceArea(serviceArea) {
 				aoiLayer.clear();
@@ -386,9 +403,11 @@ require([
 				}
 			}
 
-			/** Sets the selection to the given geometry after clearing the AOI graphics layer, then updates the charts.
+			/** 
+			 * Sets the selection to the given geometry after clearing the AOI graphics layer, then updates the charts.
+			 * @param {"esri/geometry/Geometry"} geometry
 			 */
-			function setSelection(/**{esri/geometry/Geometry}*/ geometry) {
+			function setSelection(geometry) {
 				aoiLayer.clear();
 				chartDataProvider.getSelectionGraphics(geometry, map.getScale(), false, getServiceAreaGeometry());
 			}
@@ -422,6 +441,7 @@ require([
 				domUtils.hide(document.getElementById("mapProgress"));
 			});
 
+			// Create the graphics layer list.
 			graphicsLayerList = new GraphicsLayerList(map, "graphicsLayerList", {
 				omittedLayers: /(?:serviceArea)|(?:aoi)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
 			});
@@ -500,6 +520,7 @@ require([
 
 			basemapGallery.startup();
 
+			// Set up the layer chooser.
 			try {
 				layerChooser = new LayerChooser(response, "layerToggle", {
 					omittedMapServices: /Aggregate/i
@@ -618,7 +639,7 @@ require([
 				}
 
 				/** @typedef DrawResposne
-				 * @property {esri/geometry/Geometry} geometry
+				 * @property {"esri/geometry/Geometry"} geometry
 				 */
 				
 
@@ -639,7 +660,7 @@ require([
 
 				/** Activates the draw toolbar and sets the "alpacaMode" property.
 				    The alpacaMode property is used by the drawToolbars "draw-complete" event.
-				 * @this {dijit/form/Button}
+				 * @this {"dijit/form/Button"}
 				 */
 				clickHandler = function () {
 					var fillSymbol, mode;
@@ -655,7 +676,7 @@ require([
 				};
 
 				/** Clears the graphics layer associated with the button.
-				 * @this {dijit/form/Button}
+				 * @this {"dijit/form/Button"}
 				 */
 				clearHandler = function () {
 					var layerId, saGeometry;
