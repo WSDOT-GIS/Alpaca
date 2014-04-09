@@ -900,7 +900,7 @@ require([
 				 */
 				function selectCountyOnMap(e) {
 					var select = e.target;
-					if (!select.selectedOptions[0].disabled) {
+					if (!select.options[select.selectedIndex].disabled) {
 						var type = select.getAttribute("data-select-type"); //select.dataset.selectType;
 						var fips = Number(select.value);
 						if (type === "service area") {
@@ -977,7 +977,11 @@ require([
 						[saContainer, aoiContainer].forEach(function (div) {
 							var select = document.createElement("select");
 							select.disabled = true;
-							select.classList.add("layer-select");
+							if (select.classList) {
+								select.classList.add("layer-select");
+							} else {
+								select.setAttribute("class", "layer-select");
+							}
 							////select.dataset.selectType = div === saContainer ? "service area" : "aoi";
 							select.setAttribute("data-select-type", div === saContainer ? "service area" : "aoi");
 							var option = document.createElement("option");
