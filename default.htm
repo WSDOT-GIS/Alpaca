@@ -7,6 +7,16 @@
 	<link rel="stylesheet" href="//js.arcgis.com/3.8/js/esri/css/esri.css" />
 	<link href="//js.arcgis.com/3.8/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet" />
 	<link href="Style/index.min.css" rel="stylesheet" />
+	<script>
+		// Check for features that may not be supported in older browsers.
+		(function () {
+			var supported = !!Array.prototype.map && !!document.createElement("div").classList;
+			if (!supported) {
+				alert("This application relies on features that are not supported by your browser. Please upgrade to the latest version of your browser.");
+				navigate("http://www.wsdot.wa.gov/Transit/Grants/ALPACAtool.htm");
+			}
+		}())
+	</script>
 
 	<script>
 		(function() {

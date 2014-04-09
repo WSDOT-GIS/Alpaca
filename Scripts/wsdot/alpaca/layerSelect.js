@@ -136,6 +136,9 @@ define([
 				function populateSelect(result) {
 					self.featureSet = result.featureSet;
 					var frag = document.createDocumentFragment();
+
+					// TODO: Check for error. The error property will have a value, featureSet will not.
+
 					// Sort features by name.
 					self.featureSet.features.sort(function (featureA, featureB) {
 						var nameA = getName(featureA.attributes), nameB = getName(featureB.attributes);
