@@ -871,9 +871,11 @@ require([
 			require(["alpaca/countySelect"], function(countySelect) {
 				var saSelect, aoiSelect;
 				saSelect = document.getElementById("countyServiceAreaSelect");
-				saSelect.dataset.selectType = "service area";
+				////saSelect.dataset.selectType = "service area";
+				saSelect.setAttribute("data-select-type", "service area");
 				aoiSelect = document.getElementById("countyAOISelect");
-				aoiSelect.dataset.selectType = "aoi";
+				////aoiSelect.dataset.selectType = "aoi";
+				aoiSelect.setAttribute("data-select-type", "aoi");
 				
 				// Populate the select boxes with county data.
 				countySelect.createCountySelect(saSelect);
@@ -899,7 +901,7 @@ require([
 				function selectCountyOnMap(e) {
 					var select = e.target;
 					if (!select.selectedOptions[0].disabled) {
-						var type = select.dataset.selectType;
+						var type = select.getAttribute("data-select-type"); //select.dataset.selectType;
 						var fips = Number(select.value);
 						if (type === "service area") {
 							serviceAreaLayer.clear();
@@ -935,7 +937,7 @@ require([
 					select = this.select;
 					/*jshint validthis:false*/
 
-					selectType = select.dataset.selectType;
+					selectType = select.getAttribute("data-select-type"); //select.dataset.selectType;
 					/*jshint eqnull:true*/
 					if (feature != null) {
 					/*jshint eqnull:false*/
@@ -976,7 +978,8 @@ require([
 							var select = document.createElement("select");
 							select.disabled = true;
 							select.classList.add("layer-select");
-							select.dataset.selectType = div === saContainer ? "service area" : "aoi";
+							////select.dataset.selectType = div === saContainer ? "service area" : "aoi";
+							select.setAttribute("data-select-type", div === saContainer ? "service area" : "aoi");
 							var option = document.createElement("option");
 							option.disabled = true;
 							option.textContent = [layer.id, "…"].join("");

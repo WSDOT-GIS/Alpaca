@@ -115,13 +115,16 @@ require([
 	 * @constructor
 	 */
 	function Parameters(dataset) {
+		var layerInfo;
+
 		this.extent = dataset.extent ? new Extent(JSON.parse(dataset.extent)) : null;
 		this.aoiGraphics = dataset.aoiGraphics ? JSON.parse(dataset.aoiGraphics) : null;
 		this.aoiRenderer = dataset.aoiRenderer ? new SimpleRenderer(JSON.parse(dataset.aoiRenderer)) : null;
 		this.saGraphics = dataset.saGraphics ? JSON.parse(dataset.saGraphics) : null;
 		this.saRenderer = dataset.saRenderer ? new SimpleRenderer(JSON.parse(dataset.saRenderer)) : null;
 		this.chart = dataset.chart ? JSON.parse(dataset.chart, chartReviver) : null;
-		var layerInfo = dataset.censusLayer ? (JSON.parse(dataset.censusLayer)) : null;
+		layerInfo = dataset.censusLayer ? (JSON.parse(dataset.censusLayer)) : null;
+
 		if (layerInfo) {
 			var imageParameters = new ImageParameters();
 			imageParameters.layerIds = layerInfo.visibleLayers;
@@ -134,7 +137,20 @@ require([
 		}
 	}
 
-	qsParameters = new Parameters(document.getElementById("data").dataset);
+	var dataElement = document.getElementById("data");
+	
+	// Either store the dataset element, or (if not supported by the browser) create a similar object.
+	var dataset = dataElement.dataset || {
+		extent: dataElement.getAttribute("data-extent") || null,
+		aoiGraphics: dataElement.getAttribute("data-aoi-graphics") || null,
+		aoiRenderer: dataElement.getAttribute("data-aoi-renderer") || null,
+		saGraphics: dataElement.getAttribute("data-sa-graphics") || null,
+		saRenderer: dataElement.getAttribute("data-sa-renderer") || null,
+		chart: dataElement.getAttribute("data-chart") || null,
+		layerInfo: dataElement.getAttribute("census-layer") || null
+	};
+
+	qsParameters = new Parameters(dataset);
 
 	map = new Map("map", {
 		basemap: "gray",

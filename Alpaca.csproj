@@ -50,8 +50,6 @@
     <Content Include="LICENSE.txt" />
     <Content Include="Print.aspx" />
     <Content Include="Scripts\default.js" />
-    <Content Include="Scripts\html5_dataset.js" />
-    <Content Include="Scripts\modernizr.custom.js" />
     <Content Include="Scripts\Print.js" />
     <Content Include="Scripts\wsdot\alpaca\ageData.js" />
     <Content Include="Scripts\wsdot\alpaca\ageData.min.js">
