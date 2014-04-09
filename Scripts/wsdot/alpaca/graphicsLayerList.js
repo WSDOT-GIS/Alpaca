@@ -222,7 +222,7 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 			this.domNode.appendChild(frag);
 
 			/**
-			 * @param evt
+			 * @param {Event} evt
 			 * @param {esri/layers/Layer} evt.layer The removed layer.
 			 * @this {esri/Map}
 			 */
@@ -234,7 +234,7 @@ define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 			});
 
 			/**
-			 * @param evt
+			 * @param {Event} evt
 			 * @param {esri/layers/Layer} evt.layer The layer that was added to the Map
 			 * @param {(Error|null)} evt.error An optional parameter. The value of this parameter will a standard JavaScript Error object if an error occurred or null if the layer was added successfully.
 			 * @this {esri/Map}

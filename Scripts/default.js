@@ -827,22 +827,37 @@ require([
 					}
 				}
 
-				var agencySelect = GtfsAgencySelect.createGtfsAgencySelect(document.getElementById("gtfsAgencySelect"));
-				var gtfsLayerManager = new GtfsLayerManager();
+				// Only enable GTFS if the CustomEvent constructor is available.
+				// Otherwise show an error message.
+				if (typeof CustomEvent === 'function') {
+					(function () {
+						var agencySelect = GtfsAgencySelect.createGtfsAgencySelect(document.getElementById("gtfsAgencySelect"));
 
-				agencySelect.addEventListener("gtfsreturned", function (e) {
-					var layers = gtfsLayerManager.getGtfsLayers(e.detail.agencyId, e.detail.gtfs);
-					map.addLayer(layers.shapesLayer);
-					map.addLayer(layers.stopsLayer);
-					dialog.hide();
-				});
+						var gtfsLayerManager = new GtfsLayerManager();
 
-				agencySelect.addEventListener("gtfserror", function (e) {
-					alert(e.detail.error);
-				});
-				if (input.addEventListener) {
+						agencySelect.addEventListener("gtfsreturned", function (e) {
+							var layers = gtfsLayerManager.getGtfsLayers(e.detail.agencyId, e.detail.gtfs);
+							map.addLayer(layers.shapesLayer);
+							map.addLayer(layers.stopsLayer);
+							dialog.hide();
+						});
 
-					input.addEventListener("change", handleFileSelect, false);
+						agencySelect.addEventListener("gtfserror", function (e) {
+							alert(e.detail.error);
+						});
+						if (input.addEventListener) {
+
+							input.addEventListener("change", handleFileSelect, false);
+						}
+					}());
+				} else {
+					(function () {
+						var agencySelect = document.getElementById("gtfsAgencySelect");
+						var parent = agencySelect.parentElement;
+						var newNode = document.createElement("p");
+						newNode.textContent = "This feature is not supported in this browser.";
+						parent.replaceChild(newNode, agencySelect);
+					}());
 				}
 
 				menuItem.on("click", function () {

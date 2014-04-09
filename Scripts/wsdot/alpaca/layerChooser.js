@@ -143,8 +143,6 @@ define([
 
 				controlsDiv.appendChild(self.opacitySlider.domNode);
 
-
-
 				if (options.includeSublayers) {
 					self.sublayerList = new SublayerList(opLayer.layerObject);
 					controlsDiv.appendChild(self.sublayerList.domNode);
