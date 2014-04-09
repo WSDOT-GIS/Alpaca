@@ -53,13 +53,21 @@ define([
 				feature = self.getSelectedFeature();
 
 				self.emit("feature-select", feature);
-				event = new CustomEvent("featureselect", {
-					detail: {
-						feature: feature
+				if (CustomEvent) {
+					try {
+						event = new CustomEvent("featureselect", {
+							detail: {
+								feature: feature
+							}
+						});
+						self.select.dispatchEvent(event);
+					} catch (e) {
+						if (!(e instanceof TypeError)) {
+							throw e;
+						}
 					}
-				});
 
-				self.select.dispatchEvent(event);
+				}
 			}
 
 			var featureLayerUrlRe = /https?\:\/\/.+\/MapServer\/\d+\/?/i;
@@ -86,7 +94,7 @@ define([
 				// Store layer (may not actually be necessary for this layer type).
 				this.layer = layer;
 				// Create a query task for the first child layer.
-				this.queryTask = new QueryTask([layer.url.trimRight("/"), layerId || "0"].join("/"));
+				this.queryTask = new QueryTask([layer.url.replace(/\/$/, ""), layerId || "0"].join("/"));
 			} else if (typeof layer === "string") {
 				if (featureLayerUrlRe.test(layer)) {
 					this.queryTask = new QueryTask(layer);
@@ -146,19 +154,28 @@ define([
 
 					var event;
 
-					// Fire custom (standard HTML element) event for the select element.
-					if (window.CustomEvent) {
-						event = new CustomEvent("featuresloaded", {
-							detail: {
-								result: result
-							}
-						});
-						self.select.dispatchEvent(event);
-					}
 					// Fire the dojo/Evented event.
 					self.emit("features-loaded", result);
 
 					self.select.addEventListener("change", emitChangeEvent);
+
+					// Fire custom (standard HTML element) event for the select element.
+					if (window.CustomEvent) {
+						try {
+							event = new CustomEvent("featuresloaded", {
+								detail: {
+									result: result
+								}
+							});
+						} catch (e) {
+							if (!(e instanceof TypeError)) {
+								throw e;
+							}
+						}
+						if (event) {
+							self.select.dispatchEvent(event);
+						}
+					}
 				}
 
 				// Query all features. Populate the select element with corresponding options.
