@@ -4,8 +4,10 @@
 	<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>ALPACA - Application for Local Planning and Community Accessibility</title>
-	<link rel="stylesheet" href="//js.arcgis.com/3.8/js/esri/css/esri.css" />
-	<link href="//js.arcgis.com/3.8/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet" />
+	<link rel="dns-prefetch" href="//js.arcgis.com" />
+	<link href="//cdn-geoweb.s3.amazonaws.com" rel="dns-prefetch" />
+	<link rel="stylesheet" href="//js.arcgis.com/3.9/js/esri/css/esri.css" />
+	<link href="//js.arcgis.com/3.9/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet" />
 	<link href="Style/index.min.css" rel="stylesheet" />
 	<script>
 		// Check for features that may not be supported in older browsers.
@@ -34,7 +36,7 @@
 	</script>
 
 	<script>
-		(function() {
+		(function () {
 			"use strict";
 			var url, re = /\/[^\/]+$/;
 
@@ -66,7 +68,7 @@
 			window.dojoConfig = dojoConfig;
 		}());
 	</script>
-	<script src="//js.arcgis.com/3.8/"></script>
+	<script src="//js.arcgis.com/3.9/"></script>
 	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.2/terraformer.min.js"></script>
 	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.1/terraformer-arcgis-parser.min.js"></script>
 	<script src="Scripts/default.js"></script>
