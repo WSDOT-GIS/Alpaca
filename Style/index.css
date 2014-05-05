@@ -9,6 +9,10 @@ html, body {
 	overflow: hidden;
 }
 
+.landing-page-link {
+	text-decoration: none;
+}
+
 #wsdotLogo {
 	vertical-align: central;
 	padding-right: 0.5em;
