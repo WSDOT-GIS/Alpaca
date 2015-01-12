@@ -47,7 +47,6 @@
     <Content Include="GTFS-Service\GtfsService\Scripts\gtfs-agency-select.js" />
     <Content Include="GTFS-Service\GtfsService\Scripts\gtfs.js" />
     <Content Include="Images\WsdotBasemapThumbnail.jpg" />
-    <Content Include="LICENSE.txt" />
     <Content Include="Print.aspx" />
     <Content Include="Scripts\default.js" />
     <Content Include="Scripts\Print.js" />
@@ -112,7 +111,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="README.md" />
     <Content Include="map.txt" />
     <None Include="Properties\PublishProfiles\Production.pubxml" />
     <None Include="Properties\PublishProfiles\QA.pubxml" />
