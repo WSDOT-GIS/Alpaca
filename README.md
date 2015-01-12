@@ -11,10 +11,6 @@ If you have already cloned the repository without the `--recurse-submodules` opt
 
 	git submodule update --init --recursive
 
-## License ##
-Licensed under [The MIT License]. See the `LICENSE.txt` file for details.
-
-[The MIT License]:http://choosealicense.com/licenses/mit/
 [GTFS.NET]:https://github.com/WSDOT-GIS/GTFS.NET
 [GTFS-Service]:https://github.com/WSDOT-GIS/GTFS-Service/
 [submodule]:http://git-scm.com/book/en/Git-Tools-Submodules
