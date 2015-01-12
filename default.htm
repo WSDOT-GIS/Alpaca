@@ -6,9 +6,34 @@
 	<title>ALPACA - Application for Local Planning and Community Accessibility</title>
 	<link rel="dns-prefetch" href="//js.arcgis.com" />
 	<link href="//cdn-geoweb.s3.amazonaws.com" rel="dns-prefetch" />
-	<link rel="stylesheet" href="//js.arcgis.com/3.9/js/esri/css/esri.css" />
-	<link href="//js.arcgis.com/3.9/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet" />
+	<link rel="stylesheet" href="//js.arcgis.com/3.12/esri/css/esri.css" />
+	<link href="//js.arcgis.com/3.12/dijit/themes/claro/claro.css" rel="stylesheet" />
 	<link href="Style/index.min.css" rel="stylesheet" />
+	<script type="text/javascript">
+	// Setup Google Analytics, but not if user has specified that they don't want to be tracked.
+	(function (dnt) {
+		if (dnt !== "yes" && dnt !== "1") {
+			(function (i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+					(i[r].q = i[r].q || []).push(arguments)
+				}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+			})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+			ga('create', {
+				trackingId: 'UA-970887-21',
+				cookieDomain: "www.wsdot.wa.gov"
+			});
+			ga(function (tracker) {
+				tracker.set("appName", "ALPACA");
+				tracker.send('pageview');
+				// Set a global variable containing the Google Analytics tracker.
+				window.gaTracker = tracker;
+			});
+		}
+	}(navigator.doNotTrack || navigator.msDoNotTrack || null));
+
+	</script>
 	<script>
 		// Check for features that may not be supported in older browsers.
 		(function () {
@@ -68,35 +93,11 @@
 			window.dojoConfig = dojoConfig;
 		}());
 	</script>
-	<script src="//js.arcgis.com/3.9/"></script>
-	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.2/terraformer.min.js"></script>
-	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.1/terraformer-arcgis-parser.min.js"></script>
+	<script src="//js.arcgis.com/3.12/init.js"></script>
+	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.4/terraformer.min.js"></script>
+	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.4/terraformer-arcgis-parser.min.js"></script>
 	<script src="Scripts/default.js"></script>
-	<script type="text/javascript">
-		// Setup Google Analytics, but not if user has specified that they don't want to be tracked.
-		(function (dnt) {
-			if (dnt !== "yes" && dnt !== "1") {
-				(function (i, s, o, g, r, a, m) {
-					i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-						(i[r].q = i[r].q || []).push(arguments)
-					}, i[r].l = 1 * new Date(); a = s.createElement(o),
-					m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-				})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-				ga('create', {
-					trackingId: 'UA-970887-21',
-					cookieDomain: "www.wsdot.wa.gov"
-				});
-				ga(function (tracker) {
-					tracker.set("appName", "ALPACA");
-					tracker.send('pageview');
-					// Set a global variable containing the Google Analytics tracker.
-					window.gaTracker = tracker;
-				});
-			}
-		}(navigator.doNotTrack || navigator.msDoNotTrack || null));
-
-	</script>
 </head>
 <body class="claro">
 	<div id="outerBorderContainer" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false">
