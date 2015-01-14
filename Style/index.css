@@ -1,5 +1,5 @@
 ﻿body {
-	font-family: Futura, "Gill Sans", "Century Gothic", "Dejavu Sans", "Trebuchet MS", sans-serif;
+	font-family: Arial, Arial, Helvetica, sans-serif;
 }
 
 html, body {
@@ -87,7 +87,6 @@ html, body {
 .esriAttribution {
 	background-color: rgba(255, 255, 255, 0.5);
 	padding: 0.5em;
-	-webkit-border-radius: 5px;
 	border-radius: 5px; 
 }
 
@@ -148,7 +147,7 @@ ul.data-layer-list {
 	display: table-row;
 }
 
-.data-layer-list > li > * {
+.data-layer-list > li > input, .data-layer-list > li > label {
 	display: table-cell;
 }
 
