@@ -58,10 +58,11 @@ require([
 	"use strict";
 
 	// Setup configuration defaults.
-	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
+	////esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
 	// Inform the ArcGIS API about servers that we know support CORS so that it doesn't have to check each time it sends a request.
-	esriConfig.defaults.io.corsEnabledServers.push("wsdot.wa.gov/geoservices");
+	esriConfig.defaults.io.corsEnabledServers.push("www.wsdot.wa.gov");
+	////esriConfig.defaults.io.corsEnabledServers.push("webgis.dor.wa.gov");
 
 	// Setup dummy console.* functions for browsers that lack them to prevent exceptions from occurring.
 	if (!window.console) {
