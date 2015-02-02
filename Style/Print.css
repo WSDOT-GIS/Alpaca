@@ -1,9 +1,11 @@
 ﻿body {
-	font-family: Futura, "Gill Sans", "Century Gothic", "Dejavu Sans", "Trebuchet MS", sans-serif;
+	font-family: Futura, "Century Gothic", "Dejavu Sans", "Trebuchet MS", sans-serif;
+	font-size: 8pt;
 }
 
 html, body {
-	height: 100%;
+	width: 8.5in;
+	height: 11in;
 	padding: 0;
 	margin: 0;
 }
@@ -19,7 +21,7 @@ html, body {
 }
 
 table {
-	float: left;
+	display: inline-table;
 	margin-left: 1.5em;
 	margin-right: 1.5em;
 	margin-top: 1em;
