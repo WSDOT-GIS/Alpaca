@@ -19,12 +19,12 @@ define(["dojo/number"], function (number) {
 	}
 
 	DisabilityData.labels = {
-		hearingDisabled: "hearingDisabled",
-		visualDisabled: "visualDisabled",
-		cognitiveDisabled: "cognitiveDisabled",
-		ambulitoryDisabled: "ambulitoryDisabled",
-		selfCareDisabled: "selfCareDisabled",
-		independentLivingDisabled: "independentLivingDisabled"
+		hearingDisabled: "Hearing Disabled",
+		visualDisabled: "Visual Disabled",
+		cognitiveDisabled: "Cognitive Disabled",
+		ambulitoryDisabled: "Ambulatory Disabled",
+		selfCareDisabled: "Self Care Disabled",
+		independentLivingDisabled: "Independent Living Disabled"
 	};
 
 	/**
@@ -41,38 +41,37 @@ define(["dojo/number"], function (number) {
 	};
 
 	/** Creates objects used to populate a column chart.
-	 * @param {string} level - "statewide", "service area", or "aoi". Used to determine bar chart outline color.
-	 * @param {bool} background - Set to true if the chart series will be behind another chart, false otherwise. If true the chart fill color will be less saturated than it would be otherwise.
-	 * @returns {ChartSeries[]}
+	 * @returns {Object[]}
 	 */
-	DisabilityData.prototype.toColumnChartSeries = function (level, background) {
-		var category, output = [], item, label, percent, total, categoryCount, aoiRe = /aoi/i, normalFill, thresholdFill;
-		thresholdFill = "#FF0000";
-		normalFill = "#FFBEBE";
+	DisabilityData.prototype.toColumnChartSeries = function (level, isBackground) {
+		var disability, item, output = [], total, label;
 
-		total = this.getTotal();
-		for (category in DisabilityData.labels) {
-			if (DisabilityData.labels.hasOwnProperty(category)) {
-				label = DisabilityData.labels[category];
-				categoryCount = this[category];
-				percent = Math.round((categoryCount / total) * 10000) / 100;
+		total = this.getTotalDisabled();
+
+		var strokeColor = "black";
+		var strokeWidth = 1;
+		if (level === "aoi") {
+			strokeColor = isBackground ? "blue" : "green";
+			strokeWidth = 3;
+		}
+
+		for (disability in DisabilityData.labels) {
+			if (DisabilityData.labels.hasOwnProperty(disability)) {
+				label = DisabilityData.labels[disability];
 				item = {
-					y: categoryCount,
+					y: this[disability],
 					text: label,
-					// If the level is "AOI", set stroke color to blue if background is true, green if false.
-					// If level is not "AOI", set stroke color to black.
+					fill: "RGB(240,118,5)",
+					tooltip: [label, ": ", number.format(this[disability]), " (~", Math.round((this[disability] / total) * 10000) / 100, "%)"].join(""),
 					stroke: {
-						color: aoiRe.test(level) ? (background ? "blue" : "green") : "black",
-						width: aoiRe.test(level) ? 3 : 1
-					},
-					// Set the fill depending if the threshold has been met and if background is true.
-					fill: this.thresholdMet(category) ? thresholdFill : normalFill,
-					// Set the tooltip to display the category, number of speakers, and the percentage of those speakers vs. total.
-					tooltip: [label, ": ", number.format(categoryCount), "(~", percent, "%)"].join("")
+						color: strokeColor,
+						width: strokeWidth
+					}
 				};
 				output.push(item);
 			}
 		}
+
 		return output;
 	};
 
@@ -82,7 +81,7 @@ define(["dojo/number"], function (number) {
 	DisabilityData.prototype.toHtmlTable = function () {
 		var self = this, table, tbody, total, propertyName;
 
-		total = this.getTotal();
+		total = this.getTotalDisabled();
 
 		table = document.createElement("table");
 		table.createCaption().textContent = "Disability";
@@ -100,9 +99,9 @@ define(["dojo/number"], function (number) {
 			percent = (value / total) * 100;
 
 			tr = document.createElement("tr");
-			if (self.thresholdMet(propertyName)) {
-				tr.classList.add("threshold-met");
-			}
+			////if (self.thresholdMet(propertyName)) {
+			////	tr.classList.add("threshold-met");
+			////}
 
 			td = document.createElement("td");
 			td.textContent = label;

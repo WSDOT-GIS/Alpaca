@@ -170,7 +170,7 @@ require([
 			}
 		}).then(function (response) { // Once the map has loaded...
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
-				serviceAreaLayer, aoiLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
+				serviceAreaLayer, aoiLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart, disabilityChart,
 				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
 
 			/** Creates the service area graphics layer and adds it to the map.
@@ -359,6 +359,16 @@ require([
 					setSecondSeries(povertyChart, "poverty", "SA Poverty");
 					updateChartTitle(povertyChart, "Poverty", level);
 				}
+
+				if (!disabilityChart) {
+					disabilityChart = chartUtils.createDisabilityChart(chartData.disability, level);
+				} else {
+					disabilityChart.updateSeries("Disability", chartData.disability.toColumnChartSeries(level));
+					setSecondSeries(disabilityChart, "disability", "SA Disability");
+					updateChartTitle(disabilityChart, "Disability", level);
+				}
+
+
 
 				// Add the chart data JSON string to the chart data hidden input on the print form.
 				document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(chartData);

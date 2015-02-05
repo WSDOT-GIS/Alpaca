@@ -232,6 +232,49 @@ define([
 			new Tooltip(chart, "default");
 			chart.render();
 			return chart;
+		},
+
+		/** Creates the disability chart
+		 * @param {DisabilityData} disabilityData
+		 * @param {string} [chartLevel="Statewide"]
+		 * @returns {dojo/charting/Chart}
+		 */
+		createDisabilityChart: function (/**{DisabilityData}*/ disabilityData, chartLevel) {
+			var chart;
+			chartLevel = chartLevel || "Statewide";
+			chart = new Chart("disabilityChart", {
+				title: "Disability (" + chartLevel + ")",
+				titlePos: "top",
+				titleGap: 5
+			});
+			chart.addPlot("default", {
+				type: ClusteredColumns,
+				gap: 5
+			}).addSeries("Disability", disabilityData.toColumnChartSeries());
+			chart.addAxis("x", {
+				labels: [
+					{ value: 1, text: "Hearing" },
+					{ value: 2, text: "Visual" },
+					{ value: 3, text: "Cognitive" },
+					{ value: 4, text: "Ambulatory" },
+					{ value: 5, text: "Self Care" },
+					{ value: 6, text: "Ind. Living" }
+
+				],
+				dropLabels: false,
+				minorLabels: false,
+				titleOrientation: "away",
+				majorTickStep: 1,
+				minorTickStep: 0.5,
+				microTickStep: 0.25
+			});
+			chart.addAxis("y", {
+				vertical: true,
+				includeZero: true
+			});
+			new Tooltip(chart, "default");
+			chart.render();
+			return chart;
 		}
 	};
 });
