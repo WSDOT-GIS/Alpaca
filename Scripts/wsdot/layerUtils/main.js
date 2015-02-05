@@ -14,12 +14,14 @@ define(["esri/symbols/SimpleMarkerSymbol",
 	*/
 	function getRandomInt(/**{number}*/ min, /**{number}*/ max) {
 		/*jslint eqeq:true*/
+		/*jshint eqnull:true*/
 		if (min == null) {
 			min = 0;
 		}
 		if (max == null) {
 			max = 0xffffff;
 		}
+		/*jshint eqnull:false*/
 		/*jslint eqeq:false*/
 
 		return Math.floor(Math.random() * (max - min + 1) + min);
