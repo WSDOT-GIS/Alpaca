@@ -154,7 +154,8 @@ require([
 
 	map = new Map("map", {
 		basemap: "gray",
-		extent: new Extent(qsParameters.extent)
+		extent: new Extent(qsParameters.extent),
+		logo: false
 	});
 
 	map.on("load", function () {
