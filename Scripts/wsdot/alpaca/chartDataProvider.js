@@ -301,7 +301,7 @@ define([
 			 */
 			function performAggregateQuery() {
 				var query, queryTask;
-				queryTask = self.getQueryTaskForScale(scale);
+				queryTask = self.queryTasks.county; //self.getQueryTaskForScale(scale);
 				query = new Query();
 
 				type = "statewide";

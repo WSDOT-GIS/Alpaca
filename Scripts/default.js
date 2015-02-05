@@ -59,7 +59,7 @@ require([
 
 	// Setup configuration defaults.
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
-	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
+	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geoservices/ArcGIS/rest/services/Geometry/GeometryServer");
 	// Inform the ArcGIS API about servers that we know support CORS so that it doesn't have to check each time it sends a request.
 	esriConfig.defaults.io.corsEnabledServers.push("www.wsdot.wa.gov");
 
