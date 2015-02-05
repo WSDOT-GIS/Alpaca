@@ -14,17 +14,18 @@ define([
 	"./ageData",
 	"./veteranData",
 	"./povertyData",
+	"./disabilityData",
 	"./utils",
-	"dojo/text!alpaca/aggregate_fields.txt"
+	"dojo/text!alpaca/aggregate_fields.json"
 ], function (
 	declare, Deferred, Evented, esriConfig, Graphic, Query, QueryTask, StatisticDefinition,
-	RaceData, LanguageData, AgeData, VeteranData, PovertyData, utils, fields)
+	RaceData, LanguageData, AgeData, VeteranData, PovertyData, DisabilityData, utils, fields)
 {
 	/** Provides classes for updating charts.
 	 * @exports wsdot/alpaca/chartDataProvider
 	 */
 	"use strict";
-	var ChartDataProvider, marginOfErrorRe, raceFieldRe, popFieldRe, povFieldRe, langFieldRe, numberTypesRe;
+	var ChartDataProvider, marginOfErrorRe, raceFieldRe, popFieldRe, povFieldRe, langFieldRe, disabilityFieldRe, numberTypesRe;
 
 	// These regular expressions detect the charts
 	marginOfErrorRe = /^ME/;
@@ -33,6 +34,7 @@ define([
 	// vetFieldRe = /^[MF](Age[0-9]{1,2})?([a-z]+)?[0-9]+(?:Non)?Vet$/i;
 	povFieldRe = /^((?:Total_POV)|(?:Poverty_(?:Fed)|(?:State))|(?:PctPoverty)|(?:Income))$/i;
 	raceFieldRe = /^(?:(?:(?:Not)?White)|(?:AfricanAmerican_Black)|(?:AmericanIndian_AlaskaNative)|(?:AsianAlone)|(?:NativeHawaiian_PacificIsl)|(?:SomeOtherRace)|(?:TwoOrMoreRaces))$/i;
+	disabilityFieldRe = /^(?:(?:Total_DIS)|(?:\w+Disabled))$/i;
 	numberTypesRe = /(?:Integer)|(?:Double})/i;
 
 	/** Represents a field.
@@ -89,6 +91,8 @@ define([
 		/**@member {Field[]}*/
 		this.race = [];
 		/**@member {Field[]}*/
+		this.disability = [];
+		/**@member {Field[]}*/
 		this.other = [];
 
 		for (i = 0, l = fields.length; i < l; i += 1) {
@@ -104,6 +108,8 @@ define([
 					this.poverty.push(field);
 				} else if (raceFieldRe.test(field.name)) {
 					this.race.push(field);
+				} else if (disabilityFieldRe.test(field.name)) {
+					this.disability.push(field);
 				} else {
 					this.other.push(field);
 				}
@@ -128,6 +134,7 @@ define([
 		output = output.concat(this.veteran.map(toSD));
 		output = output.concat(this.poverty.map(toSD));
 		output = output.concat(this.race.map(toSD));
+		output = output.concat(this.disability.map(toSD));
 
 		return output;
 	};
@@ -147,6 +154,7 @@ define([
 		output = output.concat(this.veteran.map(getName));
 		output = output.concat(this.poverty.map(getName));
 		output = output.concat(this.race.map(getName));
+		output = output.concat(this.disability.map(getName));
 
 		return output;
 	};
@@ -161,6 +169,7 @@ define([
 	 * @member {AgeData} age
 	 * @member {VeteranData} veteran
 	 * @member {PovertyData} poverty
+	 * @member {DisabilityData} disability
 	 * @constructor
 	 */
 	function ChartData(/**{(Object|ChartData)}*/ queryResults) {
@@ -174,6 +183,8 @@ define([
 		this.veteran = queryResults.veteran ? new VeteranData(queryResults.veteran) : new VeteranData(queryResults);
 
 		this.poverty = queryResults.poverty ? new PovertyData(queryResults.poverty) : new PovertyData(queryResults);
+
+		this.disability = queryResults.disability ? new DisabilityData(queryResults.disability) : new DisabilityData(queryResults);
 	}
 
 	/** 

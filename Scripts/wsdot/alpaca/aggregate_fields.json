@@ -960,15 +960,57 @@
         "domain": null
     },
     {
-        "name": "SHAPE.STArea()",
-        "type": "esriFieldTypeDouble",
-        "alias": "SHAPE.STArea()",
+        "name": "Total_DIS",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Population (Disability)",
         "domain": null
     },
     {
-        "name": "SHAPE.STLength()",
+        "name": "TotalDisabled",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Disabled",
+        "domain": null
+    },
+    {
+        "name": "PercentDisabled",
         "type": "esriFieldTypeDouble",
-        "alias": "SHAPE.STLength()",
+        "alias": "Percent Disabled",
+        "domain": null
+    },
+    {
+        "name": "TotalHearingDisabled",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Hearing Disabled",
+        "domain": null
+    },
+    {
+        "name": "TotalVisualDisabled",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Visual Disabled",
+        "domain": null
+    },
+    {
+        "name": "TotalCognitiveDisabled",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Cognitive Disabled",
+        "domain": null
+    },
+    {
+        "name": "TotalAmbulatoryDisabled",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Ambulatory Disabled",
+        "domain": null
+    },
+    {
+        "name": "TotalSelfCareDisabled",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Self Care Disabled",
+        "domain": null
+    },
+    {
+        "name": "TotalIndependentLivingDisabled",
+        "type": "esriFieldTypeInteger",
+        "alias": "Total Independent Living Disabled",
         "domain": null
     }
 ]
