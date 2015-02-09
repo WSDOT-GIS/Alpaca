@@ -73,6 +73,14 @@ html, body {
 	z-index: 1;
 }
 
+#homebutton {
+	position: absolute;
+	top: 95px;
+	left: 20px;
+	z-index: 50;
+}
+
+
 .toolbar {
 	position: absolute;
 	top: 0;

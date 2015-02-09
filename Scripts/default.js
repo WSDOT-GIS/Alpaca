@@ -33,6 +33,8 @@ require([
 	"GtfsService/gtfs-agency-select",
 	"GtfsService/arcgis/gtfs-layer-manager",
 	"alpaca/layerSelect",
+	"esri/geometry/Extent",
+	"esri/dijit/HomeButton",
 
 	"dijit/Dialog",
 	"dojox/charting/axis2d/Default",
@@ -53,7 +55,7 @@ require([
 	GeometryService, InfoTemplate,
 	jsonUtils, chartUtils, csvArcGis, LayerUtils,
 	esriConfig, UserGraphicsLayers, FeatureLayer, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
-	GtfsAgencySelect, GtfsLayerManager, LayerSelect)
+	GtfsAgencySelect, GtfsLayerManager, LayerSelect, Extent, HomeButton)
 {
 	"use strict";
 
@@ -451,10 +453,20 @@ require([
 				domUtils.hide(document.getElementById("mapProgress"));
 			});
 
-			// Create the graphics layer list.
-			graphicsLayerList = new GraphicsLayerList(map, "graphicsLayerList", {
-				omittedLayers: /(?:serviceArea)|(?:aoi)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
-			});
+			/**
+			 * Create the Home button using the extent from the AGOL map definition.
+			 */
+			(function (extCoords) {
+				HomeButton({
+					map: map,
+					extent: new Extent(extCoords[0][0], extCoords[0][1], extCoords[1][0], extCoords[1][1])
+				}, "homebutton");
+
+				// Create the graphics layer list.
+				graphicsLayerList = new GraphicsLayerList(map, "graphicsLayerList", {
+					omittedLayers: /(?:serviceArea)|(?:aoi)|(?:\w+_\d+_\d+)|(?:user(?:(?:points)|(?:lines)|(?:polygons)))|(?:^layer\d+$)|(?:^layer_osm$)/i
+				});
+			}(response.itemInfo.item.extent));
 
 			// Add data layers
 			(function () {
