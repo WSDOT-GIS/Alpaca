@@ -275,14 +275,28 @@ define([
 		},
 
 		/** Determines a service area based on a given geometry and scale.
-		 * @param {esri/Geometry} [drawnGeometry] The geometry used to determine the service area or selection. Not required for statewide.
-		 * @param {Number} [scale] The scale of the map. Used to determine which query task is used (County, Tract, or Block Group). Not required for statewide.
-		 * @param {Boolean} [union] Set to true to union the returned geometry. (Output will be a single graphic in this case.) Set to false to skip the union operation (for selection).
-		 * @param {esri/Geometry} [serviceAreaGeometry] When making a selection, use this parameter to filter by a service area geometry.
+		 * @param {?esri/Geometry} [drawnGeometry] The geometry used to determine the service area or selection. Not required for statewide.
+		 * @param {?Number} [scale] The scale of the map. Used to determine which query task is used (County, Tract, or Block Group). Not required for statewide.
+		 * @param {?Boolean} [union] Set to true to union the returned geometry. (Output will be a single graphic in this case.) Set to false to skip the union operation (for selection).
+		 * @param {?esri/Geometry} [serviceAreaGeometry] When making a selection, use this parameter to filter by a service area geometry.
+		 * @param {?Number[]} [states] - An array of state IDs to be used in a where clause to filter to certain states.
 		 * @returns {dojo/Deferred} The "resolve" function contains a single esri/Graphic parameter if union is true.
 		 */
-		getSelectionGraphics: function(drawnGeometry, scale, union, serviceAreaGeometry) {
+		getSelectionGraphics: function(drawnGeometry, scale, union, serviceAreaGeometry, states) {
 			var self = this, deferred = new Deferred(), type, geometryService;
+
+			/**
+			 * Creates a where clause for the specified states. Returns null if no states are selected or if all three states are selected.
+			 * @return {?string}
+			 */
+			function createWhereClause() {
+				var output = null;
+				// If all three states are specified, there's no need for the where clause.
+				if (states && states.length > 0 && states.length < 3) {
+					output = "STATE IN (" + states.join(",") + ")";
+				}
+				return output;
+			}
 
 			function getGeometryService() {
 				// Get the default geometry service.
@@ -303,7 +317,7 @@ define([
 				var query, queryTask;
 				queryTask = self.getQueryTaskForScale(scale);
 				query = new Query();
-
+				query.where = createWhereClause();
 				type = "statewide";
 				// Perform a query for statewide statistics.
 				query.outStatistics = self._statisticDefinitions;
@@ -333,7 +347,7 @@ define([
 				// Get the query task for the current scale.
 				queryTask = self.getQueryTaskForScale(scale);
 				query = new Query();
-
+				query.where = createWhereClause();
 				// Setup the query.
 				query.geometry = geometry;
 				query.outFields = fields.getOutFields();
