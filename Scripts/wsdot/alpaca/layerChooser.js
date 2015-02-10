@@ -255,7 +255,7 @@ define([
 							//label: opLayer.title,
 							checked: !firstLayerFound, // Only check the first valid layer's radio button.
 							//errors: opLayer.errors
-							includeSublayers: !/\b(?:(?:Boundaries)|(?:Minority)|(?:Poverty)|(?:Veterans)|(?:Age))\b/i.test(opLayer.title)
+							includeSublayers: !/\b(?:(?:Boundaries)|(?:Minority)|(?:Poverty)|(?:Veterans)|(?:Age)|(?:Disability))\b/i.test(opLayer.title)
 						});
 
 						layerRadio.on("checked", toggleLayer);

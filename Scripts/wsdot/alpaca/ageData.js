@@ -170,6 +170,10 @@ define(["dojo/number"], function (number) {
 		this.age85Plus = agd.ageOver85;
 	}
 
+	SubGroupedAgeData.prototype.getAllOver64 = function () {
+		return this.age65to84 + this.age85Plus;
+	};
+
 	SubGroupedAgeData.prototype.toColumnChartSeries = toColumnChartSeries;
 
 	/** 

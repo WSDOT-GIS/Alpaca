@@ -23,3 +23,4 @@
 /// <reference path="wsdot/alpaca/layerselect.js" />
 /// <reference path="wsdot/queryutils/main.js" />
 /// <reference path="../tests/layerselect.js" />
+/// <reference path="wsdot/alpaca/disabilitydata.js" />

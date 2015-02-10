@@ -63,7 +63,7 @@ require([
 	esriConfig.defaults.io.proxyUrl = "proxy.ashx";
 	esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
 	// Inform the ArcGIS API about servers that we know support CORS so that it doesn't have to check each time it sends a request.
-	esriConfig.defaults.io.corsEnabledServers.push("wsdot.wa.gov/geoservices");
+	esriConfig.defaults.io.corsEnabledServers.push("www.wsdot.wa.gov");
 
 	// Setup dummy console.* functions for browsers that lack them to prevent exceptions from occurring.
 	if (!window.console) {
@@ -163,7 +163,7 @@ require([
 
 		// Create a map using an ArcGIS Online map ID. The map's center and zoom extent are set based on values stored in 
 		// localStorage if available; otherwise default values are used.
-		arcgisUtils.createMap("6005be3ad4d64b50b0008078b2b04ffc", "map", {
+		arcgisUtils.createMap("60e08f3b796243719dfef1fd115387d2", "map", {
 			mapOptions: {
 				center: window.JSON && window.localStorage && window.localStorage.alpaca_mapCenter ? JSON.parse(window.localStorage.alpaca_mapCenter) : [-120.80566406246835, 47.41322033015946],
 				zoom: window.localStorage && window.localStorage.alpaca_mapZoom ? Number(window.localStorage.alpaca_mapZoom) : 7,
@@ -172,7 +172,7 @@ require([
 			}
 		}).then(function (response) { // Once the map has loaded...
 			var basemapGallery, layerChooser, graphicsLayerList, chartDataProvider, drawToolbar,
-				serviceAreaLayer, aoiLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart,
+				serviceAreaLayer, aoiLayer, languageChart, raceChart, ageChart, veteranChart, povertyChart, disabilityChart,
 				aggregateLayerUrl, popupHandle, popupListener, userGraphicsLayers;
 
 			/** Creates the service area graphics layer and adds it to the map.
@@ -361,6 +361,16 @@ require([
 					setSecondSeries(povertyChart, "poverty", "SA Poverty");
 					updateChartTitle(povertyChart, "Poverty", level);
 				}
+
+				if (!disabilityChart) {
+					disabilityChart = chartUtils.createDisabilityChart(chartData.disability, level);
+				} else {
+					disabilityChart.updateSeries("Disability", chartData.disability.toColumnChartSeries(level));
+					setSecondSeries(disabilityChart, "disability", "SA Disability");
+					updateChartTitle(disabilityChart, "Disability", level);
+				}
+
+
 
 				// Add the chart data JSON string to the chart data hidden input on the print form.
 				document.forms.printForm.querySelector("[name=chartdata]").value = JSON.stringify(chartData);

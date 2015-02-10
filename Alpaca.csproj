@@ -54,13 +54,14 @@
     <Content Include="Scripts\wsdot\alpaca\ageData.min.js">
       <DependentUpon>ageData.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\wsdot\alpaca\aggregate_fields.txt" />
+    <Content Include="Scripts\wsdot\alpaca\aggregate_fields.json" />
     <Content Include="Scripts\wsdot\alpaca\chartDataProvider.js" />
     <Content Include="Scripts\wsdot\alpaca\chartDataProvider.min.js">
       <DependentUpon>chartDataProvider.js</DependentUpon>
     </Content>
     <Content Include="Scripts\wsdot\alpaca\chartUtils.js" />
     <Content Include="Scripts\wsdot\alpaca\countySelect.js" />
+    <Content Include="Scripts\wsdot\alpaca\disabilityData.js" />
     <Content Include="Scripts\wsdot\alpaca\graphicsLayerList.js" />
     <Content Include="Scripts\wsdot\alpaca\languageData.js" />
     <Content Include="Scripts\wsdot\alpaca\layerChooser.js" />

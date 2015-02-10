@@ -13,8 +13,9 @@ require([
 	"alpaca/languageData",
 	"alpaca/povertyData",
 	"alpaca/raceData",
-	"alpaca/veteranData"
-], function (number, Map, Extent, Graphic, ArcGISDynamicMapServiceLayer, ImageParameters, GraphicsLayer, SimpleRenderer, AgeData, LanguageData, PovertyData, RaceData, VeteranData) {
+	"alpaca/veteranData",
+	"alpaca/disabilityData"
+], function (number, Map, Extent, Graphic, ArcGISDynamicMapServiceLayer, ImageParameters, GraphicsLayer, SimpleRenderer, AgeData, LanguageData, PovertyData, RaceData, VeteranData, DisabilityData) {
 	"use strict";
 	var map, qsParameters, dataDiv;
 
@@ -96,6 +97,8 @@ require([
 			output = new VeteranData(v);
 		} else if (k === "race") {
 			output = new RaceData(v);
+		} else if (k === "disability") {
+			output = new DisabilityData(v);
 		}
 		return output;
 	}
@@ -197,4 +200,5 @@ require([
 		return output;
 
 	}, "Veteran Status", "Group"));
+	dataDiv.appendChild(qsParameters.chart.disability.toHtmlTable());
 });
