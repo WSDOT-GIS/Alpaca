@@ -9,7 +9,7 @@ define(["dojo/number"], function (number) {
 		/** @type {number} */
 		this.cognitiveDisabled = queryResults.TotalCognitiveDisabled || 0;
 		/** @type {number} */
-		this.ambulitoryDisabled = queryResults.TotalAmbulitoryDisabled || 0;
+		this.ambulatoryDisabled = queryResults.TotalAmbulatoryDisabled || 0;
 		/** @type {number} */
 		this.selfCareDisabled = queryResults.TotalSelfCareDisabled || 0;
 		/** @type {number} */
@@ -22,7 +22,7 @@ define(["dojo/number"], function (number) {
 		hearingDisabled: "Hearing Disabled",
 		visualDisabled: "Visual Disabled",
 		cognitiveDisabled: "Cognitive Disabled",
-		ambulitoryDisabled: "Ambulatory Disabled",
+		ambulatoryDisabled: "Ambulatory Disabled",
 		selfCareDisabled: "Self Care Disabled",
 		independentLivingDisabled: "Independent Living Disabled"
 	};
@@ -35,7 +35,7 @@ define(["dojo/number"], function (number) {
 		return this.hearingDisabled
 			+ this.visualDisabled
 			+ this.cognitiveDisabled
-			+ this.ambulitoryDisabled
+			+ this.ambulatoryDisabled
 			+ this.selfCareDisabled
 			+ this.independentLivingDisabled;
 	};
