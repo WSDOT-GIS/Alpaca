@@ -3,19 +3,19 @@ define(["dojo/number"], function (number) {
 	/** @constructor */
 	function DisabilityData(/**{Object.<string,number>}*/ queryResults) {
 		/** @type {number} */
-		this.hearingDisabled = queryResults.TotalHearingDisabled || 0;
+		this.hearingDisabled = queryResults.TotalHearingDisabled || queryResults.hearingDisabled || 0;
 		/** @type {number} */
-		this.visualDisabled = queryResults.TotalVisualDisabled || 0;
+		this.visualDisabled = queryResults.TotalVisualDisabled || queryResults.visualDisabled || 0;
 		/** @type {number} */
-		this.cognitiveDisabled = queryResults.TotalCognitiveDisabled || 0;
+		this.cognitiveDisabled = queryResults.TotalCognitiveDisabled || queryResults.cognitiveDisabled || 0;
 		/** @type {number} */
-		this.ambulatoryDisabled = queryResults.TotalAmbulatoryDisabled || 0;
+		this.ambulatoryDisabled = queryResults.TotalAmbulatoryDisabled || queryResults.ambulatoryDisabled || 0;
 		/** @type {number} */
-		this.selfCareDisabled = queryResults.TotalSelfCareDisabled || 0;
+		this.selfCareDisabled = queryResults.TotalSelfCareDisabled || queryResults.selfCareDisabled || 0;
 		/** @type {number} */
-		this.independentLivingDisabled = queryResults.TotalIndependentLivingDisabled || 0;
+		this.independentLivingDisabled = queryResults.TotalIndependentLivingDisabled || queryResults.independentLivingDisabled || 0;
 		/** @type {number} */
-		this.totalPopulation = queryResults.Total_DIS || 0;
+		this.totalPopulation = queryResults.totalPopulation || 0;
 	}
 
 	DisabilityData.labels = {
@@ -118,8 +118,8 @@ define(["dojo/number"], function (number) {
 			tbody.appendChild(tr);
 		}
 
-		for (propertyName in self) {
-			if (self.hasOwnProperty(propertyName)) {
+		for (propertyName in DisabilityData.labels) {
+			if (DisabilityData.labels.hasOwnProperty(propertyName)) {
 				addRow(propertyName);
 			}
 		}
