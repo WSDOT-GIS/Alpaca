@@ -229,7 +229,7 @@ require([
                 var cb;
                 function clear() {
                     //chartDataProvider.getSelectionGraphics(undefined, undefined, undefined, undefined, getCheckedStateIds());
-                    setServiceArea()
+                    setServiceArea();
                 }
                 for (var i = 0, l = stateCheckboxes.length; i < l; i += 1) {
                     cb = stateCheckboxes[i];
