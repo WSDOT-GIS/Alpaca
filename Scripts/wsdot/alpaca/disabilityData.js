@@ -61,7 +61,7 @@ define(["dojo/number"], function (number) {
 				item = {
 					y: this[disability],
 					text: label,
-					fill: "RGB(240,118,5)",
+					fill: "RGB(153,96,53)",
 					tooltip: [label, ": ", number.format(this[disability]), " (~", Math.round((this[disability] / total) * 10000) / 100, "%)"].join(""),
 					stroke: {
 						color: strokeColor,
