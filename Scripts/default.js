@@ -211,7 +211,7 @@ require([
 
         // Create a map using an ArcGIS Online map ID. The map's center and zoom extent are set based on values stored in 
         // localStorage if available; otherwise default values are used.
-    	arcgisUtils.createMap("4c23d3ac187347e281ca478827cd89c1", "map", {
+    	arcgisUtils.createMap("a2a177ec2ddc4769958cb2823ba61020", "map", {
             mapOptions: {
                 center: window.JSON && window.localStorage && window.localStorage.alpaca_mapCenter ? JSON.parse(window.localStorage.alpaca_mapCenter) : [-120.80566406246835, 47.41322033015946],
                 zoom: window.localStorage && window.localStorage.alpaca_mapZoom ? Number(window.localStorage.alpaca_mapZoom) : 7,
