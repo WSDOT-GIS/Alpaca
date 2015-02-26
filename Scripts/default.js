@@ -545,7 +545,7 @@ require([
 
                 // Add the PTBA layer
                 pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
-                    id: "Public Transportation Benifit Areas (PTBA)",
+                    id: "Public Transportation Benefit Areas (PTBA)",
                     className: "ptba",
                     outFields: ["PTBA_NAME"],
                     visible: false,
@@ -1020,7 +1020,7 @@ require([
             (function () {
                 var saContainer = document.getElementById("saLayerSelectContainer"), aoiContainer = document.getElementById("aoiLayerSelectContainer");
 
-                var validLayersRe = /^(?:(?:Regional Transportation Authority \(RTA\))|(?:Public Transportation Benifit Areas \(PTBA\))|(?:City Limits)|(?:Metro Planning Organization \(MPO\))|(?:Regional Transportation Planning Organization \(RTPO\))|(?:Reservation and Trust Lands))$/i;
+                var validLayersRe = /^(?:(?:Regional Transportation Authority \(RTA\))|(?:Public Transportation Benefit Areas \(PTBA\))|(?:City Limits)|(?:Metro Planning Organization \(MPO\))|(?:Regional Transportation Planning Organization \(RTPO\))|(?:Reservation and Trust Lands))$/i;
                 var sublayerIds = {
                     "City Limits": 2
                 };

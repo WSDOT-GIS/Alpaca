@@ -21,7 +21,7 @@ require([
 
 	// Add the PTBA layer
 	var pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
-		id: "Public Transportation Benifit Areas (PTBA)",
+		id: "Public Transportation Benefit Areas (PTBA)",
 		outFields: ["PTBA_NAME"],
 		visible: false,
 		styling: false,
