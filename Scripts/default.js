@@ -174,13 +174,16 @@ require([
             return layerDefinitions;
         }
 
+        /**
+         * Updates the layer definitions of the multi-state map layers to match the state checkboxes.
+         */
         function setLayerDefinitionForStateFilters() {
             var stateIds = getCheckedStateIds();
-            var basemapRe = /Base/i;
+            var includeRe = /(?:(Boundaries)|(Language)|(Minority)|(Poverty)|(Veterans)|(Age)|(Disability))_\d+$/i;
             map.layerIds.forEach(function (layerId) {
                 var layer;
                 // Ignore basemap layers.
-                if (!basemapRe.test(layerId)) {
+                if (includeRe.test(layerId)) {
                     layer = map.getLayer(layerId);
 
                     if (layer.setDefaultLayerDefinitions && layer.setLayerDefinitions) {
@@ -211,7 +214,7 @@ require([
 
         // Create a map using an ArcGIS Online map ID. The map's center and zoom extent are set based on values stored in 
         // localStorage if available; otherwise default values are used.
-    	arcgisUtils.createMap("a2a177ec2ddc4769958cb2823ba61020", "map", {
+        arcgisUtils.createMap("a2a177ec2ddc4769958cb2823ba61020", "map", {
             mapOptions: {
                 center: window.JSON && window.localStorage && window.localStorage.alpaca_mapCenter ? JSON.parse(window.localStorage.alpaca_mapCenter) : [-120.80566406246835, 47.41322033015946],
                 zoom: window.localStorage && window.localStorage.alpaca_mapZoom ? Number(window.localStorage.alpaca_mapZoom) : 7,
