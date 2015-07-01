@@ -1,4 +1,4 @@
-﻿/*global define*/
+/*global define*/
 define(["dojo/number"], function (number) {
 	/** @constructor */
 	function DisabilityData(/**{Object.<string,number>}*/ queryResults) {

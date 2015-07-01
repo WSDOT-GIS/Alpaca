@@ -1,4 +1,4 @@
-﻿/*global define*/
+/*global define*/
 /*jslint nomen:true,plusplus:true*/
 define([
 	"dojo/_base/declare",

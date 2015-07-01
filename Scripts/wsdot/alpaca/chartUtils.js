@@ -1,4 +1,4 @@
-﻿/*global define*/
+/*global define*/
 /*jslint white:true*/
 define([
 	"dojox/charting/Chart",

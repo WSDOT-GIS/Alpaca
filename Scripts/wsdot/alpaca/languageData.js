@@ -1,4 +1,4 @@
-﻿/*global define*/
+/*global define*/
 /*jslint nomen:true,plusplus:true,browser:true,white:true*/
 define(["dojo/number"], function (number) {
 	"use strict";

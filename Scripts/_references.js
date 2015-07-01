@@ -1,4 +1,4 @@
-﻿/// <autosync enabled="true" />
+/// <autosync enabled="true" />
 /// <reference path="wsdot/alpaca/agedata.js" />
 /// <reference path="wsdot/alpaca/chartdataprovider.js" />
 /// <reference path="wsdot/alpaca/chartutils.js" />

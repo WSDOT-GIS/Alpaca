@@ -1,4 +1,4 @@
-﻿/*global require*/
+/*global require*/
 /*jslint white:true,browser:true,plusplus:true */
 require([
     "dojo/ready",

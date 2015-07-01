@@ -1,4 +1,4 @@
-﻿/*global define*/
+/*global define*/
 define(["esri/tasks/QueryTask", "esri/tasks/query", "dojo/Deferred"], function (QueryTask, Query, Deferred) {
 	var countyData;
 

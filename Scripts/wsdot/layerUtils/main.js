@@ -1,4 +1,4 @@
-﻿/*global define*/
+/*global define*/
 /*jslint white:true*/
 define(["esri/symbols/SimpleMarkerSymbol",
 "esri/renderers/SimpleRenderer"

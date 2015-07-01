@@ -1,4 +1,4 @@
-﻿/*global define*/
+/*global define*/
 /*jslint browser:true*/
 define(["dojo/_base/declare", "dojo/on"], function (declare, on) {
 	"use strict";
