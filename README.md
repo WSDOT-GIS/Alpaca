@@ -1,6 +1,8 @@
 ALPACA (Application for Local Planning and Community Accessibility)
 ===================================================================
 
+[![bitHound Score](https://www.bithound.io/github/WSDOT-GIS/Alpaca/badges/score.svg?)](https://www.bithound.io/github/WSDOT-GIS/Alpaca)
+
 ## Submodules ##
 
 This project uses the [GTFS-Service] project as a [submodule], which itself uses [GTFS.NET] as submodule. To ensure all submodules are checked out, use the following command when cloning this repository.
