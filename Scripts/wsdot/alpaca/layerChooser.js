@@ -1,5 +1,3 @@
-/*global define*/
-/*jslint browser:true,plusplus:true*/
 define([
 	"dojo/_base/declare",
 	"dojo/dom-class",

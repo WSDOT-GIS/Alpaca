@@ -28,26 +28,26 @@ require([
 		surfaceType: "SVG"
 	});
 
-	var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
+	var cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
 		id: "City Limits",
 		visible: false,
 		opacity: 0.6
 	});
 
-	var mpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
+	var mpoLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MetroPlanningOrganization/MapServer", {
 		id: "Metro Planning Organization (MPO)",
 		visible: false,
 		opacity: 0.6
 
 	});
 
-	var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
+	var rtpoLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
 		id: "Regional Transportation Planning Organization (RTPO)",
 		visible: false,
 		opacity: 0.6
 	});
 
-	var tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
+	var tribalLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
 		id: "Reservation and Trust Lands",
 		visible: false,
 		opacity: 0.6

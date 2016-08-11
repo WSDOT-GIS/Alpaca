@@ -1,5 +1,3 @@
-/*global require*/
-/*jslint white:true,browser:true,plusplus:true */
 require([
     "dojo/ready",
     "dojo/_base/Color",
@@ -60,9 +58,9 @@ require([
 
     // Setup configuration defaults.
     esriConfig.defaults.io.proxyUrl = "proxy.ashx";
-    esriConfig.defaults.geometryService = new GeometryService("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Geometry/GeometryServer");
+    esriConfig.defaults.geometryService = new GeometryService("http://data.wsdot.wa.gov/ArcGIS/rest/services/Geometry/GeometryServer");
     // Inform the ArcGIS API about servers that we know support CORS so that it doesn't have to check each time it sends a request.
-    esriConfig.defaults.io.corsEnabledServers.push("www.wsdot.wa.gov");
+    esriConfig.defaults.io.corsEnabledServers.push("data.wsdot.wa.gov");
 
     // Setup dummy console.* functions for browsers that lack them to prevent exceptions from occurring.
     if (!window.console) {
@@ -558,14 +556,14 @@ require([
 
                 map.addLayer(pdbaLayer);
 
-                cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
+                cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
                     id: "City Limits",
                     visible: false,
                     opacity: 0.6
                 });
                 map.addLayer(cityLimitsLayer);
 
-                mpaLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer", {
+                mpaLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer", {
                     id: "Metro Planning Areas (MPA)",
                     visible: false,
                     opacity: 0.6
@@ -573,14 +571,14 @@ require([
                 });
                 map.addLayer(mpaLayer);
 
-                rtpoLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
+                rtpoLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
                     id: "Regional Transportation Planning Organization (RTPO)",
                     visible: false,
                     opacity: 0.6
                 });
                 map.addLayer(rtpoLayer);
 
-                tribalLayer = new ArcGISDynamicMapServiceLayer("http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
+                tribalLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
                     id: "Reservation and Trust Lands",
                     visible: false,
                     opacity: 0.6
@@ -597,7 +595,7 @@ require([
                         title: "WSDOT",
                         thumbnailUrl: "Images/WsdotBasemapThumbnail.jpg",
                         layers: [new BasemapLayer({
-                            url: "http://www.wsdot.wa.gov/geosvcs/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+                            url: "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
                         })]
                     })
                 ]
