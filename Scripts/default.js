@@ -195,7 +195,7 @@ require([
             });
         }
 
-        /** 
+        /**
          * Gets the layer ids of all basemap layers currently in the map.
          * @returns {Array} An array of layer ID strings.
          */
@@ -210,7 +210,7 @@ require([
             return output;
         }
 
-        // Create a map using an ArcGIS Online map ID. The map's center and zoom extent are set based on values stored in 
+        // Create a map using an ArcGIS Online map ID. The map's center and zoom extent are set based on values stored in
         // localStorage if available; otherwise default values are used.
         arcgisUtils.createMap("a2a177ec2ddc4769958cb2823ba61020", "map", {
             mapOptions: {
@@ -244,7 +244,7 @@ require([
             function createServiceAreaLayer() {
                 var renderer, symbol, layer;
 
-                /** 
+                /**
                  * Disables the AOI button if there are no service area graphics,
                  * enables it if there are S.A. graphics.
                  */
@@ -268,7 +268,7 @@ require([
                 return layer;
             }
 
-            /** 
+            /**
              * Creates the selection layer and adds it to the map.
              * @returns {"esri/layers/GraphicsLayer"}
              */
@@ -323,7 +323,7 @@ require([
                 return output;
             }
 
-            /** 
+            /**
              * Updates a chart's title and executes the correct rendering function afterword.
              * If the new title is different than the old one, chart.fullRender() is called,
              * otherwise chart.render() is called.
@@ -342,7 +342,7 @@ require([
                 }
             }
 
-            /** 
+            /**
              * Updates the charts in the application
              * @param {ChartData} chartData
              * @param {string} level
@@ -478,7 +478,7 @@ require([
                 }
             }
 
-            /** 
+            /**
              * Sets the selection to the given geometry after clearing the AOI graphics layer, then updates the charts.
              * @param {"esri/geometry/Geometry"} geometry
              */
@@ -556,7 +556,7 @@ require([
 
                 map.addLayer(pdbaLayer);
 
-                cityLimitsLayer = new ArcGISTiledMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
+                cityLimitsLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
                     id: "City Limits",
                     visible: false,
                     opacity: 0.6
@@ -824,7 +824,7 @@ require([
                     return layers.length ? layers[0] : null;
                 }
 
-                /** 
+                /**
                  * @typedef {Object.<string, (string|number[])>} LayerInfo
                  * @property {string} url
                  * @property {number[]} visibleLayers - sublayer IDs of visible layers.
