@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>GTFS API Test</title>
+	<link rel="stylesheet" href="//cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+	<style>
+		html, body, #map {
+			height: 100%;
+			margin: 0;
+		}
+		#tools h1 {
+			padding: 0;
+			margin: 0;
+		}
+		#tools {
+			position: absolute;
+			top: 0;
+			right: 0;
+			text-align: right;
+			z-index: 1;
+			border: 1px solid black;
+			margin-right: 0.5em;
+			margin-top: 0.5em;
+			padding: 0.5em;
+			background-color: rgba(205, 233, 193, 0.70);
+			border-radius: 1em;
+		}
+	</style>
+</head>
+<body>
+	<div id="tools">
+		<h1>GTFS API Test</h1>
+		<form id="agencyForm">
+			<label>Agency</label>
+			<select id="agencySelect" disabled="disabled">
+				<option value="" disabled="disabled">Select an agency</option>
+			</select>
+			<input id="agencySubmit" type="submit" disabled="disabled" />
+			<progress id="agencyProgress" hidden="hidden">Loading GTFS data for agency...</progress>
+		</form>
+	</div>
+	<div id="map">
+	</div>
+	<script src="//cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.2/terraformer.min.js"></script>
+	<script src="Scripts/gtfs.js"></script>
+	<script src="Scripts/index.js"></script>
+</body>
+</html>

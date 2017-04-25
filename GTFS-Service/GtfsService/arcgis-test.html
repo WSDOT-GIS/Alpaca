@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>GTFS Import with ArcGIS API</title>
+	<link rel="stylesheet" href="//js.arcgis.com/3.8compact/js/esri/css/esri.css">
+	<link href="Stylesheets/arcgis-test.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div id="mapDiv"></div>
+	<div id="tools">
+		<select id="agencySelect" disabled="disabled"></select>
+		<!--<button id="importGtfsButton" type="button" disabled="disabled" title="Import GTFS data from selected agency">Import</button>
+		<progress id="gtfsProgress">Loading agency list...</progress>-->
+	</div>
+	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.2/terraformer.min.js"></script>
+	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.1/terraformer-arcgis-parser.min.js"></script>
+	<script src="Scripts/gtfs.js"></script>
+	<script>
+		var dojoConfig = {
+			async: true,
+			packages: [
+				{
+					name: "gtfs-agency-select",
+					location: "/./Scripts",
+					main: "gtfs-agency-select"
+				},
+				{
+					name: "gtfs-layer-manager",
+					location: "/./Scripts/arcgis",
+					main: "gtfs-layer-manager"
+				}
+			]
+		};
+	</script>
+	<script src="//js.arcgis.com/3.8compact/"></script>
+	<script src="Scripts/arcgis-test.js"></script>
+</body>
+</html>
