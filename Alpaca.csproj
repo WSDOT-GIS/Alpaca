@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E1473CF7-4E4B-48F8-B4D1-A60FDA07B82A}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Wsdot.Alpaca</RootNamespace>
+    <AssemblyName>Alpaca</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="default.htm" />
+    <Content Include="Global.asax" />
+    <Content Include="GTFS-Service\GtfsService\Scripts\arcgis\gtfs-layer-manager.js" />
+    <Content Include="GTFS-Service\GtfsService\Scripts\gtfs-agency-select.js" />
+    <Content Include="GTFS-Service\GtfsService\Scripts\gtfs.js" />
+    <Content Include="Images\WsdotBasemapThumbnail.jpg" />
+    <Content Include="Print.aspx" />
+    <Content Include="Scripts\default.js" />
+    <Content Include="Scripts\Print.js" />
+    <Content Include="Scripts\wsdot\alpaca\ageData.js" />
+    <Content Include="Scripts\wsdot\alpaca\ageData.min.js">
+      <DependentUpon>ageData.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\wsdot\alpaca\aggregate_fields.json" />
+    <Content Include="Scripts\wsdot\alpaca\chartDataProvider.js" />
+    <Content Include="Scripts\wsdot\alpaca\chartDataProvider.min.js">
+      <DependentUpon>chartDataProvider.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\wsdot\alpaca\chartUtils.js" />
+    <Content Include="Scripts\wsdot\alpaca\countySelect.js" />
+    <Content Include="Scripts\wsdot\alpaca\disabilityData.js" />
+    <Content Include="Scripts\wsdot\alpaca\graphicsLayerList.js" />
+    <Content Include="Scripts\wsdot\alpaca\languageData.js" />
+    <Content Include="Scripts\wsdot\alpaca\layerChooser.js" />
+    <Content Include="Scripts\wsdot\alpaca\layerSelect.js" />
+    <Content Include="Scripts\wsdot\alpaca\povertyData.js" />
+    <Content Include="Scripts\wsdot\alpaca\raceData.js" />
+    <Content Include="Scripts\wsdot\alpaca\UserGraphicsLayers.js" />
+    <Content Include="Scripts\wsdot\alpaca\utils.js" />
+    <Content Include="Scripts\wsdot\alpaca\veteranData.js" />
+    <Content Include="Scripts\wsdot\CSV-Reader\csvArcGis.js" />
+    <Content Include="Scripts\wsdot\CSV-Reader\csvHtml.js" />
+    <Content Include="Scripts\wsdot\CSV-Reader\main.js" />
+    <Content Include="Scripts\wsdot\layerUtils\main.js" />
+    <Content Include="Docs\Technical Info.md" />
+    <Content Include="Scripts\wsdot\alpaca\ageData.min.js.map">
+      <DependentUpon>ageData.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\wsdot\alpaca\chartDataProvider.min.js.map">
+      <DependentUpon>chartDataProvider.min.js</DependentUpon>
+    </Content>
+    <Content Include="packages.config" />
+    <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\wsdot\queryUtils\main.js" />
+    <Content Include="Style\index.css" />
+    <Content Include="Style\index.min.css">
+      <DependentUpon>index.css</DependentUpon>
+    </Content>
+    <Content Include="Style\Print.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="GTFS-Service\GtfsService\AgencyQueryException.cs" />
+    <Compile Include="GTFS-Service\GtfsService\AgencyResponse.cs" />
+    <Compile Include="GTFS-Service\GtfsService\Controllers\AgencyController.cs" />
+    <Compile Include="GTFS-Service\GtfsService\Controllers\FeedController.cs" />
+    <Compile Include="GTFS-Service\GtfsService\Extensions.cs" />
+    <Compile Include="GTFS-Service\GtfsService\FeedManager.cs" />
+    <Compile Include="GTFS-Service\GtfsService\FeedRecord.cs" />
+    <Compile Include="Print.aspx.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Print.aspx.designer.cs">
+      <DependentUpon>Print.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="map.txt" />
+    <None Include="Properties\PublishProfiles\Production.pubxml" />
+    <None Include="Properties\PublishProfiles\QA.pubxml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
+    <Content Include="proxy.ashx" />
+    <Content Include="proxy.config" />
+    <Content Include="Tests\layerSelect.html" />
+    <Content Include="Tests\layerSelect.js" />
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Microsoft.AspNet.WebApi.Core.5.1.1\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Microsoft.AspNet.WebApi.WebHost.5.1.1\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="GTFS-Service\GTFS.NET\Gtfs.Contract\Gtfs.Contract.csproj">
+      <Project>{87063403-b38c-446e-a517-9c4082d64e57}</Project>
+      <Name>Gtfs.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="GTFS-Service\GTFS.NET\Gtfs.IO\Gtfs.IO.csproj">
+      <Project>{d0f94838-10a7-4ba2-bbee-41b342641554}</Project>
+      <Name>Gtfs.IO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

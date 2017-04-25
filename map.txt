@@ -1,0 +1,2086 @@
+﻿{
+	"operationalLayers": [{
+		"url": "http://hqolymgis99t/arcgis/rest/services/Demographic/Aggregate/MapServer",
+		"id": "Aggregate_7712",
+		"visibility": false,
+		"opacity": 1,
+		"title": "WSDOT - Title VI Aggregate",
+		"itemId": "5cf333565ae640ff90bee0e35c14dc3b"
+	},
+	{
+		"url": "http://hqolymgis99t/arcgis/rest/services/Demographic/Minority/MapServer",
+		"id": "Minority_3563",
+		"visibility": false,
+		"visibleLayers": [0,
+		1,
+		2,
+		3],
+		"opacity": 1,
+		"title": "WSDOT - Title VI Minority",
+		"itemId": "ae8634b8f0de46bab06770aefa74691e",
+		"layers": [{
+			"id": 1,
+			"popupInfo": {
+				"title": "Block Group - Minority",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID",
+					"label": "OBJECTID",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "STATE",
+					"label": "STATE",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "COUNTY",
+					"label": "COUNTY",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "TRACT",
+					"label": "TRACT",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "BLKGRP",
+					"label": "BLKGRP",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "CENSUSAREA",
+					"label": "CENSUSAREA",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "TableID",
+					"label": "TableID",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Total",
+					"label": "Total",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "OneRace",
+					"label": "OneRace",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "White",
+					"label": "White",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "METotal",
+					"label": "METotal",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "MEOneRace",
+					"label": "MEOneRace",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "MEWhite",
+					"label": "MEWhite",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "NotWhite",
+					"label": "NotWhite",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "PctNotWhit",
+					"label": "PctNotWhit",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "GEOID",
+					"label": "GEOID",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Title",
+					"label": "Table Name",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				}],
+				"description": "Total Population: {Total}<br />White Population: {White}<br />Minority Population: {NotWhite}<br />Percent Minority: {PctNotWhit}%",
+				"showAttachments": false,
+				"mediaInfos": [{
+					"title": "Percent Minority",
+					"type": "piechart",
+					"caption": "",
+					"value": {
+						"fields": ["White",
+						"NotWhite"],
+						"normalizeField": null
+					},
+					"_visible": true,
+					"_pos": 0
+				}]
+			}
+		},
+		{
+			"id": 2,
+			"popupInfo": {
+				"title": "Tract - Minority",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID",
+					"label": "OBJECTID",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "STATE",
+					"label": "STATE",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "COUNTY",
+					"label": "COUNTY",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "TRACT",
+					"label": "TRACT",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "CENSUSAREA",
+					"label": "CENSUSAREA",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Total",
+					"label": "Total",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "OneRace",
+					"label": "OneRace",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "White",
+					"label": "White",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "METotal",
+					"label": "METotal",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "MEOneRace",
+					"label": "MEOneRace",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "MEWhite",
+					"label": "MEWhite",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "NotWhite",
+					"label": "NotWhite",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "PctNotWhit",
+					"label": "PctNotWhit",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "GEOID",
+					"label": "FIPS",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Table_ID",
+					"label": "ACS Table Number",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Title",
+					"label": "Table Name",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				}],
+				"description": "Total Population: {Total}<br />White Population: {White}<br />Minority Population: {NotWhite}<br />Percent Minority: {PctNotWhit}%\n        ",
+				"showAttachments": false,
+				"mediaInfos": [{
+					"title": "Percent Minority",
+					"type": "piechart",
+					"caption": "",
+					"value": {
+						"fields": ["White",
+						"NotWhite"],
+						"normalizeField": null
+					}
+				}]
+			}
+		},
+		{
+			"id": 3,
+			"popupInfo": {
+				"title": "County - Minority",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "STATE",
+					"label": "State",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "COUNTY",
+					"label": "County",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "JURLBL",
+					"label": "JURLBL",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "TableID",
+					"label": "TableID",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Total",
+					"label": "Total",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "OneRace",
+					"label": "OneRace",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "White",
+					"label": "White",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "METotal",
+					"label": "METotal",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "MEOneRace",
+					"label": "MEOneRace",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "MEWhite",
+					"label": "MEWhite",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "PctNotWhit",
+					"label": "PctNotWhit",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "NotWhite",
+					"label": "NotWhite",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "GEOID",
+					"label": "FIPS",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Title",
+					"label": "Table Name",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				}],
+				"description": "Total Population: {Total}<br />White Population: {White}<br />Minority Population: {NotWhite}<br />Percent Minority: {PctNotWhit}%\n        ",
+				"showAttachments": false,
+				"mediaInfos": [{
+					"title": "Percent Minority",
+					"type": "piechart",
+					"caption": "",
+					"value": {
+						"fields": ["White",
+						"NotWhite"],
+						"normalizeField": null
+					}
+				}]
+			}
+		}]
+	},
+	{
+		"url": "http://hqolymgis99t/arcgis/rest/services/Demographic/Language/MapServer",
+		"id": "Language_850",
+		"visibility": false,
+		"visibleLayers": [0,
+		1,
+		2,
+		3,
+		5,
+		6,
+		7,
+		9,
+		10,
+		11,
+		13,
+		14,
+		15,
+		17,
+		18,
+		19],
+		"opacity": 1,
+		"title": "WSDOT - Title VI Language",
+		"itemId": "3a5d6c75224b47518c95d267db2ddddc",
+		"layers": [{
+			"id": 6,
+			"popupInfo": {
+				"title": "Tract - Spanish",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Spanish",
+					"label": "Total Spanish Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Spanish",
+					"label": "Percent Spanish Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": true,
+					"stringFieldOption": "textbox"
+				}],
+				"description": "<p>Speak Spanish: {Spanish}<br />Percent Spanish: {Percent_Spanish}%</p>",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 7,
+			"popupInfo": {
+				"title": "County - Spanish",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Spanish",
+					"label": "Total Spanish Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Spanish",
+					"label": "Percent Spanish Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": true,
+					"stringFieldOption": "textbox"
+				}],
+				"description": "Speak Spanish: {Spanish}<br />Percent Spanish: {Percent_Spanish}%<br />",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 10,
+			"popupInfo": {
+				"title": "Tract - Indo or European",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Indo_European",
+					"label": "Total Indo and European Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Indo_European",
+					"label": "Percent Indo and European Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": false
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": true,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "<p>Speak Indo or European: {Indo_European}<br />Percent Indo or European: {Percent_Indo_European}%</p>",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 11,
+			"popupInfo": {
+				"title": "County - Indo or European",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Indo_European",
+					"label": "Total Indo and European Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "PercentIndo_European",
+					"label": "Percent Indo and European Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "Speak Indo or European: {Indo_European}<br />Percent Indo or European: {PercentIndo_European}%",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 9,
+			"popupInfo": {
+				"title": "Block Group - Indo & European",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Indo_European",
+					"label": "Total Indo and European Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Indo_European",
+					"label": "Percent Indo and European Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "<p>Speak Indo or European: {Indo_European}<br />Percent Indo or European: {Percent_Indo_European}%</p>",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 13,
+			"popupInfo": {
+				"title": "Block Group: Asian or Pacific Island",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Asian_PacificIsland",
+					"label": "Total Asian and Pacific Island Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Asian_PacificIsland",
+					"label": "Percent Asian and Pacific Island Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": false
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": true,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "Speaks Asian or Pacific Island: {Asian_PacificIsland}<br />Percent Asian or Pacific Island: {Percent_Asian_PacificIsland}%",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 14,
+			"popupInfo": {
+				"title": "Tract - Asian or Pacific Island",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Asian_PacificIsland",
+					"label": "Total Asian and Pacific Island Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Asian",
+					"label": "Percent Asian and Pacific Island Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": false
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": true,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "Speaks Asian or Pacific Island: {Asian_PacificIsland}<div>Percent Asian or Pacific Island: {Percent_Asian}%</div>",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 15,
+			"popupInfo": {
+				"title": "County: Asian or Pacific Island",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Asian_PacificIsland",
+					"label": "Total Asian and Pacific Island Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "PercentAsian_PacificIsland",
+					"label": "PercAsian",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "Speaks Asian or Pacific Island: {Asian_PacificIsland}<div>Percent Asian or Pacific Island: {PercentAsian_PacificIsland}%</div>",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 17,
+			"popupInfo": {
+				"title": "Block Group - Other Languages",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Other",
+					"label": "Total Other Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Other",
+					"label": "Percent Other Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "Speaks Other Languages: {Other}<div>Percent Other Languages: {Percent_Other}%</div>",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 18,
+			"popupInfo": {
+				"title": "Tract - Other Languages",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Other",
+					"label": "Total Other Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Other",
+					"label": "Percent Other Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "Speaks Other Languages: {Other}<div>Percent Other Languages: {Percent_Other}%</div>",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 19,
+			"popupInfo": {
+				"title": "County - Other Languages",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Other",
+					"label": "Total Other Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Other",
+					"label": "PercOther",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": false
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "Speaks Other Languages: {Other}<div>Percent Other Languages: {Percent_Other}%</div>",
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 5,
+			"popupInfo": {
+				"title": "Block Group - Spanish",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Total_Population",
+					"label": "Total Population",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Spanish",
+					"label": "Total Spanish Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Spanish",
+					"label": "Percent Spanish Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": true,
+					"stringFieldOption": "textbox"
+				}],
+				"description": null,
+				"showAttachments": false,
+				"mediaInfos": []
+			}
+		},
+		{
+			"id": 1,
+			"popupInfo": {
+				"title": "Block Group - Language",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "GEO_ID",
+					"label": "FIPS",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "STATE",
+					"label": "State",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "COUNTY",
+					"label": "County",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "TRACT",
+					"label": "Tract",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "BLKGRP",
+					"label": "Block Group",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "CENSUSAREA",
+					"label": "Census Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Table_ID",
+					"label": "ACS Table Number",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Title",
+					"label": "Table Name",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Universe",
+					"label": "Universe",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "ACS_Release_Year",
+					"label": "ACS Release Year",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Total_Population",
+					"label": "Total Population",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "English",
+					"label": "Total English Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Spanish",
+					"label": "Total Spanish Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Indo_European",
+					"label": "Total Indo and European Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Asian_PacificIsland",
+					"label": "Total Asian and Pacific Island Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Other",
+					"label": "Total Other Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_English",
+					"label": "English",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Spanish",
+					"label": "Percent Spanish Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Indo_European",
+					"label": "Percent Indo and European Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Asian_PacificIsland",
+					"label": "Percent Asian and Pacific Island Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Other",
+					"label": "Percent Other Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 1,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": true,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "<p>Total Population: {Total_Population}<br />Title VI Requirement: {LEP_Threshold}<br />Spanish: {Spanish}<br />Indo/European: {Indo_European}<br />A &amp; PI: {Asian_PacificIsland}<br />Other: {Other}</p>",
+				"showAttachments": false,
+				"mediaInfos": [{
+					"title": "Percent by Language",
+					"type": "columnchart",
+					"caption": "",
+					"value": {
+						"fields": ["Percent_Spanish",
+						"Percent_Indo_European",
+						"Percent_Asian_PacificIsland",
+						"Percent_Other"],
+						"normalizeField": null
+					}
+				}]
+			}
+		},
+		{
+			"id": 2,
+			"popupInfo": {
+				"title": "Tract - Language",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "GEOID",
+					"label": "GEOID",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "STATE",
+					"label": "STATE",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "COUNTY",
+					"label": "COUNTY",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "TRACT",
+					"label": "TRACT",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Table_ID",
+					"label": "ACS Table Number",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Title",
+					"label": "Table Name",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Universe",
+					"label": "Universe",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "ACS_Release_Year",
+					"label": "ACS Release Year",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Total",
+					"label": "Total Population",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "English",
+					"label": "Total English Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Spanish",
+					"label": "Total Spanish Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Indo_European",
+					"label": "Total Indo and European Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Asian_PacificIsland",
+					"label": "Total Asian and Pacific Island Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Other",
+					"label": "Total Other Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_English",
+					"label": "Percent English Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Spanish",
+					"label": "Percent Spanish Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Indo_European",
+					"label": "Percent Indo and European Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Asian",
+					"label": "Percent Asian and Pacific Island Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Other",
+					"label": "Percent Other Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": true,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "<p>Total Population: {Total}<br />Title VI Requirement: {LEP_Threshold}<br />Spanish: {Spanish}<br />Indo/European: {Indo_European}<br />A &amp; PI: {Asian_PacificIsland}<br />Other: {Other}</p>",
+				"showAttachments": false,
+				"mediaInfos": [{
+					"title": "Percent by Language",
+					"type": "columnchart",
+					"caption": "",
+					"value": {
+						"fields": ["Percent_Spanish",
+						"Percent_Indo_European",
+						"Percent_Asian",
+						"Percent_Other"],
+						"normalizeField": null
+					}
+				}]
+			}
+		},
+		{
+			"id": 3,
+			"popupInfo": {
+				"title": "County - Language",
+				"fieldInfos": [{
+					"fieldName": "OBJECTID_1",
+					"label": "OBJECTID_1",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "Shape",
+					"label": "Shape",
+					"isEditable": false,
+					"visible": false
+				},
+				{
+					"fieldName": "GEOID",
+					"label": "FIPS",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "STATE",
+					"label": "STATE",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "COUNTY",
+					"label": "County",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "COUNTYNAME",
+					"label": "County Name",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Table_ID",
+					"label": "ACS Table Number",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Title",
+					"label": "Table Name",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Universe",
+					"label": "Universe",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "ACS_Release_Year",
+					"label": "ACS Release Year",
+					"isEditable": false,
+					"visible": false,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Total_Population",
+					"label": "Estimate_",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "English",
+					"label": "Total English Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Spanish",
+					"label": "Total Spanish Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Indo_European",
+					"label": "Total Indo and European Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Asian_PacificIsland",
+					"label": "Total Asian and Pacific Island Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Other",
+					"label": "Total Other Speaking",
+					"isEditable": false,
+					"visible": true,
+					"format": {
+						"places": 0,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_English",
+					"label": "Percent English Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Spanish",
+					"label": "Percent Spanish Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "PercentIndo_European",
+					"label": "Percent Indo and European Speaking",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "PercentAsian_PacificIsland",
+					"label": "PercAsian",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Percent_Other",
+					"label": "PercOther",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "LEP_Threshold",
+					"label": "Meets Title VI LEP Criteria",
+					"isEditable": false,
+					"visible": true,
+					"stringFieldOption": "textbox"
+				},
+				{
+					"fieldName": "Shape_Length",
+					"label": "Shape_Length",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				},
+				{
+					"fieldName": "Shape_Area",
+					"label": "Shape_Area",
+					"isEditable": false,
+					"visible": false,
+					"format": {
+						"places": 2,
+						"digitSeparator": true
+					}
+				}],
+				"description": "<p>Total Population: {Total_Population}<br />Title VI Requirement: {LEP_Threshold}<br />Spanish: {Spanish}<br />Indo/European: {Indo_European}<br />A &amp; PI: {Asian_PacificIsland}<br />Other: {Other}</p>",
+				"showAttachments": false,
+				"mediaInfos": [{
+					"title": "Percent by Language",
+					"type": "columnchart",
+					"caption": "",
+					"value": {
+						"fields": ["Percent_Spanish",
+						"PercentIndo_European",
+						"PercentAsian_PacificIsland"],
+						"normalizeField": null
+					}
+				}]
+			}
+		}]
+	},
+	{
+		"url": "http://tigerweb.geo.census.gov/arcgis/rest/services/Tracts_Blocks/MapServer",
+		"id": "Tracts_Blocks_3479",
+		"visibility": true,
+		"visibleLayers": [4,
+		5,
+		7,
+		8,
+		9,
+		10,
+		11],
+		"opacity": 1,
+		"title": "Boundaries",
+		"layers": []
+	}],
+	"baseMap": {
+		"baseMapLayers": [{
+			"id": "World_Light_Gray_Base_3182",
+			"opacity": 1,
+			"visibility": true,
+			"url": "http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer"
+		},
+		{
+			"id": "World_Light_Gray_Reference_9723",
+			"isReference": true,
+			"opacity": 1,
+			"visibility": true,
+			"url": "http://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer"
+		}],
+		"title": "Light Gray Canvas"
+	},
+	"version": "1.9"
+}

@@ -1,0 +1,21 @@
+{
+    "env": {
+        "browser": true,
+        "amd": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": [
+            "off",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}

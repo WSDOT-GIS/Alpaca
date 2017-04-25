@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>ALPACA - Application for Local Planning and Community Accessibility</title>
+	<link rel="dns-prefetch" href="//js.arcgis.com" />
+	<link href="//cdn-geoweb.s3.amazonaws.com" rel="dns-prefetch" />
+	<link rel="stylesheet" href="//js.arcgis.com/3.12/esri/css/esri.css" />
+	<link href="//js.arcgis.com/3.12/dijit/themes/claro/claro.css" rel="stylesheet" />
+	<link href="Style/index.min.css" rel="stylesheet" />
+	<script type="text/javascript">
+	// Setup Google Analytics, but not if user has specified that they don't want to be tracked.
+	(function (dnt) {
+		if (dnt !== "yes" && dnt !== "1") {
+			(function (i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+					(i[r].q = i[r].q || []).push(arguments)
+				}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+			})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+			ga('create', {
+				trackingId: 'UA-970887-21',
+				cookieDomain: "www.wsdot.wa.gov"
+			});
+			ga(function (tracker) {
+				tracker.set("appName", "ALPACA");
+				tracker.send('pageview');
+				// Set a global variable containing the Google Analytics tracker.
+				window.gaTracker = tracker;
+			});
+		}
+	}(navigator.doNotTrack || navigator.msDoNotTrack || null));
+
+	</script>
+	<script>
+		// Check for features that may not be supported in older browsers.
+		(function () {
+			var supported = !!Array.prototype.map && !!Array.prototype.filter && !!Array.prototype.forEach && !!document.createElement("div").classList;
+			if (!supported) {
+				alert("This application relies on features that are not supported by your browser. Please upgrade to the latest version of your browser.");
+				navigate("http://www.wsdot.wa.gov/Transit/Grants/ALPACAtool.htm");
+			}
+		}());
+		// Polyfill for CustomEvent constructor
+		(function (isSupported) {
+			(function () {
+				function CustomEvent(event, params) {
+					params = params || { bubbles: false, cancelable: false, detail: undefined };
+					var evt = document.createEvent('CustomEvent');
+					evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+					return evt;
+				};
+
+				CustomEvent.prototype = window.Event.prototype;
+
+				window.CustomEvent = CustomEvent;
+			}());
+		})(typeof window.CustomEvent === "function");
+	</script>
+
+	<script>
+		(function () {
+			"use strict";
+			var url, re = /\/[^\/]+$/;
+
+			url = re.test(location.href) ? location.href.replace(re, "/") : location.href;
+
+			var dojoConfig = {
+				async: true,
+				parseOnLoad: true,
+				paths: {
+					"alpaca": url + "Scripts/wsdot/alpaca",
+					"GtfsService": url + "GTFS-Service/GtfsService/Scripts"
+				},
+				packages: [
+					{
+						name: "CSV-Reader",
+						location: url + "Scripts/wsdot/CSV-Reader"
+					},
+					{
+						name: "layerUtils",
+						location: url + "Scripts/wsdot/layerUtils"
+					},
+					{
+						name: "queryUtils",
+						location: url + "Scripts/wsdot/queryUtils"
+					}
+				]
+			};
+
+			window.dojoConfig = dojoConfig;
+		}());
+	</script>
+	<script src="//js.arcgis.com/3.12/init.js"></script>
+	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer/1.0.4/terraformer.min.js"></script>
+	<script src="//cdn-geoweb.s3.amazonaws.com/terraformer-arcgis-parser/1.0.4/terraformer-arcgis-parser.min.js"></script>
+	<script src="Scripts/default.js"></script>
+
+</head>
+<body class="claro">
+	<div id="outerBorderContainer" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false">
+		<div id="headerPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
+			<a class="landing-page-link" href="http://www.wsdot.wa.gov/Transit/Grants/ALPACAtool.htm" target="alpacalanding">
+				<img id="wsdotLogo" src="//www.wsdot.wa.gov/media/images/back/greenlogo.png" alt="WSDOT" height="39" width="240" />
+			</a>
+			<h1>
+
+				<!--<abbr title="Washington State Department of Transportation">WSDOT</abbr>-->
+				<abbr title="Application for Local Planning and Community Accessibility">ALPACA</abbr>
+			</h1>
+		</div>
+		<div id="outerContentPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region: 'center'">
+			<div id="borderContainer"
+				 data-dojo-type="dijit/layout/BorderContainer"
+				 data-dojo-props="design:'headline', gutters:false, liveSplitters:true">
+				<div id="sidebarPane" data-dojo-type="dijit/layout/ContentPane"
+					 data-dojo-props="splitter:true, region:'leading'">
+
+					<div data-dojo-type="dijit/layout/AccordionContainer">
+						<div data-dojo-type="dijit/layout/ContentPane" title="View">
+							<div id="layerToggle"></div>
+							<div id="userAddedDataSection">
+								<button type="button" id="addDataButton" data-dojo-type="dijit/form/Button">Add</button>
+								<h1>Data Layers</h1>
+								<ul id="graphicsLayerList"></ul>
+							</div>
+						</div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="Title VI charts">
+							<div>
+								<div id="languageChart" style="width: 300px; height: 300px;"></div>
+								<table class="chart-legend language-chart-legend">
+									<tr>
+										<td></td>
+										<td>Below Title VI Threshold</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>Meets or exceeds Title VI Threshold</td>
+									</tr>
+								</table>
+							</div>
+							<div>
+								<div id="minorityChart" style="width: 300px; height: 300px;"></div>
+							</div>
+						</div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="Env. Justice charts">
+							<div>
+								<div id="povertyChart" style="width: 300px; height: 300px;"></div>
+								<div id="disabilityChart" style="width:300px; height: 300px"></div>
+							</div>
+						</div>
+						<div data-dojo-type="dijit/layout/ContentPane" title="Population charts">
+							<div>
+								<div id="ageChart" style="width: 300px; height: 300px;"></div>
+								<div id="veteranChart" style="width: 300px; height: 300px;"></div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div id="mapPane" data-dojo-type="dijit/layout/ContentPane"
+					 data-dojo-props="splitter:true, region:'center'">
+					<div id="map">
+						<div id="homebutton"></div>
+						<div id="statefilters">
+							<ul>
+								<li><input id="wacheck" type="checkbox" value="53" checked="checked" disabled="disabled" /><label for="wacheck"><abbr title="Washington">WA</abbr></label></li>
+								<li><input id="orcheck" type="checkbox" value="41" /><label for="orcheck"><abbr title="Oregon">OR</abbr></label></li>
+								<li><input id="idcheck" type="checkbox" value="16" /><label for="idcheck"><abbr title="Idaho">ID</abbr></label></li>
+							</ul>
+						</div>
+						<div id="toolbar" class="toolbar" data-dojo-type="dijit/Toolbar">
+							<div data-dojo-type="dijit/form/DropDownButton">
+								<span>Service Area</span>
+								<div data-dojo-type="dijit/DropDownMenu">
+									<div data-dojo-type="dijit/PopupMenuItem" data-dojo-props="disabled: false">
+										<span>By Layer</span>
+										<div data-dojo-type="dijit/TooltipDialog">
+											<div id="saLayerSelectContainer">
+												<select id="countyServiceAreaSelect">
+													<option disabled="disabled">Select a county...</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div id="drawServiceAreaButton" data-alpaca-mode="service-area" data-dojo-type="dijit/MenuItem">Draw custom</div>
+									<div id="clearServiceAreaButton" data-layer-id="serviceArea" data-dojo-type="dijit/MenuItem"
+										 data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
+								</div>
+							</div>
+							<div id="aoiButton" data-dojo-type="dijit/form/DropDownButton" data-dojo-props="disabled: true">
+								<span>Area of Interest</span>
+								<div data-dojo-type="dijit/DropDownMenu">
+									<div data-dojo-type="dijit/PopupMenuItem" data-dojo-props="disabled: false">
+										<span>By Layer</span>
+										<div data-dojo-type="dijit/TooltipDialog">
+											<div id="aoiLayerSelectContainer">
+												<select id="countyAOISelect">
+													<option disabled="disabled">Select a county...</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div data-dojo-type="dijit/PopupMenuItem">
+										<span>Draw custom</span>
+										<div data-dojo-type="dijit/DropDownMenu">
+											<div id="drawPointsSelectionButton" data-alpaca-mode="aoi" data-geometry-type="MULTI_POINT" data-dojo-type="dijit/MenuItem">Points</div>
+											<div id="drawLineSelectionButton" data-alpaca-mode="aoi" data-geometry-type="POLYLINE" data-dojo-type="dijit/MenuItem">Lines</div>
+											<div id="drawPolylineSelectionButton" data-alpaca-mode="aoi" data-geometry-type="POLYGON" data-dojo-type="dijit/MenuItem">Polygon</div>
+										</div>
+									</div>
+
+									<div id="clearSelectionButton" data-layer-id="aoi"
+										 data-dojo-type="dijit/MenuItem"
+										 data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconDelete'">Clear</div>
+								</div>
+							</div>
+
+							<div id="basemapButton" data-dojo-type="dijit/form/DropDownButton" title="Change the basemap">
+								<span>Basemap</span>
+								<div data-dojo-type="dijit/TooltipDialog">
+									<div id="basemapGallery"></div>
+								</div>
+							</div>
+							<div id="printMenuItem" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconPrint'">Print</div>
+							<div id="helpButton" data-dojo-type="dijit/form/Button" data-url="http://www.wsdot.wa.gov/NR/rdonlyres/6E8780F3-0D5E-478E-AF2F-939FB5A63756/0/ALPACA_HelpGuideFINAL.pdf">Help</div>
+						</div>
+						<progress id="mapProgress">Loading data...</progress>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<form id="printForm" hidden="hidden" action="Print.aspx" target="alpaca_print" method="post">
+		<input name="extent" type="hidden" />
+		<input name="chartdata" type="hidden" />
+		<input name="aoigraphics" type="hidden" />
+		<input name="aoirenderer" type="hidden" />
+		<input name="sagraphics" type="hidden" />
+		<input name="sarenderer" type="hidden" />
+		<input name="censuslayer" type="hidden" />
+	</form>
+
+	<div id="addCsvDialog" data-dojo-type="dijit/Dialog" data-dojo-props='title:"Add data to map"'>
+		<section>
+			<h1>GTFS</h1>
+			<select id="gtfsAgencySelect" disabled="disabled"></select>
+		</section>
+		<section>
+			<h1>CSV</h1>
+			<input id="addCsvFileInput" type="file" />
+		</section>
+	</div>
+</body>
+</html>

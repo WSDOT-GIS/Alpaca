@@ -1,0 +1,49 @@
+﻿body {
+	font-family: Futura, "Century Gothic", "Dejavu Sans", "Trebuchet MS", sans-serif;
+	font-size: 8pt;
+}
+
+html, body {
+	width: 8.5in;
+	height: 11in;
+	padding: 0;
+	margin: 0;
+}
+
+#map {
+	height: 60%;
+	width: 100%;
+}
+
+#data {
+	height: 40%;
+	width: 100%;
+}
+
+table {
+	display: inline-table;
+	margin-left: 1.5em;
+	margin-right: 1.5em;
+	margin-top: 1em;
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+td {
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	border: 1px dotted #999999;
+}
+
+tr:nth-child(odd) td {
+	background: #cdf2f2;
+}
+
+.threshold-met {
+	font-style: italic;
+	font-weight: bold;
+}
+
+td:first-child + td, td:first-child + td + td {
+	text-align: right;
+}
