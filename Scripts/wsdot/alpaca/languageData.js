@@ -21,7 +21,7 @@ define(["dojo/number"], function (number) {
 	 * @static {Object.<string, number>}
 	 */
 	LanguageData.labels = {
-		english: "English",
+		//english: "English",
 		spanish: "Spanish",
 		indoEuropean: "Indo / European",
 		asianPacificIsland: "Asian / Pacific Island",
@@ -50,7 +50,7 @@ define(["dojo/number"], function (number) {
 		output = this.getTotal() / this.getMaxNotEnglish() - 10;
 		if (output < 0) {
 			output = 0;
-		}
+        }
 		return output;
 	};
 
@@ -94,7 +94,7 @@ define(["dojo/number"], function (number) {
 			if (LanguageData.labels.hasOwnProperty(language)) {
 				label = LanguageData.labels[language];
 				speakerCount = this[language];
-				percent = Math.round((speakerCount / total) * 10000) / 100;
+				percent = (Math.round((speakerCount / total) * 10000) / 100).toFixed(1);
 				item = {
 					y: speakerCount,
 					text: label,
@@ -107,7 +107,7 @@ define(["dojo/number"], function (number) {
 					// Set the fill depending if the threshold has been met and if background is true.
 					fill: this.thresholdMet(language) ? thresholdFill : normalFill,
 					// Set the tooltip to display the language, number of speakers, and the percentage of those speakers vs. total.
-					tooltip: [label, ": ", number.format(speakerCount), "(~", percent, "%)"].join("")
+					tooltip: [label, ": ", number.format(speakerCount), " (", percent, "%)"].join("")
 				};
 				output.push(item);
 			}
@@ -124,7 +124,7 @@ define(["dojo/number"], function (number) {
 		total = this.getTotal();
 
 		table = document.createElement("table");
-		table.createCaption().textContent = "Language Proficiency";
+		table.createCaption().textContent = "Limited English Proficiency";
 		table.createTHead().innerHTML = "<tr><th>Language</th><th>Count</th><th>%</th></tr>";
 		tbody = document.createElement("tbody");
 		table.appendChild(tbody);

@@ -212,7 +212,7 @@ require([
 
         // Create a map using an ArcGIS Online map ID. The map's center and zoom extent are set based on values stored in
         // localStorage if available; otherwise default values are used.
-        arcgisUtils.createMap("a2a177ec2ddc4769958cb2823ba61020", "map", {
+        arcgisUtils.createMap("79349160e97a4a11b3989f5a90d1a25e", "map", {
             mapOptions: {
                 center: window.JSON && window.localStorage && window.localStorage.alpaca_mapCenter ? JSON.parse(window.localStorage.alpaca_mapCenter) : [-120.80566406246835, 47.41322033015946],
                 zoom: window.localStorage && window.localStorage.alpaca_mapZoom ? Number(window.localStorage.alpaca_mapZoom) : 7,
@@ -386,11 +386,16 @@ require([
 
                     // Update the language chart with the response language data.
                     languageChart.updateSeries("Language Proficiency", chartData.language.toColumnChartSeries(level));
-                    languageChart.setAxisWindow("y", chartData.language.getNotEnglishZoomScale(), 0);
+                    if (level === "statewide") {
+                        languageChart.setAxisWindow("y", 0, 0);
+                    } else {
+                        languageChart.setAxisWindow("y", chartData.language.getNotEnglishZoomScale(), 0);
+                    }
+                    //languageChart.setAxisWindow("y", 0, 0);
                     // Add the second axis if necessary, remove if not
                     setSecondSeries(languageChart, "language", "SA Language Proficiency");
 
-                    updateChartTitle(languageChart, "Language Proficiency", level);
+                    updateChartTitle(languageChart, "Limited English Proficiency", level);
                 }
                 if (!raceChart) {
                     raceChart = chartUtils.createRaceChart(chartData.race, level);
