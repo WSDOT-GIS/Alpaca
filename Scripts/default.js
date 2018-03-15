@@ -386,12 +386,6 @@ require([
 
                     // Update the language chart with the response language data.
                     languageChart.updateSeries("Language Proficiency", chartData.language.toColumnChartSeries(level));
-                    if (level === "statewide") {
-                        languageChart.setAxisWindow("y", 0, 0);
-                    } else {
-                        languageChart.setAxisWindow("y", chartData.language.getNotEnglishZoomScale(), 0);
-                    }
-                    //languageChart.setAxisWindow("y", 0, 0);
                     // Add the second axis if necessary, remove if not
                     setSecondSeries(languageChart, "language", "SA Language Proficiency");
 

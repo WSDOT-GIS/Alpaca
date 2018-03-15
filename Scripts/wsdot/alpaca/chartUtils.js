@@ -49,8 +49,6 @@ define([
 			});
 			chart.addAxis("y", {
 				vertical: true,
-                max: 150000,
-                min: 150000,
 				//title: "No. of speakers"
 				includeZero: true
 			});
@@ -62,7 +60,7 @@ define([
 			});
 			anim_c = new Tooltip(chart, "default");
 			//chart.setAxisWindow("y", languageData.getNotEnglishZoomScale(), 0);
-		    chart.setAxisWindow("y", 0, 0);
+		    chart.setAxisWindow("y", 1, 0);
 			chart.render();
 			return chart;
 		},
