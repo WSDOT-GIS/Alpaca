@@ -662,10 +662,10 @@ require([
                                 }
                             }());
                         } else {
-                            chartDataProvider.getSelectionGraphics(undefined, undefined, undefined, undefined, getCheckedStateIds());
+                            chartDataProvider.getSelectionGraphics(undefined, map.getScale(), undefined, undefined, getCheckedStateIds());
                         }
                     } else {
-                        chartDataProvider.getSelectionGraphics(undefined, undefined, undefined, undefined, getCheckedStateIds());
+                        chartDataProvider.getSelectionGraphics(undefined, map.getScale(), undefined, undefined, getCheckedStateIds());
                     }
                 } catch (e) {
                     console.error("chartDataProvider error", e);
@@ -782,7 +782,7 @@ require([
                         updateCharts(saGeometry.attributes, "Service Area");
                     } else {
                         // TODO: Load stored statewide chart data from variable.
-                        chartDataProvider.getSelectionGraphics(undefined, undefined, undefined, undefined, getCheckedStateIds());
+                        chartDataProvider.getSelectionGraphics(undefined, map.getScale(), undefined, undefined, getCheckedStateIds());
                     }
                 };
 
