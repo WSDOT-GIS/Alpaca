@@ -208,6 +208,38 @@ table.language-chart-legend tr:last-child > td:first-child {
 	display: block;
 }
 
+.legend-no-table {
+    margin: 6px 2px 2px 50px;
+}
+
+.legend-no-box {
+    width: 12px;
+    height: 12px;
+    border: 1px solid black;
+    background: #FFBEBE;
+}
+
+.legend-no-label {
+    padding: 0 0 0 6px;
+    font-size: 0.8em;
+}
+
+.legend-yes-table {
+    margin: 2px 2px 4px 50px;
+}
+
+.legend-yes-box {
+    width: 12px;
+    height: 12px;
+    border: 1px solid black;
+    background: #FF0000;
+}
+
+.legend-yes-label {
+    padding: 0 0 0 6px;
+    font-size: 0.8em;
+}
+
 #statefilters {
 	position: absolute;
 	left: 20px;

@@ -86,9 +86,6 @@
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\wsdot\queryUtils\main.js" />
     <Content Include="Style\index.css" />
-    <Content Include="Style\index.min.css">
-      <DependentUpon>index.css</DependentUpon>
-    </Content>
     <Content Include="Style\Print.css" />
   </ItemGroup>
   <ItemGroup>
