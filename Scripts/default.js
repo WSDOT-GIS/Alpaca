@@ -214,7 +214,7 @@ require([
         // localStorage if available; otherwise default values are used.
         // PROD: a2a177ec2ddc4769958cb2823ba61020
         // QA: 79349160e97a4a11b3989f5a90d1a25e
-        arcgisUtils.createMap("79349160e97a4a11b3989f5a90d1a25e", "map", {
+        arcgisUtils.createMap("a2a177ec2ddc4769958cb2823ba61020", "map", {
             mapOptions: {
                 center: window.JSON && window.localStorage && window.localStorage.alpaca_mapCenter ? JSON.parse(window.localStorage.alpaca_mapCenter) : [-120.80566406246835, 47.41322033015946],
                 zoom: window.localStorage && window.localStorage.alpaca_mapZoom ? Number(window.localStorage.alpaca_mapZoom) : 7,
