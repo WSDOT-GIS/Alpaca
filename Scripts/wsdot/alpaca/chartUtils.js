@@ -22,7 +22,7 @@ define([
 			var chart, anim_a, anim_c, mouseZoomAndPan;
 			chartLevel = chartLevel || "Statewide";
 			chart = new Chart("languageChart", {
-				title: "Language Proficiency (" + chartLevel + ")",
+				title: "Limited English Proficiency (" + chartLevel + ")",
 				titlePos: "top",
 				titleGap: 5
 			});
@@ -33,11 +33,11 @@ define([
 			});
 			chart.addAxis("x", {
 				labels: [
-					{ value: 1, text: "English" },
-					{ value: 2, text: "Spanish" },
-					{ value: 3, text: "IndoEu." },
-					{ value: 4, text: "Asian,PI" },
-					{ value: 5, text: "Other" }
+					//{ value: 1, text: "English" },
+					{ value: 1, text: "Spanish" },
+					{ value: 2, text: "IndoEu." },
+					{ value: 3, text: "Asian,PI" },
+					{ value: 4, text: "Other" }
 				],
 				dropLabels: false,
 				minorLabels: false,
@@ -49,18 +49,18 @@ define([
 			});
 			chart.addAxis("y", {
 				vertical: true,
-				//max: languageData.getTotal() - languageData.english,
 				//title: "No. of speakers"
 				includeZero: true
 			});
-			chart.addSeries("Language Proficiency", languageData.toColumnChartSeries());
+            chart.addSeries("Language Proficiency", languageData.toColumnChartSeries());
 			mouseZoomAndPan = new MouseZoomAndPan(chart, "default", { axis: "y" });
 			anim_a = new Shake(chart, "default", {
 				shiftX: 10,
 				shiftY: 10
 			});
 			anim_c = new Tooltip(chart, "default");
-			chart.setAxisWindow("y", languageData.getNotEnglishZoomScale(), 0);
+			//chart.setAxisWindow("y", languageData.getNotEnglishZoomScale(), 0);
+		    chart.setAxisWindow("y", 1, 0);
 			chart.render();
 			return chart;
 		},

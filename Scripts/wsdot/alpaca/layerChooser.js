@@ -68,7 +68,7 @@ define([
 		@param {string} options.operationalLayer.title
 		@param {Array} options.operationalLayer.errors
 		@param {boolean} [options.checked] Is the radio button checked?
-		@param {boolean} [options.includeSublayers] 
+		@param {boolean} [options.includeSublayers]
 		@constructs
 		*/
 		constructor: function (options) {
@@ -152,18 +152,60 @@ define([
 				// Create the legend...
 				legendDiv = document.createElement("div");
 				////legendDiv.classList.add("layer-chooser-legend");
-				domClass.add(legendDiv, "layer-chooser-legend");
-				controlsDiv.appendChild(legendDiv);
-				self.legend = new Legend({
-					autoUpdate: true,
-					map: options.map,
-					layerInfos: [
-						{
-							layer: opLayer.layerObject,
-							title: opLayer.title
-						}
-					]
-				}, legendDiv);
+				//domClass.add(legendDiv, "layer-chooser-legend");
+                if (opLayer.title === "Limited English Proficiency") {
+                    // Hard-coded workaround for the wacky "LEP" layer.
+                    // The out-of-the-box ESRI legend control gets confused with the mismatching sublayers.
+
+                    var legendNoTable = document.createElement("table");
+                    domClass.add(legendNoTable, "legend-no-table");
+
+			        var legendNoRow = document.createElement("tr");
+
+			        var legendNoColumnBox = document.createElement("td");
+                    domClass.add(legendNoColumnBox, "legend-no-box");
+			        legendNoRow.appendChild(legendNoColumnBox);
+
+			        var legendNoColumnLabel = document.createElement("td");
+                    domClass.add(legendNoColumnLabel, "legend-no-label");
+			        legendNoColumnLabel.textContent = "Does Not Meet LEP Threshold";
+                    legendNoRow.appendChild(legendNoColumnLabel);
+
+			        legendNoTable.appendChild(legendNoRow);
+
+			        legendDiv.appendChild(legendNoTable);
+
+			        var legendYesTable = document.createElement("table");
+                    domClass.add(legendYesTable, "legend-yes-table");
+
+			        var legendYesRow = document.createElement("tr");
+
+			        var legendYesColumnBox = document.createElement("td");
+                    domClass.add(legendYesColumnBox, "legend-yes-box");
+                    legendYesRow.appendChild(legendYesColumnBox);
+
+			        var legendYesColumnLabel = document.createElement("td");
+                    domClass.add(legendYesColumnLabel, "legend-yes-label");
+			        legendYesColumnLabel.textContent = "Meets LEP Threshold (5% or 1,000 people)";
+                    legendYesRow.appendChild(legendYesColumnLabel);
+
+			        legendYesTable.appendChild(legendYesRow);
+
+                    legendDiv.appendChild(legendYesTable);
+			    } else {
+			        self.legend = new Legend({
+			                autoUpdate: true,
+			                map: options.map,
+			                layerInfos: [
+			                    {
+			                        layer: opLayer.layerObject,
+			                        title: opLayer.title
+			                    }
+			                ]
+			            },
+			            legendDiv);
+			    }
+			    controlsDiv.appendChild(legendDiv);
 			}
 		}
 	});
@@ -269,17 +311,19 @@ define([
 							}
 						}
 
-						self.list.appendChild(layerRadio.domNode);
-						if (layerRadio.legend) {
-							layerRadio.legend.startup();
-						}
+                        self.list.appendChild(layerRadio.domNode);
+					    if (opLayer.title !== "Limited English Proficiency" && opLayer.title !== "Census Boundaries") {
+					        if (layerRadio.legend) {
+					            layerRadio.legend.startup();
+					        }
+					    }
 					}
 				} catch (lError) {
 					if (console && console.error) {
 						console.error("Error creating layer radio button", lError);
 					}
 				}
-			} 
+			}
 		}
 	});
 
