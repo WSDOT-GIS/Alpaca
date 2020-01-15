@@ -37,7 +37,7 @@ define(["esri/tasks/QueryTask", "esri/tasks/query", "dojo/Deferred"], function (
 	}
 
 	/**
-	 * @param {string} [url="http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer/0"] - URL to the map service layer providing county data.
+	 * @param {string} [url="https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer/0"] - URL to the map service layer providing county data.
 	 * @returns {dojo/Deferred}
 	 */
 	function queryForCountyData(url) {
@@ -60,7 +60,7 @@ define(["esri/tasks/QueryTask", "esri/tasks/query", "dojo/Deferred"], function (
 
 		// Set default URL.
 		if (!url) {
-			url = "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer/0";
+			url = "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CountyBoundaries/MapServer/0";
 		}
 		if (!countyData) {
 			query = new Query();
