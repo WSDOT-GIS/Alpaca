@@ -40,7 +40,7 @@
 			var supported = !!Array.prototype.map && !!Array.prototype.filter && !!Array.prototype.forEach && !!document.createElement("div").classList;
 			if (!supported) {
 				alert("This application relies on features that are not supported by your browser. Please upgrade to the latest version of your browser.");
-				navigate("http://www.wsdot.wa.gov/Transit/Grants/ALPACAtool.htm");
+				navigate("https://www.wsdot.wa.gov/Transit/Grants/ALPACAtool.htm");
 			}
 		}());
 		// Polyfill for CustomEvent constructor
@@ -102,7 +102,7 @@
 <body class="claro">
 	<div id="outerBorderContainer" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="gutters:false">
 		<div id="headerPane" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
-			<a class="landing-page-link" href="http://www.wsdot.wa.gov/Transit/Grants/ALPACAtool.htm" target="alpacalanding">
+			<a class="landing-page-link" href="https://www.wsdot.wa.gov/Transit/Grants/ALPACAtool.htm" target="alpacalanding">
 				<img id="wsdotLogo" src="//www.wsdot.wa.gov/media/images/back/greenlogo.png" alt="WSDOT" height="39" width="240" />
 			</a>
 			<h1>
@@ -225,7 +225,7 @@
 								</div>
 							</div>
 							<div id="printMenuItem" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'dijitEditorIcon dijitEditorIconPrint'">Print</div>
-							<div id="helpButton" data-dojo-type="dijit/form/Button" data-url="http://www.wsdot.wa.gov/NR/rdonlyres/6E8780F3-0D5E-478E-AF2F-939FB5A63756/0/ALPACA_HelpGuideFINAL.pdf">Help</div>
+							<div id="helpButton" data-dojo-type="dijit/form/Button" data-url="https://www.wsdot.wa.gov/NR/rdonlyres/6E8780F3-0D5E-478E-AF2F-939FB5A63756/0/ALPACA_HelpGuideFINAL.pdf">Help</div>
 						</div>
 						<progress id="mapProgress">Loading data...</progress>
 					</div>

@@ -60,7 +60,7 @@ require([
     esriConfig.defaults.io.proxyUrl = "proxy.ashx";
     esriConfig.defaults.geometryService = new GeometryService("https://data.wsdot.wa.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer");
     // Inform the ArcGIS API about servers that we know support CORS so that it doesn't have to check each time it sends a request.
-    esriConfig.defaults.io.corsEnabledServers.push("data.wsdot.wa.gov");
+    esriConfig.defaults.io.corsEnabledServers.push("data.wsdot.wa.gov", "webgis.dor.wa.gov");
 
     // Setup dummy console.* functions for browsers that lack them to prevent exceptions from occurring.
     if (!window.console) {
@@ -317,7 +317,7 @@ require([
                         output = "Service Area";
                     } else if (/Statewide/i.test(level)) {
                         output = "Statewide";
-                    } else if (/(?:(?:selection)|(?:A(?:rea\s)?o(?:f\s)?I(?:nterest)?))/i) {
+                    } else if (/(?:(?:selection)|(?:A(?:rea\s)?o(?:f\s)?I(?:nterest)?))/i.test(level)) {
                         output = "AOI";
                     }
                 }
