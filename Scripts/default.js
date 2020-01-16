@@ -163,12 +163,16 @@ require([
          * @returns {string[]}
          */
         function getLayerDefinitions(layerInfos, stateIds) {
+            console.group("getLayerDefinitions");
             var layerDefinitions = [];
-            layerInfos.forEach(function (layerInfo) {
-                if (layerInfo && (!layerInfo.sublayerIds || layerInfo.sublayerIds.length === 0)) {
-                    layerDefinitions[layerInfo.id] = "State IN (" + stateIds.join(",") + ")";
+            const clause = `State IN (${stateIds.join(",")})`;
+            for (const layerInfo of layerInfos) {
+                if (!layerInfo.subLayerIds) {
+                    layerDefinitions[layerInfo.id] = clause;
                 }
-            });
+            }
+            console.debug("Layer Definitions: ", layerDefinitions);
+            console.groupEnd();
             return layerDefinitions;
         }
 
