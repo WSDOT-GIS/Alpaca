@@ -58,9 +58,9 @@ require([
 
     // Setup configuration defaults.
     esriConfig.defaults.io.proxyUrl = "proxy.ashx";
-    esriConfig.defaults.geometryService = new GeometryService("http://data.wsdot.wa.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer");
+    esriConfig.defaults.geometryService = new GeometryService("https://data.wsdot.wa.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer");
     // Inform the ArcGIS API about servers that we know support CORS so that it doesn't have to check each time it sends a request.
-    esriConfig.defaults.io.corsEnabledServers.push("data.wsdot.wa.gov");
+    esriConfig.defaults.io.corsEnabledServers.push("data.wsdot.wa.gov", "webgis.dor.wa.gov");
 
     // Setup dummy console.* functions for browsers that lack them to prevent exceptions from occurring.
     if (!window.console) {
@@ -317,7 +317,7 @@ require([
                         output = "Service Area";
                     } else if (/Statewide/i.test(level)) {
                         output = "Statewide";
-                    } else if (/(?:(?:selection)|(?:A(?:rea\s)?o(?:f\s)?I(?:nterest)?))/i) {
+                    } else if (/(?:(?:selection)|(?:A(?:rea\s)?o(?:f\s)?I(?:nterest)?))/i.test(level)) {
                         output = "AOI";
                     }
                 }
@@ -534,7 +534,7 @@ require([
             (function () {
                 var rtaLayer, pdbaLayer, cityLimitsLayer, mpaLayer, rtpoLayer, tribalLayer;
                 // Add the PTBA layer
-                rtaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
+                rtaLayer = new FeatureLayer("https://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/1", {
                     id: "Regional Transportation Authority (RTA)",
                     className: "rta",
                     outFields: ["RTA_NAME"],
@@ -546,7 +546,7 @@ require([
                 map.addLayer(rtaLayer);
 
                 // Add the PTBA layer
-                pdbaLayer = new FeatureLayer("http://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
+                pdbaLayer = new FeatureLayer("https://webgis.dor.wa.gov/ArcGIS/rest/services/Programs/WADOR_SalesTax/MapServer/2", {
                     id: "Public Transportation Benefit Areas (PTBA)",
                     className: "ptba",
                     outFields: ["PTBA_NAME"],
@@ -557,14 +557,14 @@ require([
 
                 map.addLayer(pdbaLayer);
 
-                cityLimitsLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
+                cityLimitsLayer = new ArcGISDynamicMapServiceLayer("https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/CityLimits/MapServer", {
                     id: "City Limits",
                     visible: false,
                     opacity: 0.6
                 });
                 map.addLayer(cityLimitsLayer);
 
-                mpaLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer", {
+                mpaLayer = new ArcGISDynamicMapServiceLayer("https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/MetroPlanningAreas/MapServer", {
                     id: "Metro Planning Areas (MPA)",
                     visible: false,
                     opacity: 0.6
@@ -572,14 +572,14 @@ require([
                 });
                 map.addLayer(mpaLayer);
 
-                rtpoLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
+                rtpoLayer = new ArcGISDynamicMapServiceLayer("https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/RegionalTransportationPlanning/MapServer", {
                     id: "Regional Transportation Planning Organization (RTPO)",
                     visible: false,
                     opacity: 0.6
                 });
                 map.addLayer(rtpoLayer);
 
-                tribalLayer = new ArcGISDynamicMapServiceLayer("http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
+                tribalLayer = new ArcGISDynamicMapServiceLayer("https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/TribalReservationLands/MapServer", {
                     id: "Reservation and Trust Lands",
                     visible: false,
                     opacity: 0.6
@@ -596,7 +596,7 @@ require([
                         title: "WSDOT",
                         thumbnailUrl: "Images/WsdotBasemapThumbnail.jpg",
                         layers: [new BasemapLayer({
-                            url: "http://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
+                            url: "https://data.wsdot.wa.gov/ArcGIS/rest/services/Shared/WebBaseMapWebMercator/MapServer"
                         })]
                     })
                 ]

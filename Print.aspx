@@ -8,7 +8,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
 	<title>Title VI</title>
-	<link rel="stylesheet" href="http://js.arcgis.com/3.12compact/esri/css/esri.css">
+	<link rel="stylesheet" href="https://js.arcgis.com/3.12compact/esri/css/esri.css">
 	<link rel="stylesheet" href="Style/Print.css" />
 	<script type="text/javascript">
 		// Setup Google Analytics, but not if user has specified that they don't want to be tracked.
@@ -66,7 +66,7 @@
 			window.dojoConfig = dojoConfig;
 		}());
 	</script>
-	<script src="http://js.arcgis.com/3.12compact/"></script>
+	<script src="https://js.arcgis.com/3.12compact/"></script>
 	<script src="Scripts/Print.js"></script>
 </body>
 </html>
