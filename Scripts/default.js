@@ -33,8 +33,8 @@ require([
     "alpaca/layerSelect",
     "esri/geometry/Extent",
     "esri/dijit/HomeButton",
-
     "dijit/Dialog",
+
     "dojox/charting/axis2d/Default",
     "dojo/parser",
     "dijit/form/DropDownButton",
@@ -53,7 +53,7 @@ require([
     GeometryService, InfoTemplate,
     jsonUtils, chartUtils, csvArcGis, LayerUtils,
     esriConfig, UserGraphicsLayers, FeatureLayer, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
-    GtfsAgencySelect, GtfsLayerManager, LayerSelect, Extent, HomeButton) {
+    GtfsAgencySelect, GtfsLayerManager, LayerSelect, Extent, HomeButton, Dialog) {
     "use strict";
 
     // Setup configuration defaults.
@@ -155,6 +155,16 @@ require([
     // When the dojo framework code is ready...
     ready(function () {
         var map;
+
+        // Show dialog with app retirement message.
+
+        let retirementDialog = new Dialog({
+            title: "App retirement notice",
+            content: "Please be aware that this application will be retired soon.",
+            style: "width: 300px"
+        });
+
+        retirementDialog.show();
 
         /**
          * Converts a layer's LasyerInfo objects into layer definintion strings.
