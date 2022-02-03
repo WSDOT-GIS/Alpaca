@@ -1,7 +1,7 @@
 ALPACA (Application for Local Planning and Community Accessibility)
 ===================================================================
 
-[![bitHound Score](https://www.bithound.io/github/WSDOT-GIS/Alpaca/badges/score.svg?)](https://www.bithound.io/github/WSDOT-GIS/Alpaca)
+:warning: This application has been retired and is no longer being updated.
 
 ## Submodules ##
 
