@@ -160,7 +160,7 @@ require([
 
         let retirementDialog = new Dialog({
             title: "App retirement notice",
-            content: "Please be aware that this application will be retired soon.",
+            content: "ALPACA will be taken offline in the coming months. Users are encouraged to find other publicly available mapping tools to complete the types of work for which ALPACA was intended. Please contact <a href='mailto:Matthew.Cramer@wsdot.wa.gov'>Matthew Cramer</a> for help finding other online resources.",
             style: "width: 300px"
         });
 
@@ -813,11 +813,11 @@ require([
                 clearSelButton.on("click", clearHandler);
 
             }(registry.byId("drawServiceAreaButton"),
-            registry.byId("drawPolylineSelectionButton"),
-            registry.byId("drawPointsSelectionButton"),
-            registry.byId("drawLineSelectionButton"),
-            registry.byId("clearServiceAreaButton"),
-            registry.byId("clearSelectionButton")));
+                registry.byId("drawPolylineSelectionButton"),
+                registry.byId("drawPointsSelectionButton"),
+                registry.byId("drawLineSelectionButton"),
+                registry.byId("clearServiceAreaButton"),
+                registry.byId("clearSelectionButton")));
 
             // Setup print feature
             registry.byId("printMenuItem").on("click", function () {
